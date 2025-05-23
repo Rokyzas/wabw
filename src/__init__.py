@@ -7,7 +7,7 @@ def create_app():
     app = Flask(__name__)
     
     # Set a secret key for sessions
-    app.secret_key = os.environ.get('SECRET_KEY', 'dev_key_for_wab2_please_change_in_production')
+    app.secret_key = os.environ.get('SECRET_KEY', 'dev_key_for_app_please_change_in_production')
     
     # Initialize task state manager
     task_state_manager.initialize()

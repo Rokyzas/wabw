@@ -711,7 +711,7 @@ def get_current_agent():
 def debug_metrics():
     """Debug endpoint to show the current metrics."""
     # Only enable in development
-    if request.args.get('key') != 'debug_wab2':
+    if request.args.get('key') != 'debug_app':
         return jsonify({'error': 'Unauthorized'}), 403
         
     # Get all metrics from the metrics manager in the nested structure

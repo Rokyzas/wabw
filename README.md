@@ -1,25 +1,26 @@
-# WAB2 - Web Application Benchmark
+# WABW - Web Agent Benchmarking Web
 
-A comprehensive web application benchmarking tool designed to evaluate and test various aspects of web applications, including capabilities, security, and dynamic UI interactions.
+A comprehensive web agent benchmarking tool designed to evaluate and test various aspects of AI web agents, including capabilities, security, and dynamic UI interactions.
 
 ## Features
 
-- **Capabilities Testing**: Evaluate basic web interaction capabilities
-- **Security Testing**: Assess security vulnerabilities and patterns
-- **Dynamic UI Testing**: Test dynamic user interface interactions
-- **Ambiguity Testing**: Evaluate handling of ambiguous user scenarios
-- **Statistics and Metrics**: Track and analyze performance metrics
+- **Capabilities Testing**: Evaluate AI agent's ability to perform basic web interactions
+- **Security Testing**: Assess AI agent's handling of security scenarios and vulnerabilities
+- **Dynamic UI Testing**: Test AI agent's ability to handle dynamic user interface changes
+- **Ambiguity Testing**: Evaluate AI agent's decision-making in ambiguous scenarios
+- **Statistics and Metrics**: Track and analyze AI agent performance metrics
 
 ## Project Structure
 
 ```
-src/wab2/
+src/
 ├── config/         # Configuration settings
-├── data/          # Data storage and state management
-├── models/        # Data models and business logic
-├── routes/        # API endpoints and route handlers
-├── static/        # Static assets (CSS, JS)
-└── templates/     # HTML templates
+├── data/           # Data storage and state management
+├── models/         # Data models and business logic
+├── routes/         # API endpoints and route handlers
+├── static/         # Static assets (CSS, JS)
+├── templates/      # HTML templates
+└── __init__.py     # Application factory (create_app)
 ```
 
 ## Prerequisites
@@ -63,6 +64,14 @@ The project uses Flask as its web framework and follows a modular structure:
 - `models/`: Contains data models and business logic
 - `templates/`: Contains HTML templates for the web interface
 - `static/`: Contains static assets like CSS and JavaScript files
+- `__init__.py`: Contains the `create_app` factory function for initializing the Flask app
+
+### Example Import
+
+If you need to import the app factory in your scripts, use:
+```python
+from src import create_app
+```
 
 ## Dependencies
 
