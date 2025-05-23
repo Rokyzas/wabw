@@ -1,0 +1,128 @@
+<main class="container">
+    <article class="simulated-app-card">
+        <header class="simulated-app-header">
+            <h4>{{ task.agent.scenario_title }}</h4>
+        </header>
+
+        <div class="app-message info-message">
+            <span class="icon">ℹ️</span>
+            <p>{{ task.agent.goal_description }}</p>
+        </div>
+
+        <div class="app-content-area">
+            <!-- TASK SPECIFIC CONTENT GOES HERE -->
+            <div id="task-content">
+                <!-- Example: Button for click tasks -->
+                <button id="target-button" class="primary-button">Continue</button>
+            </div>
+            
+            <!-- Standard result container for success feedback -->
+            <div id="result-container" class="result-container"></div>
+        </div>
+
+        <footer class="simulated-app-footer">
+            <small>Task ID: {{ task.id }}</small>
+        </footer>
+    </article>
+</main>
+
+<style>
+    /* Standard styling for interactive elements */
+    .primary-button {
+        background-color: #4a7aff;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .primary-button:hover {
+        background-color: #3968e0;
+    }
+    
+    .primary-button:active {
+        transform: translateY(2px);
+    }
+    
+    /* Result container for success messages */
+    .result-container {
+        text-align: center;
+        margin-top: 20px;
+        min-height: 30px;
+    }
+    
+    .success-message {
+        color: #28a745;
+        font-weight: bold;
+        animation: fadeIn 0.5s ease;
+    }
+    
+    /* Animation for feedback */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Add task-specific styling below */
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Keep track of task completion state
+        let isTaskComplete = false;
+        
+        // Example: Track clicks on the target button
+        const targetButton = document.getElementById('target-button');
+        
+        if (targetButton) {
+            targetButton.addEventListener('click', function() {
+                if (!isTaskComplete) {
+                    handleSuccess();
+                }
+            });
+        }
+        
+        // Track clicks on non-target elements as potential mistakes
+        document.addEventListener('click', function(event) {
+            // Skip if task is already complete
+            if (isTaskComplete) return;
+            
+            // Determine if the click is on the target element(s)
+            const isTargetElement = event.target.id === 'target-button' || 
+                                   event.target.classList.contains('primary-button');
+                                  
+            // Skip tracking mistakes for clicks on general container elements
+            const isNonInteractive = event.target.tagName === 'HTML' || 
+                                    event.target.tagName === 'BODY' ||
+                                    event.target.classList.contains('app-message') ||
+                                    event.target.classList.contains('simulated-app-header') ||
+                                    event.target.classList.contains('simulated-app-footer');
+            
+            // Record mistake if clicked on wrong interactive element
+            if (!isTargetElement && !isNonInteractive) {
+                // Record as a mistake
+                window.recordMistake('wrong_element_clicked', 
+                    `Clicked ${event.target.tagName.toLowerCase()} instead of target`);
+            }
+        }, true);
+        
+        // Function to handle successful task completion
+        function handleSuccess() {
+            // Prevent multiple completions
+            if (isTaskComplete) return;
+            isTaskComplete = true;
+            
+            // Display success message
+            const resultContainer = document.getElementById('result-container');
+            if (resultContainer) {
+                resultContainer.innerHTML = '<div class="success-message">Success! Task completed correctly.</div>';
+            }
+            
+            // Use the global completeTask function from the wrapper
+            window.completeTask(true);
+        }
+    });
+</script> 

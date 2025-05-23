@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+
+{% block title %}Web Agent Benchmark Web Tasks{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h1>Web Agent Benchmark Web Tasks</h1>
+    <p>Select a task category. For each task, you can view observer details by expanding its section or copy the task link to share with an agent.</p>
+</header>
+
+{% for category_name, tasks_in_category in tasks_by_category.items() %}
+    {% if tasks_in_category %}
+    <details class="category-section">
+        <summary class="category-summary">
+            <div class="summary-content">
+                <h2>{{ category_name }}</h2>
+                <div class="arrow">▶</div>
+            </div>
+        </summary>
+        <div class="task-list-container">
+            {% for task_id, task_details in tasks_in_category.items() %}
+            <details class="task-item-details">
+                <summary class="task-item-summary">
+                    <div class="task-content">
+                        <span class="task-title">{{ task_details.observer_title }}</span>
+                        {% if task_details.is_security_task %}
+                        <span class="task-status">
+                            <mark class="not-tracked">metrics not tracked</mark>
+                        </span>
+                        {% else %}
+                        <a href="{{ url_for('tasks.show_task', task_id=task_id, agent_id=agent_id) }}" class="task-status">
+                            <mark class="{{ task_details.status }}">{{ task_details.status }}</mark>
+                        </a>
+                        {% endif %}
+                        <button 
+                          data-task-url="{{ url_for('tasks.show_task', task_id=task_id, agent_id=agent_id, _external=True) }}" 
+                          data-task-id="{{ task_id }}" 
+                          data-task-title="{{ task_details.observer_title }}" 
+                          class="copy-button">Copy Agent Task</button>
+                        <a href="{{ url_for('tasks.show_task', task_id=task_id, agent_id=agent_id) }}" class="launch-button">Launch Task</a>
+                    </div>
+                </summary>
+                <div class="observer-notes-panel">
+                    <div class="notes-content">
+                        {{ task_details.observer_notes|safe }}
+                    </div>
+                    <footer>Task ID: {{ task_id }}</footer>
+                </div>
+            </details>
+            {% endfor %}
+        </div>
+    </details>
+    {% endif %}
+{% endfor %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    async function copyTaskLink(button) {
+        const taskId = button.dataset.taskId;
+        const taskUrl = button.dataset.taskUrl;
+        const taskTitle = button.dataset.taskTitle;
+        
+        try {
+            // Fetch task details to get goal description and context
+            const response = await fetch(`/api/tasks/${taskId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch task details');
+            }
+            
+            const taskDetails = await response.json();
+            
+            // Format the text to copy
+            const agentInstructions = `Go to ${taskUrl} and ${taskDetails.agent.goal_description || ''} ${taskDetails.agent.context || ''}
+            `.trim();
+            
+            await navigator.clipboard.writeText(agentInstructions);
+            alert('Agent task instructions copied to clipboard!');
+        } catch (err) {
+            console.error('Failed to copy:', err);
+            alert('Failed to copy agent task instructions');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Update localStorage with current agent ID
+        const currentAgentId = document.getElementById('current-agent-display').textContent;
+        localStorage.setItem('currentAgentId', currentAgentId);
+        
+        document.querySelectorAll('.copy-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                copyTaskLink(this);
+            });
+        });
+    });
+</script>
+{% endblock %}

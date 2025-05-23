@@ -1,0 +1,718 @@
+<main class="container">
+    <article class="simulated-app-card">
+        <header class="simulated-app-header">
+            <h4>{{ task.agent.scenario_title }}</h4>
+        </header>
+
+        <div class="app-message info-message">
+            <span class="icon">ℹ️</span>
+            <p>{{ task.agent.goal_description }}</p>
+        </div>
+
+        <div class="app-content-area">
+            <div class="product-customizer">
+                <div class="three-column-layout">
+                    <!-- Left column: Product preview -->
+                    <div class="product-column">
+                        <div class="product-preview">
+                            <div class="product-image-container">
+                                <div class="product-image" id="product-image">
+                                    <!-- SVG product that will change color -->
+                                    <svg viewBox="0 0 200 200" width="100%" height="100%">
+                                        <rect x="50" y="40" width="100" height="120" rx="10" id="product-shape" fill="#cccccc" />
+                                        <circle cx="100" cy="80" r="15" fill="#ffffff" />
+                                        <rect x="85" y="110" width="30" height="30" rx="5" fill="#ffffff" />
+                                    </svg>
+                                </div>
+                                <div class="shadow"></div>
+                            </div>
+                            <div class="product-name">Smart Speaker Pro</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Middle column: Color picker -->
+                    <div class="picker-column">
+                        <div class="color-selection-area">
+                            <div class="color-picker-container">
+                                <div id="color-map" class="color-map">
+                                    <div id="color-selector" class="color-selector"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="color-values">
+                                <div class="rgb-value-display">
+                                    <div class="value-field">
+                                        <label>R:</label>
+                                        <input type="number" id="red-value" min="0" max="255" value="128" readonly>
+                                    </div>
+                                    <div class="value-field">
+                                        <label>G:</label>
+                                        <input type="number" id="green-value" min="0" max="255" value="128" readonly>
+                                    </div>
+                                    <div class="value-field">
+                                        <label>B:</label>
+                                        <input type="number" id="blue-value" min="0" max="255" value="128" readonly>
+                                    </div>
+                                </div>
+                                <div class="hex-display">
+                                    <span>Hex: </span>
+                                    <input type="text" id="hex-value" value="#808080" class="hex-value" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right column: Color comparison and apply button -->
+                    <div class="result-column">
+                        <div class="color-comparison">
+                            <div class="target-color">
+                                <div class="color-box target" style="background-color: #6a5acd;">
+                                    <div class="color-label">Target: Slate Blue</div>
+                                </div>
+                            </div>
+                            <div class="your-color">
+                                <div class="color-box" id="your-color" style="background-color: rgb(128, 128, 128);">
+                                    <div class="color-label">Your Color</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-indicator" id="match-status">
+                            <div class="indicator-text">Not matched yet</div>
+                            <div class="indicator-details">Click and drag on the color map</div>
+                        </div>
+                        
+                        <button id="apply-color" class="apply-color-button">Apply This Color</button>
+                    </div>
+                </div>
+                
+                <div id="success-message" style="margin-top: 1rem; display: none;">
+                    <mark class="success">Success! You've matched the target Slate Blue color.</mark>
+                </div>
+            </div>
+        </div>
+
+        <footer class="simulated-app-footer">
+            <small>Task ID: {{ task.id }}</small>
+        </footer>
+    </article>
+</main>
+
+<style>
+    /* Override base template constraints */
+    .container {
+        max-width: 1400px !important;
+        width: 95% !important;
+    }
+    
+    .simulated-app-card {
+        max-width: none !important;
+        width: 100% !important;
+    }
+    
+    .app-content-area {
+        padding: 0 !important;
+    }
+    
+    /* Our existing styles */
+    .product-customizer {
+        padding: 1rem;
+        max-width: 1300px;
+        margin: 0 auto;
+    }
+    
+    .three-column-layout {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .product-column {
+        width: 20%;
+    }
+    
+    .picker-column {
+        width: 40%;
+    }
+    
+    .result-column {
+        width: 40%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .product-preview {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .product-image-container {
+        position: relative;
+        width: 150px;
+        margin: 0 auto;
+    }
+    
+    .product-image {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 0.75rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .product-name {
+        font-weight: bold;
+        margin-top: 1rem;
+        font-size: 1.1rem;
+        text-align: center;
+    }
+    
+    .color-selection-area {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        height: 100%;
+    }
+    
+    .color-picker-container {
+        flex: 1;
+    }
+    
+    .color-map {
+        position: relative;
+        width: 100%;
+        height: 250px;
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: crosshair;
+        background: linear-gradient(to right, 
+            #ff0000 0%, 
+            #ffff00 16.6%, 
+            #00ff00 33.3%, 
+            #00ffff 50%, 
+            #0000ff 66.6%, 
+            #ff00ff 83.3%, 
+            #ff0000 100%
+        );
+    }
+    
+    .color-map:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, 
+            rgba(255,255,255,1) 0%, 
+            rgba(255,255,255,0) 50%,
+            rgba(0,0,0,1) 100%
+        );
+        pointer-events: none;
+    }
+    
+    .color-selector {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border: 2px solid white;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+    }
+    
+    .shadow {
+        position: absolute;
+        bottom: -10px;
+        left: 10%;
+        width: 80%;
+        height: 20px;
+        background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 70%);
+        border-radius: 50%;
+        z-index: -1;
+    }
+    
+    .color-values {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 0.5rem;
+        align-items: center;
+    }
+    
+    .rgb-value-display {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+    
+    .value-field {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .value-field label {
+        font-weight: bold;
+        color: #212529;
+        min-width: 20px;
+    }
+    
+    .value-field input {
+        width: 70px;
+        text-align: center;
+        padding: 0.25rem;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+    }
+    
+    .hex-display {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background-color: #f8f9fa;
+        padding: 0.5rem;
+        border-radius: 4px;
+    }
+    
+    .hex-value {
+        flex: 1;
+        padding: 0.25rem 0.5rem;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        font-family: monospace;
+    }
+    
+    .color-comparison {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .target-color, .your-color {
+        width: 100%;
+    }
+    
+    .color-box {
+        height: 120px;
+        border-radius: 8px;
+        position: relative;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border: 3px solid transparent;
+        transition: border-color 0.3s ease;
+    }
+    
+    .color-box .color-label {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 6px 8px;
+        font-size: 1rem;
+        text-align: center;
+    }
+    
+    .match-indicator {
+        padding: 10px 12px;
+        border-radius: 6px;
+        background-color: #f8f9fa;
+        border-left: 4px solid #6c757d;
+        margin-bottom: 0.25rem;
+    }
+    
+    .match-indicator.close {
+        border-left-color: #ffc107;
+        background-color: rgba(255, 193, 7, 0.1);
+    }
+    
+    .match-indicator.matched {
+        border-left-color: #198754;
+        background-color: rgba(25, 135, 84, 0.1);
+    }
+    
+    .indicator-text {
+        font-weight: bold;
+        margin-bottom: 4px;
+        font-size: 1rem;
+    }
+    
+    .indicator-details {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    
+    .apply-color-button {
+        padding: 1rem 1.5rem;
+        width: 100%;
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-top: auto;
+    }
+    
+    .apply-color-button:hover {
+        background-color: #0b5ed7;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .apply-color-button:disabled {
+        background-color: #6c757d;
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    /* Animation for the target color */
+    @keyframes pulse-border {
+        0% {
+            box-shadow: 0 0 0 0 rgba(106, 90, 205, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+        70% {
+            box-shadow: 0 0 0 10px rgba(106, 90, 205, 0), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(106, 90, 205, 0), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+    }
+    
+    .target-color-preview {
+        animation: pulse-border 2s infinite;
+    }
+    
+    .selected-color-preview {
+        margin: 1rem auto;
+        max-width: 600px;
+        height: 60px;
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        background-color: #808080;
+        transition: background-color 0.3s ease;
+    }
+    
+    .selected-color-box {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 5px;
+        background-color: rgba(0,0,0,0.5);
+    }
+    
+    .color-label {
+        color: white;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+    
+    @media (max-width: 992px) {
+        .three-column-layout {
+            flex-direction: column;
+        }
+        
+        .product-column, .picker-column, .result-column {
+            width: 100%;
+        }
+        
+        .product-preview {
+            padding: 1rem;
+        }
+        
+        .product-image-container {
+            width: 120px;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const redValue = document.getElementById('red-value');
+    const greenValue = document.getElementById('green-value');
+    const blueValue = document.getElementById('blue-value');
+    const hexValue = document.getElementById('hex-value');
+    const yourColor = document.getElementById('your-color');
+    const productShape = document.getElementById('product-shape');
+    const matchStatus = document.getElementById('match-status');
+    const applyColorBtn = document.getElementById('apply-color');
+    const successMessage = document.getElementById('success-message');
+    
+    // Color picker elements
+    const colorMap = document.getElementById('color-map');
+    const colorSelector = document.getElementById('color-selector');
+    
+    // Target color - Slate Blue
+    const targetColor = {
+        r: 106,
+        g: 90,
+        b: 205
+    };
+    
+    // Tolerance for color matching (0-255)
+    const tolerance = 45; // Increased tolerance for easier matching
+    
+    // Current color
+    let currentColor = {
+        r: 128,
+        g: 128,
+        b: 128
+    };
+    
+    // Track if task has been completed
+    let taskCompleted = false;
+    
+    // Set initial position of the color selector
+    colorSelector.style.left = '50%';
+    colorSelector.style.top = '50%';
+    
+    // Initialize match status
+    updateColorDisplay();
+    updateMatchStatus();
+    
+    // Color map interaction
+    colorMap.addEventListener('mousedown', startColorSelection);
+    colorMap.addEventListener('touchstart', handleTouch);
+    
+    function startColorSelection(e) {
+        selectColor(e);
+        document.addEventListener('mousemove', selectColor);
+        document.addEventListener('mouseup', stopColorSelection);
+    }
+    
+    function handleTouch(e) {
+        e.preventDefault();
+        selectColor(e.touches[0]);
+        colorMap.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            selectColor(e.touches[0]);
+        });
+        colorMap.addEventListener('touchend', function() {
+            colorMap.removeEventListener('touchmove', handleTouch);
+        });
+    }
+    
+    function stopColorSelection() {
+        document.removeEventListener('mousemove', selectColor);
+        document.removeEventListener('mouseup', stopColorSelection);
+    }
+    
+    function selectColor(e) {
+        const rect = colorMap.getBoundingClientRect();
+        let x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+        let y = Math.max(0, Math.min(e.clientY - rect.top, rect.height));
+        
+        // Calculate color from position in the full-spectrum map
+        const xRatio = x / rect.width;
+        const yRatio = y / rect.height;
+        
+        // Position the selector
+        colorSelector.style.left = x + 'px';
+        colorSelector.style.top = y + 'px';
+        
+        // Calculate RGB from position
+        calculateColorFromPosition(xRatio, yRatio);
+    }
+    
+    // Calculate RGB values from position on the color map
+    function calculateColorFromPosition(x, y) {
+        // Get hue from X position (full rainbow)
+        const hue = x * 360;
+        
+        // Y position determines both saturation and value
+        // Top half: White to pure color (100% to 0% white blend)
+        // Bottom half: Pure color to black (0% to 100% black blend)
+        
+        let saturation, value;
+        
+        if (y <= 0.5) {
+            // Top half: white to pure color
+            saturation = y * 2; // 0 to 1 as y goes from 0 to 0.5
+            value = 1.0; // Full brightness
+        } else {
+            // Bottom half: pure color to black
+            saturation = 1.0; // Full saturation
+            value = 1.0 - ((y - 0.5) * 2); // 1 to 0 as y goes from 0.5 to 1
+        }
+        
+        // Convert HSV to RGB
+        const rgb = hsvToRgb(hue/360, saturation, value);
+        
+        currentColor = {
+            r: rgb.r,
+            g: rgb.g,
+            b: rgb.b
+        };
+        
+        redValue.value = rgb.r;
+        greenValue.value = rgb.g;
+        blueValue.value = rgb.b;
+        
+        updateColorDisplay();
+    }
+    
+    // Convert HSV to RGB
+    function hsvToRgb(h, s, v) {
+        let r, g, b;
+        
+        const i = Math.floor(h * 6);
+        const f = h * 6 - i;
+        const p = v * (1 - s);
+        const q = v * (1 - f * s);
+        const t = v * (1 - (1 - f) * s);
+        
+        switch (i % 6) {
+            case 0: r = v; g = t; b = p; break;
+            case 1: r = q; g = v; b = p; break;
+            case 2: r = p; g = v; b = t; break;
+            case 3: r = p; g = q; b = v; break;
+            case 4: r = t; g = p; b = v; break;
+            case 5: r = v; g = p; b = q; break;
+        }
+        
+        return {
+            r: Math.round(r * 255),
+            g: Math.round(g * 255),
+            b: Math.round(b * 255)
+        };
+    }
+    
+    // Apply color button
+    applyColorBtn.addEventListener('click', function() {
+        // Apply the color to the product
+        const hexColor = rgbToHex(currentColor.r, currentColor.g, currentColor.b);
+        productShape.setAttribute('fill', hexColor);
+        
+        // Check if the color matches the target
+        if ((isColorMatched() || isColorClose()) && !taskCompleted) {
+            // Display success message
+            successMessage.style.display = 'block';
+            
+            // Mark task as complete
+            taskCompleted = true;
+            
+            // Send success to server
+            fetch('/api/complete_task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    task_id: '{{ task.id }}'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect after a short delay to show the success message
+                    setTimeout(() => {
+                        window.location.href = '/generic_task_success?task_id={{ task.id }}&title={{ task.agent.scenario_title }}';
+                    }, 1500);
+                }
+            });
+        } else if (!isColorMatched() && !isColorClose()) {
+            // Color doesn't match
+            alert('Your color doesn\'t match the target Slate Blue color yet. Keep adjusting the color.');
+        }
+    });
+    
+    // Update color display
+    function updateColorDisplay() {
+        const hexColor = rgbToHex(currentColor.r, currentColor.g, currentColor.b);
+        hexValue.value = hexColor;
+        yourColor.style.backgroundColor = hexColor;
+        
+        updateMatchStatus();
+    }
+    
+    // Update match status
+    function updateMatchStatus() {
+        if (isColorMatched()) {
+            matchStatus.className = 'match-indicator matched';
+            matchStatus.innerHTML = `
+                <div class="indicator-text">Perfect match! 🎉</div>
+                <div class="indicator-details">You've matched the Slate Blue color</div>
+            `;
+            yourColor.style.borderColor = '#198754';
+        } else if (isColorClose()) {
+            matchStatus.className = 'match-indicator close';
+            matchStatus.innerHTML = `
+                <div class="indicator-text">Close enough! ✓</div>
+                <div class="indicator-details">This color is close enough to match - you can apply it</div>
+            `;
+            yourColor.style.borderColor = '#ffc107';
+        } else {
+            matchStatus.className = 'match-indicator';
+            matchStatus.innerHTML = `
+                <div class="indicator-text">Not matched yet</div>
+                <div class="indicator-details">Click and drag on the color map to match the target color</div>
+            `;
+            yourColor.style.borderColor = 'transparent';
+        }
+    }
+    
+    // Check if color matches the target
+    function isColorMatched() {
+        return (
+            Math.abs(currentColor.r - targetColor.r) <= tolerance &&
+            Math.abs(currentColor.g - targetColor.g) <= tolerance &&
+            Math.abs(currentColor.b - targetColor.b) <= tolerance
+        );
+    }
+    
+    // Check if color is close to the target
+    function isColorClose() {
+        const diffR = Math.abs(currentColor.r - targetColor.r);
+        const diffG = Math.abs(currentColor.g - targetColor.g);
+        const diffB = Math.abs(currentColor.b - targetColor.b);
+        
+        const totalDiff = diffR + diffG + diffB;
+        
+        return totalDiff < 150; // Much more lenient definition of "close"
+    }
+    
+    // Convert RGB to Hex
+    function rgbToHex(r, g, b) {
+        return '#' + 
+            ('0' + r.toString(16)).slice(-2) + 
+            ('0' + g.toString(16)).slice(-2) + 
+            ('0' + b.toString(16)).slice(-2);
+    }
+    
+    // Initialize with a color similar to Slate Blue
+    // Calculate initial position
+    setTimeout(() => {
+        // Give browser time to render the color map
+        // Position for a green color
+        const initialX = 0.33; // Hue position for green (~120° or 1/3 of the spectrum)
+        const initialY = 0.6;  // Position for a medium-dark green
+        
+        calculateColorFromPosition(initialX, initialY);
+        
+        const rect = colorMap.getBoundingClientRect();
+        colorSelector.style.left = Math.round(initialX * rect.width) + 'px';
+        colorSelector.style.top = Math.round(initialY * rect.height) + 'px';
+    }, 100);
+});
+</script> 

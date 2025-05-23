@@ -1,0 +1,1049 @@
+<main>
+    <div class="config-editor">
+        <div class="editor-header">
+            <h3>Widget Configuration</h3>
+            <div class="editor-actions">
+                <button id="undo-btn" class="action-btn" disabled>
+                    <span class="action-icon">↩️</span> Undo
+                </button>
+                <button id="redo-btn" class="action-btn" disabled>
+                    <span class="action-icon">↪️</span> Redo
+                </button>
+            </div>
+        </div>
+        
+        <div class="editor-content">
+            <div class="editor-main">
+                <form id="config-form" class="config-form">
+                    <div class="form-section">
+                        <label for="widget-name">Widget Name:</label>
+                        <input type="text" id="widget-name" class="form-control" value="Dashboard Widget">
+                    </div>
+                    
+                    <div class="form-section">
+                        <label for="widget-type">Widget Type:</label>
+                        <select id="widget-type" class="form-control">
+                            <option value="chart">Chart</option>
+                            <option value="table">Table</option>
+                            <option value="summary">Summary</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-section">
+                        <label>Widget Size:</label>
+                        <div class="radio-group">
+                            <label class="radio-item">
+                                <input type="radio" name="widget-size" value="small"> Small
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="widget-size" value="medium" checked> Medium
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="widget-size" value="large"> Large
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <label>Display Options:</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="show-title" checked> Show Title
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="show-legend"> Show Legend
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="auto-refresh" checked> Auto Refresh
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section color-section">
+                        <label>Color Theme (required):</label>
+                        <div class="color-swatches">
+                            <div class="color-swatch" data-color="blue" style="background-color: #3498db;"></div>
+                            <div class="color-swatch" data-color="green" style="background-color: #2ecc71;"></div>
+                            <div class="color-swatch" data-color="purple" style="background-color: #9b59b6;"></div>
+                            <div class="color-swatch" data-color="orange" style="background-color: #e67e22;"></div>
+                            <div class="color-swatch" data-color="red" style="background-color: #e74c3c;"></div>
+                        </div>
+                        <input type="hidden" id="color-theme" value="">
+                        <div class="hint-text">Please select a color, then use the Undo button before selecting a new color.</div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" id="submit-btn" class="primary-button" disabled>Save Configuration</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="editor-sidebar">
+                <div class="sidebar-section">
+                    <h4>History</h4>
+                    <div id="history-list" class="history-list">
+                        <div class="history-item active">
+                            <span class="history-time">Initial Configuration</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h4>Preview</h4>
+                    <div id="widget-preview" class="widget-preview">
+                        <div class="preview-header">
+                            <span class="preview-title">Dashboard Widget</span>
+                        </div>
+                        <div class="preview-content">
+                            <div class="preview-placeholder">
+                                <div class="placeholder-icon">📊</div>
+                                <div class="placeholder-text">Widget Preview</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<style>
+    main {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .config-editor {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+        overflow: hidden;
+    }
+    
+    .editor-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: #f8f9fa;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .editor-header h3 {
+        margin: 0;
+        color: #333;
+        font-size: 1.25rem;
+    }
+    
+    .editor-actions {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .action-btn {
+        display: flex;
+        align-items: center;
+        padding: 6px 12px;
+        background-color: #f1f3f5;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        color: #495057;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .action-btn:hover:not(:disabled) {
+        background-color: #e9ecef;
+    }
+    
+    .action-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    .action-btn.highlight {
+        border-color: #007bff;
+        background-color: #e7f5ff;
+        animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.5); }
+        70% { box-shadow: 0 0 0 5px rgba(0, 123, 255, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+    }
+    
+    .action-icon {
+        margin-right: 4px;
+        font-size: 1rem;
+    }
+    
+    .editor-content {
+        display: flex;
+    }
+    
+    .editor-main {
+        width: 60%;
+        padding: 1.5rem;
+        border-right: 1px solid #e9ecef;
+    }
+    
+    .editor-sidebar {
+        width: 40%;
+        padding: 1.5rem;
+        background-color: #f8f9fa;
+    }
+    
+    .sidebar-section {
+        margin-bottom: 1.5rem;
+    }
+    
+    .sidebar-section h4 {
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+        color: #495057;
+        font-size: 1rem;
+    }
+    
+    .history-list {
+        background-color: #fff;
+        border: 1px solid #e9ecef;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    
+    .history-item {
+        padding: 10px 12px;
+        border-bottom: 1px solid #e9ecef;
+        font-size: 0.9rem;
+        color: #495057;
+        cursor: pointer;
+    }
+    
+    .history-item:last-child {
+        border-bottom: none;
+    }
+    
+    .history-item.active {
+        background-color: #e9f7fe;
+        color: #0c83e2;
+        font-weight: 500;
+    }
+    
+    .history-time {
+        font-size: 0.85rem;
+    }
+    
+    .history-action {
+        font-size: 0.9rem;
+        font-weight: normal;
+    }
+    
+    .form-section {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-section label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #333;
+        font-weight: 500;
+    }
+    
+    .hint-text {
+        margin-top: 8px;
+        font-size: 0.9rem;
+        color: #6c757d;
+        font-style: italic;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 1rem;
+        color: #495057;
+        transition: border-color 0.2s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    
+    .radio-group,
+    .checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .radio-item,
+    .checkbox-item {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+    
+    .radio-item input,
+    .checkbox-item input {
+        margin-right: 6px;
+    }
+    
+    .color-swatches {
+        display: flex;
+        gap: 12px;
+        margin-top: 0.5rem;
+    }
+    
+    .color-swatch {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .color-swatch:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .color-swatch.selected {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px #007bff;
+    }
+    
+    .color-section.highlight {
+        padding: 10px;
+        border: 2px dashed #007bff;
+        border-radius: 6px;
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+    
+    .widget-preview {
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        overflow: hidden;
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .preview-header {
+        padding: 10px 12px;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e0e0e0;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+    
+    .preview-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+    }
+    
+    .preview-placeholder {
+        text-align: center;
+        color: #adb5bd;
+    }
+    
+    .placeholder-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .placeholder-text {
+        font-size: 0.9rem;
+    }
+    
+    .preview-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .form-actions {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    .primary-button {
+        padding: 0.75rem 1.5rem;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    
+    .primary-button:hover:not(:disabled) {
+        background-color: #0069d9;
+    }
+    
+    .primary-button:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+    }
+    
+    @media (max-width: 768px) {
+        .editor-content {
+            flex-direction: column;
+        }
+        
+        .editor-main,
+        .editor-sidebar {
+            width: 100%;
+        }
+        
+        .editor-main {
+            border-right: none;
+            border-bottom: 1px solid #e9ecef;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const undoBtn = document.getElementById('undo-btn');
+    const redoBtn = document.getElementById('redo-btn');
+    const submitBtn = document.getElementById('submit-btn');
+    const historyList = document.getElementById('history-list');
+    const colorSection = document.querySelector('.color-section');
+    
+    // Form elements
+    const widgetNameInput = document.getElementById('widget-name');
+    const widgetTypeSelect = document.getElementById('widget-type');
+    const sizeRadios = document.querySelectorAll('input[name="widget-size"]');
+    const showTitleCheckbox = document.getElementById('show-title');
+    const showLegendCheckbox = document.getElementById('show-legend');
+    const autoRefreshCheckbox = document.getElementById('auto-refresh');
+    const colorThemeInput = document.getElementById('color-theme');
+    const colorSwatches = document.querySelectorAll('.color-swatch');
+    
+    // Preview elements
+    const widgetPreview = document.getElementById('widget-preview');
+    const previewTitle = document.querySelector('.preview-title');
+    const previewContent = document.querySelector('.preview-content');
+    const placeholderIcon = document.querySelector('.placeholder-icon');
+    
+    // State
+    let history = [];
+    let currentState = null;
+    let futureStates = [];
+    let hasUndoneChanges = false;
+    let hasSelectedColor = false;
+    let hasUndoneColor = false;
+    let hasReselectedColor = false;
+    let ignoreNextChange = false;
+    
+    // Define fallback functions if they don't exist in the global scope
+    if (typeof window.completeTask !== 'function') {
+        console.warn('window.completeTask was not found, using fallback implementation');
+        window.completeTask = function(success) {
+            console.log('Task completed:', success);
+        };
+    }
+    
+    if (typeof window.recordMistake !== 'function') {
+        console.warn('window.recordMistake was not found, using fallback implementation');
+        window.recordMistake = function(code, details, message) {
+            console.log('Mistake recorded:', code, details, message);
+        };
+    }
+    
+    // Initialize with default state
+    const initialState = {
+        name: 'Dashboard Widget',
+        type: 'chart',
+        size: 'medium',
+        showTitle: true,
+        showLegend: false,
+        autoRefresh: true,
+        colorTheme: ''
+    };
+    
+    // Set initial form values
+    function setFormValues(state) {
+        ignoreNextChange = true;
+        
+        widgetNameInput.value = state.name;
+        widgetTypeSelect.value = state.type;
+        
+        sizeRadios.forEach(radio => {
+            radio.checked = radio.value === state.size;
+        });
+        
+        showTitleCheckbox.checked = state.showTitle;
+        showLegendCheckbox.checked = state.showLegend;
+        autoRefreshCheckbox.checked = state.autoRefresh;
+        
+        colorThemeInput.value = state.colorTheme;
+        colorSwatches.forEach(swatch => {
+            swatch.classList.toggle('selected', swatch.dataset.color === state.colorTheme);
+        });
+        
+        ignoreNextChange = false;
+        
+        // Update preview
+        updatePreview(state);
+    }
+    
+    // Update widget preview
+    function updatePreview(state) {
+        // Update widget title
+        previewTitle.textContent = state.name || 'Widget Preview';
+        
+        // Show/hide title based on checkbox
+        previewTitle.style.display = state.showTitle ? 'block' : 'none';
+        
+        // Update placeholder icon based on widget type
+        if (state.type === 'chart') {
+            placeholderIcon.textContent = '📊';
+        } else if (state.type === 'table') {
+            placeholderIcon.textContent = '📋';
+        } else if (state.type === 'summary') {
+            placeholderIcon.textContent = '📝';
+        }
+        
+        // Apply color theme if selected
+        if (state.colorTheme) {
+            let themeColor;
+            switch(state.colorTheme) {
+                case 'blue': themeColor = '#3498db'; break;
+                case 'green': themeColor = '#2ecc71'; break;
+                case 'purple': themeColor = '#9b59b6'; break;
+                case 'orange': themeColor = '#e67e22'; break;
+                case 'red': themeColor = '#e74c3c'; break;
+                default: themeColor = '#3498db';
+            }
+            previewContent.style.borderTop = `3px solid ${themeColor}`;
+        } else {
+            previewContent.style.borderTop = 'none';
+        }
+        
+        // Apply size class
+        widgetPreview.className = 'widget-preview';
+        widgetPreview.classList.add(`size-${state.size}`);
+    }
+    
+    // Function to save current state to history
+    function saveState(actionDescription) {
+        const currentState = getCurrentState();
+        
+        if (hasUndoneChanges) {
+            // If we've undone actions and then made a new change,
+            // discard the future states
+            futureStates = [];
+            redoBtn.disabled = true;
+            hasUndoneChanges = false;
+        }
+        
+        history.push({
+            state: currentState,
+            action: actionDescription
+        });
+        
+        // Enable undo button
+        undoBtn.disabled = false;
+        
+        // Update history list
+        updateHistoryList();
+        
+        // Check if form is valid
+        validateForm();
+        
+        // If this is a color change, track the workflow
+        if (actionDescription === 'Changed color theme') {
+            if (!hasSelectedColor) {
+                hasSelectedColor = true;
+                // Highlight the undo button
+                undoBtn.classList.add('highlight');
+            } else if (hasUndoneColor) {
+                hasReselectedColor = true;
+                undoBtn.classList.remove('highlight');
+            }
+        }
+    }
+    
+    // Function to get current state from form
+    function getCurrentState() {
+        const selectedSize = Array.from(sizeRadios).find(radio => radio.checked);
+        
+        return {
+            name: widgetNameInput.value,
+            type: widgetTypeSelect.value,
+            size: selectedSize ? selectedSize.value : 'medium',
+            showTitle: showTitleCheckbox.checked,
+            showLegend: showLegendCheckbox.checked,
+            autoRefresh: autoRefreshCheckbox.checked,
+            colorTheme: colorThemeInput.value
+        };
+    }
+    
+    // Function to update history list in sidebar
+    function updateHistoryList() {
+        // Clear the list except for "Initial Configuration"
+        while (historyList.children.length > 1) {
+            historyList.removeChild(historyList.lastChild);
+        }
+        
+        // Add new history items
+        history.forEach((item, index) => {
+            if (index === 0) {
+                // Skip initial state, it's already there
+                return;
+            }
+            
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            historyItem.innerHTML = `
+                <span class="history-time">${formatHistoryTime(index)}</span>
+                <div class="history-action">${item.action}</div>
+            `;
+            
+            // If this is the current state, mark it as active
+            if (index === history.length - 1 && futureStates.length === 0) {
+                historyItem.classList.add('active');
+                
+                // Set the first item (Initial Configuration) as inactive
+                historyList.querySelector('.history-item').classList.remove('active');
+            }
+            
+            historyList.appendChild(historyItem);
+        });
+        
+        // If we've undone actions, mark the appropriate item as active
+        if (futureStates.length > 0) {
+            const currentIndex = history.length - 1;
+            const historyItems = historyList.querySelectorAll('.history-item');
+            
+            historyItems.forEach((item, index) => {
+                item.classList.toggle('active', index === currentIndex);
+            });
+        }
+    }
+    
+    // Helper function to format history time
+    function formatHistoryTime(index) {
+        if (index === 0) {
+            return "Initial Configuration";
+        } else {
+            return `Change ${index}`;
+        }
+    }
+    
+    // Function to handle undo
+    function handleUndo() {
+        if (history.length <= 1) {
+            return; // Nothing to undo
+        }
+        
+        // Move current state to future states
+        const currentState = history.pop();
+        futureStates.unshift(currentState);
+        
+        // Check if we undid a color change
+        if (currentState.action === 'Changed color theme' && hasSelectedColor && !hasUndoneColor) {
+            hasUndoneColor = true;
+            // Highlight color section to encourage selection of a new color
+            colorSection.classList.add('highlight');
+            undoBtn.classList.remove('highlight');
+        }
+        
+        // Get the previous state
+        const previousState = history[history.length - 1];
+        
+        // Apply the previous state
+        setFormValues(previousState.state);
+        
+        // Enable redo button
+        redoBtn.disabled = false;
+        
+        // Disable undo button if no more history
+        if (history.length <= 1) {
+            undoBtn.disabled = true;
+        }
+        
+        // Update history list
+        updateHistoryList();
+        
+        // Set flag for undone changes
+        hasUndoneChanges = true;
+        
+        // Validate form
+        validateForm();
+    }
+    
+    // Function to handle redo
+    function handleRedo() {
+        if (futureStates.length === 0) {
+            return; // Nothing to redo
+        }
+        
+        // Move the future state to current state
+        const nextState = futureStates.shift();
+        history.push(nextState);
+        
+        // Apply the next state
+        setFormValues(nextState.state);
+        
+        // Disable redo button if no more future states
+        if (futureStates.length === 0) {
+            redoBtn.disabled = true;
+        }
+        
+        // Enable undo button
+        undoBtn.disabled = false;
+        
+        // Update history list
+        updateHistoryList();
+        
+        // Check if we've restored all changes
+        if (futureStates.length === 0) {
+            hasUndoneChanges = false;
+        }
+        
+        // Validate form
+        validateForm();
+    }
+    
+    // Function to validate the form
+    function validateForm() {
+        const currentState = getCurrentState();
+        
+        // Basic validation - check if name is not empty and color theme is selected
+        const isValid = currentState.name.trim() !== '' && 
+                       currentState.type !== '' && 
+                       currentState.colorTheme !== '';
+        
+        // Special workflow validation:
+        // We only want to enable submit if:
+        // 1. User selected a color
+        // 2. Then undid that change
+        // 3. Then selected a color again
+        const workflowComplete = hasSelectedColor && hasUndoneColor && hasReselectedColor;
+        
+        // Debug logging to help troubleshoot button state
+        console.log('Form validation:', { 
+            isValid, 
+            workflowComplete, 
+            hasSelectedColor, 
+            hasUndoneColor, 
+            hasReselectedColor,
+            colorTheme: currentState.colorTheme
+        });
+        
+        // Enable/disable submit button
+        submitBtn.disabled = !(isValid && workflowComplete);
+        
+        return isValid;
+    }
+    
+    // Initialize with default state
+    function initialize() {
+        // Set initial state
+        setFormValues(initialState);
+        
+        // Add to history
+        history.push({
+            state: initialState,
+            action: 'Initial configuration'
+        });
+        
+        // Disable undo & redo buttons initially
+        undoBtn.disabled = true;
+        redoBtn.disabled = true;
+        
+        // Highlight color section initially
+        colorSection.classList.add('highlight');
+        
+        // Validate form
+        validateForm();
+    }
+    
+    // Event listeners
+    
+    // Form change events
+    widgetNameInput.addEventListener('input', function() {
+        if (ignoreNextChange) return;
+        
+        // If user is in the middle of the color workflow, record mistake for changing unrelated field
+        if (hasSelectedColor && hasUndoneColor && !hasReselectedColor) {
+            if (window.recordMistake) {
+                window.recordMistake(
+                    'workflow_deviation',
+                    'User changed widget name instead of selecting a new color after undo',
+                    'Please select a color after undoing your previous color selection'
+                );
+            }
+        }
+        
+        saveState('Changed widget name');
+        updatePreview(getCurrentState());
+    });
+    
+    widgetTypeSelect.addEventListener('change', function() {
+        if (ignoreNextChange) return;
+        
+        // If user is in the middle of the color workflow, record mistake for changing unrelated field
+        if (hasSelectedColor && hasUndoneColor && !hasReselectedColor) {
+            if (window.recordMistake) {
+                window.recordMistake(
+                    'workflow_deviation',
+                    'User changed widget type instead of selecting a new color after undo',
+                    'Please select a color after undoing your previous color selection'
+                );
+            }
+        }
+        
+        saveState('Changed widget type');
+        updatePreview(getCurrentState());
+    });
+    
+    sizeRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (ignoreNextChange) return;
+            
+            // If user is in the middle of the color workflow, record mistake for changing unrelated field
+            if (hasSelectedColor && hasUndoneColor && !hasReselectedColor) {
+                if (window.recordMistake) {
+                    window.recordMistake(
+                        'workflow_deviation',
+                        'User changed widget size instead of selecting a new color after undo',
+                        'Please select a color after undoing your previous color selection'
+                    );
+                }
+            }
+            
+            saveState('Changed widget size');
+            updatePreview(getCurrentState());
+        });
+    });
+    
+    showTitleCheckbox.addEventListener('change', function() {
+        if (ignoreNextChange) return;
+        
+        // If user is in the middle of the color workflow, record mistake for changing unrelated field
+        if (hasSelectedColor && hasUndoneColor && !hasReselectedColor) {
+            if (window.recordMistake) {
+                window.recordMistake(
+                    'workflow_deviation',
+                    'User changed title visibility instead of selecting a new color after undo',
+                    'Please select a color after undoing your previous color selection'
+                );
+            }
+        }
+        
+        saveState('Changed title visibility');
+        updatePreview(getCurrentState());
+    });
+    
+    showLegendCheckbox.addEventListener('change', function() {
+        if (ignoreNextChange) return;
+        
+        // If user is in the middle of the color workflow, record mistake for changing unrelated field
+        if (hasSelectedColor && hasUndoneColor && !hasReselectedColor) {
+            if (window.recordMistake) {
+                window.recordMistake(
+                    'workflow_deviation',
+                    'User changed legend visibility instead of selecting a new color after undo',
+                    'Please select a color after undoing your previous color selection'
+                );
+            }
+        }
+        
+        saveState('Changed legend visibility');
+        updatePreview(getCurrentState());
+    });
+    
+    autoRefreshCheckbox.addEventListener('change', function() {
+        if (ignoreNextChange) return;
+        
+        // If user is in the middle of the color workflow, record mistake for changing unrelated field
+        if (hasSelectedColor && hasUndoneColor && !hasReselectedColor) {
+            if (window.recordMistake) {
+                window.recordMistake(
+                    'workflow_deviation',
+                    'User changed auto refresh setting instead of selecting a new color after undo',
+                    'Please select a color after undoing your previous color selection'
+                );
+            }
+        }
+        
+        saveState('Changed auto refresh');
+        updatePreview(getCurrentState());
+    });
+    
+    // Color swatch selection
+    colorSwatches.forEach(swatch => {
+        swatch.addEventListener('click', function() {
+            if (ignoreNextChange) return;
+            
+            const color = this.dataset.color;
+            const prevColor = colorThemeInput.value;
+            
+            // If we've already selected a color and are selecting the same color, record mistake
+            if (hasSelectedColor && !hasUndoneColor && color === prevColor) {
+                if (window.recordMistake) {
+                    window.recordMistake(
+                        'same_color_selected',
+                        'User selected the same color that was already chosen',
+                        'Please use the Undo button to revert your color choice'
+                    );
+                }
+                return; // Don't apply the change
+            }
+            
+            // If we've undone a color and are selecting the same color as before, record mistake
+            if (hasUndoneColor && color === futureStates[0]?.state.colorTheme) {
+                if (window.recordMistake) {
+                    window.recordMistake(
+                        'same_color_reselected',
+                        'User selected the same color that was previously undone',
+                        'Please select a different color than you initially chose'
+                    );
+                }
+                // Continue with the selection anyway
+            }
+            
+            // Remove selection from all swatches
+            colorSwatches.forEach(s => s.classList.remove('selected'));
+            
+            // Add selection to clicked swatch
+            this.classList.add('selected');
+            
+            // Update hidden input
+            colorThemeInput.value = color;
+            
+            // When user selects a color after undoing, remove the highlight
+            if (hasUndoneColor && !hasReselectedColor) {
+                colorSection.classList.remove('highlight');
+                hasReselectedColor = true; // Explicitly mark that we've reselected a color
+            }
+            
+            // Update history and preview
+            saveState('Changed color theme');
+            updatePreview(getCurrentState());
+            
+            // Verify the button state after color selection
+            validateForm();
+        });
+    });
+    
+    // Button click handlers
+    undoBtn.addEventListener('click', function() {
+        if (history.length <= 1) {
+            return; // Nothing to undo
+        }
+        
+        // If we haven't selected a color yet, record mistake
+        if (!hasSelectedColor) {
+            if (window.recordMistake) {
+                window.recordMistake(
+                    'premature_undo',
+                    'User attempted to undo before selecting a color',
+                    'Please select a color first, then use the Undo button'
+                );
+            }
+            return;
+        }
+        
+        // If we've already undone and not reselected, record mistake
+        if (hasUndoneColor && !hasReselectedColor) {
+            if (window.recordMistake) {
+                window.recordMistake(
+                    'multiple_undo',
+                    'User attempted to undo multiple times instead of selecting a new color',
+                    'After undoing, please select a new color'
+                );
+            }
+            return;
+        }
+        
+        // If we've completed the workflow, record mistake
+        if (hasSelectedColor && hasUndoneColor && hasReselectedColor) {
+            if (window.recordMistake) {
+                window.recordMistake(
+                    'unnecessary_undo',
+                    'User attempted to undo after completing the workflow',
+                    'You have already completed the color selection workflow'
+                );
+            }
+            return;
+        }
+        
+        handleUndo();
+    });
+    
+    redoBtn.addEventListener('click', function() {
+        if (futureStates.length === 0) {
+            return; // Nothing to redo
+        }
+        
+        // If we're in the middle of the workflow and should be selecting a new color, record mistake
+        if (hasUndoneColor && !hasReselectedColor) {
+            if (window.recordMistake) {
+                window.recordMistake(
+                    'workflow_deviation',
+                    'User attempted to redo instead of selecting a new color',
+                    'After undoing, please select a new color instead of redoing'
+                );
+            }
+            return;
+        }
+        
+        handleRedo();
+    });
+    
+    // Form submission
+    document.getElementById('config-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validate before submitting
+        if (!validateForm()) {
+            if (window.recordMistake) {
+                window.recordMistake(
+                    'invalid_form',
+                    'User attempted to submit an incomplete form',
+                    'Please complete all required fields before submitting'
+                );
+            }
+            return;
+        }
+        
+        // Check if the expected workflow was followed
+        if (!hasSelectedColor || !hasUndoneColor || !hasReselectedColor) {
+            if (window.recordMistake) {
+                window.recordMistake(
+                    'incomplete_workflow',
+                    'User did not follow the expected workflow of selecting a color, undoing, and selecting again',
+                    'Please select a color, undo the change, and then select a color again before saving'
+                );
+            }
+            return;
+        }
+        
+        // Complete the task
+        if (window.completeTask) {
+            window.completeTask(true);
+        }
+    });
+    
+    // Initialize
+    initialize();
+});
+</script> 

@@ -1,0 +1,319 @@
+<div class="files-manager">
+                <header class="files-header">
+                    <h3>My Files</h3>
+                    <p>Drag the file to the trash bin to delete it</p>
+                </header>
+
+                <div class="files-container">
+                    <div class="files-list">
+                        <!-- Target file to be deleted -->
+                        <div class="file-item" id="target-file" draggable="true">
+                            <div class="file-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="file-details">
+                                <div class="file-name">Annual_Report.pdf</div>
+                                <div class="file-meta">PDF document - 2.4 MB</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Other files (not draggable) -->
+                        <div class="file-item">
+                            <div class="file-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                                    <line x1="7" y1="2" x2="7" y2="22"></line>
+                                    <line x1="17" y1="2" x2="17" y2="22"></line>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <line x1="2" y1="7" x2="7" y2="7"></line>
+                                    <line x1="2" y1="17" x2="7" y2="17"></line>
+                                    <line x1="17" y1="17" x2="22" y2="17"></line>
+                                    <line x1="17" y1="7" x2="22" y2="7"></line>
+                                </svg>
+                            </div>
+                            <div class="file-details">
+                                <div class="file-name">Budget_2023.xlsx</div>
+                                <div class="file-meta">Excel spreadsheet - 1.8 MB</div>
+                            </div>
+                        </div>
+                        
+                        <div class="file-item">
+                            <div class="file-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                                    <polyline points="13 2 13 9 20 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="file-details">
+                                <div class="file-name">Meeting_Notes.docx</div>
+                                <div class="file-meta">Word document - 512 KB</div>
+                            </div>
+                        </div>
+                        
+                        <div class="file-item">
+                            <div class="file-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                                </svg>
+                            </div>
+                            <div class="file-details">
+                                <div class="file-name">Company_Overview.mp4</div>
+                                <div class="file-meta">Video file - 18.2 MB</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="trash-container" id="trash-bin">
+                        <div class="trash-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="trash-label">Trash</div>
+                    </div>
+                </div>
+            </div>
+</div>
+
+<style>
+    .files-manager {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+    
+    .files-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .files-header h3 {
+        margin-bottom: 0.5rem;
+        color: #212529;
+    }
+    
+    .files-header p {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    
+    .files-container {
+        display: flex;
+        gap: 1.5rem;
+        min-height: 300px;
+    }
+    
+    .files-list {
+        flex: 1;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .file-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid #dee2e6;
+        transition: background-color 0.2s;
+        cursor: default;
+    }
+    
+    .file-item:last-child {
+        border-bottom: none;
+    }
+    
+    .file-item:hover {
+        background-color: #e9ecef;
+    }
+    
+    #target-file {
+        cursor: grab;
+        background-color: #e9ecef;
+        border-left: 3px solid #4a7aff;
+    }
+    
+    #target-file:active {
+        cursor: grabbing;
+    }
+    
+    .file-item.dragging {
+        opacity: 0.5;
+        border: 2px dashed #4a7aff;
+    }
+    
+    .file-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        margin-right: 1rem;
+        color: #4a7aff;
+    }
+    
+    .file-details {
+        flex: 1;
+    }
+    
+    .file-name {
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+    }
+    
+    .file-meta {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+    
+    .trash-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+    
+    .trash-container.drag-over {
+        background-color: #feecf0;
+        border-color: #e53e3e;
+    }
+    
+    .trash-icon {
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+        transition: color 0.2s;
+    }
+    
+    .trash-container.drag-over .trash-icon {
+        color: #e53e3e;
+    }
+    
+    .trash-label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #6c757d;
+    }
+    
+    .trash-container.drag-over .trash-label {
+        color: #e53e3e;
+    }
+    
+    .feedback-message {
+        text-align: center;
+        min-height: 24px;
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-top: 1.5rem;
+    }
+    
+    .feedback-message.success {
+        color: #28a745;
+        font-weight: 500;
+    }
+    
+    .feedback-message.error {
+        color: #dc3545;
+        font-weight: 500;
+    }
+    
+    /* Visual cue for draggable item */
+    #target-file::after {
+        content: "↗";
+        display: inline-block;
+        margin-left: 0.5rem;
+        font-size: 1.2rem;
+        color: #4a7aff;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const targetFile = document.getElementById('target-file');
+    const trashBin = document.getElementById('trash-bin');
+    
+    let hasBeenDragged = false;
+    
+    // Make the file draggable
+    targetFile.addEventListener('dragstart', function(e) {
+        hasBeenDragged = true;
+        this.classList.add('dragging');
+        
+        // Set the drag data
+        e.dataTransfer.setData('text/plain', 'Annual_Report.pdf');
+        e.dataTransfer.effectAllowed = 'move';
+        
+        // Create drag image (optional)
+        const dragIcon = document.createElement('div');
+        dragIcon.innerHTML = `<div style="padding: 10px; background: white; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">Annual_Report.pdf</div>`;
+        document.body.appendChild(dragIcon);
+        e.dataTransfer.setDragImage(dragIcon, 15, 15);
+        setTimeout(() => document.body.removeChild(dragIcon), 0);
+    });
+    
+    targetFile.addEventListener('dragend', function(e) {
+        this.classList.remove('dragging');
+    });
+    
+    // Set up the trash bin as drop target
+    trashBin.addEventListener('dragover', function(e) {
+        e.preventDefault(); // Allow drop
+        this.classList.add('drag-over');
+        e.dataTransfer.dropEffect = 'move';
+    });
+    
+    trashBin.addEventListener('dragleave', function(e) {
+        this.classList.remove('drag-over');
+    });
+    
+    trashBin.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        
+        const data = e.dataTransfer.getData('text/plain');
+        
+        if (data === 'Annual_Report.pdf' && hasBeenDragged) {
+            // Success - complete task using standardized approach
+            // Update UI to show file is deleted
+            targetFile.style.display = 'none';
+            
+            // Complete the task
+            window.completeTask(true);
+        } else {
+            // Record mistake using standardized approach
+            window.recordMistake(
+                'invalid_drag',
+                'User attempted to drop an invalid item or the drag operation was not performed correctly',
+                'Something went wrong. Try dragging the file again.'
+            );
+        }
+    });
+    
+    // Prevent default behaviors for other files
+    document.querySelectorAll('.file-item:not(#target-file)').forEach(file => {
+        file.addEventListener('mousedown', function(e) {
+            // Record mistake for trying to drag non-draggable files
+            window.recordMistake(
+                'wrong_file',
+                'User attempted to drag a file that cannot be moved',
+                'This file can\'t be moved. Please drag the Annual Report file.'
+            );
+        });
+    });
+});
+</script> 

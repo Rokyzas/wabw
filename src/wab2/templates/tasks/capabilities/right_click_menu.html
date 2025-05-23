@@ -1,0 +1,646 @@
+<div class="app-content-area">
+    <div class="file-explorer">
+        <div class="file-explorer-header">
+            <div class="breadcrumb">
+                <span>Documents</span>
+                <span class="separator">›</span>
+                <span>Projects</span>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-sm">New Folder</button>
+                <button class="btn btn-sm">Upload</button>
+            </div>
+        </div>
+        
+        <div class="file-explorer-content">
+            <div class="file-list">
+                <div class="file-item folder">
+                    <div class="file-icon">📁</div>
+                    <div class="file-name">Images</div>
+                    <div class="file-meta">Modified 2 days ago</div>
+                </div>
+                
+                <div class="file-item folder">
+                    <div class="file-icon">📁</div>
+                    <div class="file-name">Documents</div>
+                    <div class="file-meta">Modified 1 week ago</div>
+                </div>
+                
+                <div class="file-item file" id="target-file">
+                    <div class="file-icon">📄</div>
+                    <div class="file-name">Project_Proposal.docx</div>
+                    <div class="file-meta">Modified today</div>
+                    <div class="highlight-indicator">Right-click this file</div>
+                </div>
+                
+                <div class="file-item file">
+                    <div class="file-icon">📄</div>
+                    <div class="file-name">Budget_2023.xlsx</div>
+                    <div class="file-meta">Modified 3 days ago</div>
+                </div>
+            </div>
+            
+            <div class="context-menu" id="context-menu">
+                <ul>
+                    <li class="menu-item"><span class="menu-icon">👁️</span> Open</li>
+                    <li class="menu-item"><span class="menu-icon">⬇️</span> Download</li>
+                    <li class="menu-item" id="rename-option"><span class="menu-icon">✏️</span> Rename</li>
+                    <li class="menu-item"><span class="menu-icon">📋</span> Copy</li>
+                    <li class="menu-item"><span class="menu-icon">✂️</span> Cut</li>
+                    <li class="divider"></li>
+                    <li class="menu-item danger"><span class="menu-icon">🗑️</span> Delete</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="rename-dialog" id="rename-dialog">
+        <div class="rename-header">
+            <h3>Rename File</h3>
+        </div>
+        <div class="rename-content">
+            <div class="form-group">
+                <label for="new-filename">New filename:</label>
+                <input type="text" id="new-filename" value="Project_Proposal.docx" class="form-control">
+            </div>
+        </div>
+        <div class="rename-footer">
+            <button class="btn btn-secondary" id="cancel-rename">Cancel</button>
+            <button class="btn btn-primary" id="confirm-rename">Rename</button>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    /* File Explorer Styles */
+    .file-explorer {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #fff;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        position: relative;
+    }
+    
+    .file-explorer-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1.25rem;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: #f8f9fa;
+        border-radius: 8px 8px 0 0;
+    }
+    
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+    }
+    
+    .breadcrumb .separator {
+        margin: 0 0.5rem;
+        color: #6c757d;
+    }
+    
+    .header-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .btn-sm {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.85rem;
+    }
+    
+    .file-explorer-content {
+        padding: 1rem;
+        min-height: 300px;
+        position: relative;
+    }
+    
+    .file-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+    
+    .file-item {
+        padding: 0.75rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        user-select: none;
+        position: relative;
+    }
+    
+    .file-item:hover {
+        background-color: #f5f5f5;
+    }
+    
+    .file-item.selected {
+        background-color: #e3f2fd;
+    }
+    
+    .file-icon {
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+    
+    .file-name {
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 0.25rem;
+    }
+    
+    .file-meta {
+        font-size: 0.75rem;
+        color: #6c757d;
+        text-align: center;
+    }
+    
+    /* Context Menu */
+    .context-menu {
+        position: fixed;
+        width: 180px;
+        background-color: white;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 1500;
+        opacity: 0;
+        transform: scale(0.9);
+        transform-origin: top left;
+        transition: opacity 0.2s, transform 0.2s;
+        pointer-events: none;
+        border: 1px solid #e0e0e0;
+        display: none;
+    }
+    
+    .context-menu.visible {
+        opacity: 1;
+        transform: scale(1);
+        pointer-events: auto;
+        display: block;
+    }
+    
+    .context-menu ul {
+        list-style: none;
+        padding: 0.5rem 0;
+        margin: 0;
+    }
+    
+    .menu-item {
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+    }
+    
+    .menu-item:hover {
+        background-color: #f5f5f5;
+    }
+    
+    .menu-item.danger {
+        color: #dc3545;
+    }
+    
+    .menu-item.danger:hover {
+        background-color: #fff5f5;
+    }
+    
+    .menu-icon {
+        margin-right: 0.5rem;
+        font-size: 0.95rem;
+        width: 18px;
+        display: inline-block;
+    }
+    
+    .divider {
+        height: 1px;
+        background-color: #e0e0e0;
+        margin: 0.5rem 0;
+    }
+    
+    /* Rename Dialog */
+    .rename-dialog {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.9);
+        width: 350px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        z-index: 1100;
+        opacity: 0;
+        transition: opacity 0.3s, transform 0.3s;
+        pointer-events: none;
+    }
+    
+    .rename-dialog.visible {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+        pointer-events: auto;
+    }
+    
+    .rename-header {
+        padding: 1rem;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .rename-header h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        color: #333;
+    }
+    
+    .rename-content {
+        padding: 1rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        font-size: 0.9rem;
+        color: #555;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 0.95rem;
+    }
+    
+    .form-control:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    
+    .rename-footer {
+        padding: 1rem;
+        border-top: 1px solid #e0e0e0;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+    }
+    
+    /* Overlay */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 1050;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+    }
+    
+    .overlay.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    /* Button styles */
+    .btn {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background-color: #0069d9;
+    }
+    
+    .btn-secondary {
+        background-color: #e9ecef;
+        color: #333;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #dee2e6;
+    }
+    
+    /* Pulse animation for the target file */
+    @keyframes pulse-highlight {
+        0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+    }
+    
+    .file-item.highlight {
+        animation: pulse-highlight 2s infinite;
+        background-color: #e3f2fd;
+    }
+    
+    /* Feedback Message */
+    .feedback-message {
+        text-align: center;
+        min-height: 24px;
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin: 1rem 0;
+        padding: 0.5rem;
+        border-radius: 4px;
+    }
+    
+    .feedback-message.success {
+        background-color: #d4edda;
+        color: #155724;
+        font-weight: 500;
+    }
+    
+    .feedback-message.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        font-weight: 500;
+    }
+    
+    .file-item.file#target-file {
+        position: relative;
+        border: 2px dashed transparent;
+        transition: all 0.3s ease;
+    }
+    
+    .file-item.file#target-file:hover {
+        border-color: #007bff;
+    }
+    
+    .highlight-indicator {
+        position: absolute;
+        bottom: -25px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        color: #007bff;
+        font-size: 0.8rem;
+        font-weight: 500;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .file-item.file#target-file:hover .highlight-indicator {
+        opacity: 1;
+    }
+    
+    .file-item.highlight .highlight-indicator {
+        opacity: 1 !important;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Define fallback functions if they don't exist in the global scope
+    if (typeof window.completeTask !== 'function') {
+        console.warn('window.completeTask was not found, using fallback implementation');
+        window.completeTask = function(success) {
+            console.log('Task completed:', success);
+            alert('Task completed! (fallback implementation)');
+        };
+    }
+    
+    if (typeof window.recordMistake !== 'function') {
+        console.warn('window.recordMistake was not found, using fallback implementation');
+        window.recordMistake = function(code, details, message) {
+            console.log('Mistake recorded:', code, details, message);
+            alert('Mistake: ' + message);
+        };
+    }
+
+    // Elements
+    const targetFile = document.getElementById('target-file');
+    const contextMenu = document.getElementById('context-menu');
+    const renameOption = document.getElementById('rename-option');
+    const renameDialog = document.getElementById('rename-dialog');
+    const cancelRename = document.getElementById('cancel-rename');
+    const confirmRename = document.getElementById('confirm-rename');
+    const allFiles = document.querySelectorAll('.file-item');
+    
+    let isTaskComplete = false;
+    
+    // Add a special click handler to the target file to show the menu directly
+    // This solves the issue with context menu not appearing on right-click
+    targetFile.addEventListener('click', function(e) {
+        // If it's a right click, show our custom menu
+        if (e.button === 2 || e.which === 3) {
+            e.preventDefault();
+            e.stopPropagation();
+            showCustomContextMenu(e);
+            return;
+        }
+        
+        // If we get here, it was a left click
+        if (!isTaskComplete) {
+            window.recordMistake(
+                'left_click_instead_of_right',
+                'User left-clicked instead of right-clicking',
+                "Please right-click (not left-click) on the 'Project_Proposal.docx' file to see the context menu."
+            );
+        }
+    });
+    
+    // Special mousedown handler to catch right clicks
+    targetFile.addEventListener('mousedown', function(e) {
+        // Check if it's the right mouse button
+        if (e.button === 2 || e.which === 3) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Small delay to ensure other handlers have run
+            setTimeout(() => {
+                showCustomContextMenu(e);
+            }, 10);
+        }
+    });
+    
+    // Special contextmenu handler as a fallback
+    targetFile.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        showCustomContextMenu(e);
+    });
+    
+    // Improved function to position and show our custom context menu
+    function showCustomContextMenu(e) {
+        // Select the file first
+        document.querySelectorAll('.file-item').forEach(item => {
+            item.classList.remove('selected');
+        });
+        targetFile.classList.add('selected');
+        
+        // Position the menu at the click position
+        const x = e.clientX || e.pageX;
+        const y = e.clientY || e.pageY;
+        
+        contextMenu.style.position = 'fixed';
+        contextMenu.style.visibility = 'visible';
+        contextMenu.style.display = 'block';
+        contextMenu.style.opacity = '1';
+        contextMenu.style.transform = 'scale(1)';
+        contextMenu.style.pointerEvents = 'auto';
+        
+        // Calculate best position to ensure menu is fully visible
+        const menuWidth = 180; // Approximate width from CSS
+        const menuHeight = 180; // Approximate height based on content
+        
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        
+        if (x + menuWidth > viewportWidth) {
+            contextMenu.style.left = (x - menuWidth) + 'px';
+        } else {
+            contextMenu.style.left = x + 'px';
+        }
+        
+        if (y + menuHeight > viewportHeight) {
+            contextMenu.style.top = (y - menuHeight) + 'px';
+        } else {
+            contextMenu.style.top = y + 'px';
+        }
+        
+        // Ensure the menu is visible with the visible class
+        contextMenu.classList.add('visible');
+    }
+    
+    // Handle clicks on other files (to record mistakes)
+    allFiles.forEach(file => {
+        if (file !== targetFile) {
+            file.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                
+                // Record mistake for right-clicking the wrong file
+                if (!isTaskComplete) {
+                    window.recordMistake(
+                        'wrong_file_selected',
+                        'User right-clicked on the wrong file',
+                        "Please right-click on the 'Project_Proposal.docx' file instead."
+                    );
+                }
+            });
+            
+            file.addEventListener('click', function(e) {
+                // Record mistake for left-clicking instead of right-clicking
+                if (!isTaskComplete) {
+                    window.recordMistake(
+                        'left_click_instead_of_right',
+                        'User left-clicked instead of right-clicking',
+                        "Please right-click (not left-click) on the 'Project_Proposal.docx' file."
+                    );
+                }
+            });
+        }
+    });
+    
+    // Hide context menu when clicking elsewhere
+    document.addEventListener('click', function(e) {
+        if (!contextMenu.contains(e.target) && e.target !== targetFile) {
+            contextMenu.classList.remove('visible');
+        }
+    });
+    
+    // Handle clicks on context menu items (other than rename)
+    const otherMenuItems = Array.from(contextMenu.querySelectorAll('.menu-item')).filter(item => item !== renameOption);
+    otherMenuItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            contextMenu.classList.remove('visible');
+            
+            if (!isTaskComplete) {
+                window.recordMistake(
+                    'wrong_menu_option',
+                    `User selected "${this.textContent.trim()}" instead of "Rename"`,
+                    `Please select "Rename" from the context menu, not "${this.textContent.trim()}".`
+                );
+            }
+        });
+    });
+    
+    // Handle rename option click
+    renameOption.addEventListener('click', function() {
+        // Hide context menu
+        contextMenu.classList.remove('visible');
+        
+        // Show rename dialog and overlay
+        renameDialog.classList.add('visible');
+        
+        // Focus the input
+        document.getElementById('new-filename').focus();
+        document.getElementById('new-filename').select();
+        
+        // Complete task
+        if (!isTaskComplete) {
+            completeTask();
+        }
+    });
+    
+    // Close dialog handlers
+    cancelRename.addEventListener('click', closeDialog);
+    
+    function closeDialog() {
+        renameDialog.classList.remove('visible');
+    }
+    
+    // Confirm rename (just for show)
+    confirmRename.addEventListener('click', function() {
+        const newName = document.getElementById('new-filename').value.trim();
+        
+        if (newName) {
+            targetFile.querySelector('.file-name').textContent = newName;
+            closeDialog();
+        }
+    });
+    
+    // Task completion
+    function completeTask() {
+        if (isTaskComplete) return;
+        
+        isTaskComplete = true;
+        
+        // Use the standardized task completion immediately
+        window.completeTask(true);
+    }
+    
+    // Add a subtle highlight after a delay if user hasn't completed the task
+    setTimeout(() => {
+        if (!isTaskComplete) {
+            targetFile.classList.add('highlight');
+            
+            setTimeout(() => {
+                if (!isTaskComplete && targetFile) {
+                    targetFile.classList.remove('highlight');
+                }
+            }, 3000);
+        }
+    }, 5000);
+    
+    // Prevent default context menu on the entire app area
+    document.querySelector('.app-content-area').addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+    
+});
+</script> 

@@ -1,0 +1,493 @@
+        <div class="app-content-area">
+            <div class="settings-container">
+                <div class="settings-header">
+                    <h3>Notification Settings</h3>
+                    <p>Manage how you receive notifications from our app.</p>
+                </div>
+                
+                <div class="settings-panel">
+                    <div class="setting-group main-toggle">
+                        <div class="setting-info">
+                            <div class="setting-title">
+                                <span class="setting-icon">🔔</span>
+                                <span>Push Notifications</span>
+                            </div>
+                            <div class="setting-description">
+                                Receive real-time alerts for important updates
+                            </div>
+                            <div class="setting-status" id="status-indicator">
+                                <span class="status-label">Status:</span>
+                                <span class="status-value" id="status-value">OFF</span>
+                            </div>
+                        </div>
+                        <div class="setting-control">
+                            <label class="toggle-switch" for="notification-toggle">
+                                <input type="checkbox" id="notification-toggle" class="toggle-input">
+                                <span class="toggle-slider">
+                                    <span class="toggle-knob"></span>
+                                    <span class="toggle-text-on">ON</span>
+                                    <span class="toggle-text-off">OFF</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-settings">
+                        <div class="setting-group sub-toggle">
+                            <div class="setting-info">
+                                <div class="setting-title">
+                                    <span>Email Digest</span>
+                                </div>
+                                <div class="setting-description">
+                                    Daily email summary of your notifications
+                                </div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="toggle-switch small" for="email-toggle">
+                                    <input type="checkbox" id="email-toggle" class="toggle-input" disabled>
+                                    <span class="toggle-slider">
+                                        <span class="toggle-knob"></span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-group sub-toggle">
+                            <div class="setting-info">
+                                <div class="setting-title">
+                                    <span>Sound Alerts</span>
+                                </div>
+                                <div class="setting-description">
+                                    Play sounds for incoming notifications
+                                </div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="toggle-switch small" for="sound-toggle">
+                                    <input type="checkbox" id="sound-toggle" class="toggle-input" disabled>
+                                    <span class="toggle-slider">
+                                        <span class="toggle-knob"></span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-group sub-toggle">
+                            <div class="setting-info">
+                                <div class="setting-title">
+                                    <span>Vibration</span>
+                                </div>
+                                <div class="setting-description">
+                                    Vibrate device for incoming notifications
+                                </div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="toggle-switch small" for="vibration-toggle">
+                                    <input type="checkbox" id="vibration-toggle" class="toggle-input" disabled>
+                                    <span class="toggle-slider">
+                                        <span class="toggle-knob"></span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                    <div class="note-box">
+                        <p>Note: Enable the main notification toggle first to configure individual notification types.</p>
+                    </div>
+                </div>
+            </div>
+
+<style>
+    .settings-container {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #fff;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .settings-header {
+        margin-bottom: 1.5rem;
+    }
+    
+    .settings-header h3 {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        color: #333;
+    }
+    
+    .settings-header p {
+        color: #666;
+        margin-bottom: 0;
+    }
+    
+    .settings-panel {
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    
+    .setting-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .setting-group:last-child {
+        border-bottom: none;
+    }
+    
+    .main-toggle {
+        background-color: #f5f8ff;
+        padding: 1.25rem 1.5rem;
+    }
+    
+    .setting-info {
+        flex: 1;
+    }
+    
+    .setting-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 0.25rem;
+    }
+    
+    .setting-icon {
+        font-size: 1.2rem;
+    }
+    
+    .setting-description {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .setting-status {
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+    }
+    
+    .status-label {
+        color: #666;
+    }
+    
+    .status-value {
+        font-weight: 600;
+        color: #f44336;
+    }
+    
+    .status-value.enabled {
+        color: #4caf50;
+    }
+    
+    /* Toggle Switch */
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+        user-select: none;
+    }
+    
+    .toggle-switch.small {
+        width: 50px;
+        height: 26px;
+    }
+    
+    .toggle-input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        border-radius: 34px;
+        transition: .4s;
+    }
+    
+    .toggle-knob {
+        position: absolute;
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        border-radius: 50%;
+        transition: .4s;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .toggle-switch.small .toggle-knob {
+        height: 18px;
+        width: 18px;
+    }
+    
+    .toggle-input:checked + .toggle-slider {
+        background-color: #4caf50;
+    }
+    
+    .toggle-input:checked + .toggle-slider .toggle-knob {
+        transform: translateX(26px);
+    }
+    
+    .toggle-switch.small .toggle-input:checked + .toggle-slider .toggle-knob {
+        transform: translateX(24px);
+    }
+    
+    .toggle-input:disabled + .toggle-slider {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    /* Toggle text */
+    .toggle-text-on,
+    .toggle-text-off {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: white;
+    }
+    
+    .toggle-text-on {
+        right: 8px;
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+    
+    .toggle-text-off {
+        left: 8px;
+        opacity: 1;
+        transition: opacity 0.4s;
+    }
+    
+    .toggle-input:checked + .toggle-slider .toggle-text-on {
+        opacity: 1;
+    }
+    
+    .toggle-input:checked + .toggle-slider .toggle-text-off {
+        opacity: 0;
+    }
+    
+    /* Sub-settings */
+    .sub-settings {
+        padding: 0.5rem 0;
+        opacity: 0.7;
+        pointer-events: none;
+        transition: opacity 0.3s;
+    }
+    
+    .sub-settings.enabled {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    .sub-toggle {
+        padding: 0.75rem 1.5rem;
+        background-color: #fafafa;
+    }
+    
+    /* Note box */
+    .note-box {
+        background-color: #fff8e1;
+        border-left: 4px solid #ffc107;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1rem;
+        border-radius: 4px;
+    }
+    
+    .note-box p {
+        margin: 0;
+        color: #856404;
+        font-size: 0.9rem;
+    }
+    
+    /* Settings footer */
+    .settings-footer {
+        margin-top: 1.5rem;
+    }
+    
+    .action-buttons {
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    .btn {
+        padding: 0.5rem 1.25rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    
+    .btn-primary {
+        background-color: #2196F3;
+        color: white;
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+        background-color: #1976D2;
+    }
+    
+    .btn-primary:disabled {
+        background-color: #e0e0e0;
+        color: #9e9e9e;
+        cursor: not-allowed;
+    }
+    
+    /* Feedback Message */
+    .feedback-message {
+        text-align: center;
+        min-height: 24px;
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin: 1rem 0;
+        padding: 0.5rem;
+        border-radius: 4px;
+    }
+    
+    .feedback-message.success {
+        background-color: #d4edda;
+        color: #155724;
+        font-weight: 500;
+    }
+    
+    .feedback-message.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        font-weight: 500;
+    }
+    
+    /* Toggle highlight animation */
+    @keyframes pulse-toggle {
+        0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+        70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+    }
+    
+    /* Disable or fade the other secondary toggles */
+    .sub-toggle .setting-title,
+    .sub-toggle .setting-description {
+        transition: opacity 0.3s ease;
+    }
+    
+    .sub-settings:not(.enabled) .sub-toggle .setting-title,
+    .sub-settings:not(.enabled) .sub-toggle .setting-description {
+        opacity: 0.6;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Define fallback functions if they don't exist in the global scope
+    if (typeof window.completeTask !== 'function') {
+        console.warn('window.completeTask was not found, using fallback implementation');
+        window.completeTask = function(success) {
+            console.log('Task completed:', success);
+            alert('Task completed! (fallback implementation)');
+        };
+    }
+    
+    if (typeof window.recordMistake !== 'function') {
+        console.warn('window.recordMistake was not found, using fallback implementation');
+        window.recordMistake = function(code, details, message) {
+            console.log('Mistake recorded:', code, details, message);
+            alert('Mistake: ' + message);
+        };
+    }
+
+    // Elements
+    const mainToggle = document.getElementById('notification-toggle');
+    const subSettings = document.querySelector('.sub-settings');
+    const statusValue = document.getElementById('status-value');
+    
+    const subToggles = [
+        document.getElementById('email-toggle'),
+        document.getElementById('sound-toggle'),
+        document.getElementById('vibration-toggle')
+    ];
+    
+    let isTaskComplete = false;
+    
+    // Add change event to main toggle
+    mainToggle.addEventListener('change', function() {
+        // Update status and sub-settings
+        if (this.checked) {
+            statusValue.textContent = 'ON';
+            statusValue.classList.add('enabled');
+            subSettings.classList.add('enabled');
+            
+            // Enable sub-toggles
+            subToggles.forEach(toggle => {
+                if (toggle) toggle.disabled = false;
+            });
+            
+            // Complete the task immediately when toggled ON
+            if (!isTaskComplete) {
+                isTaskComplete = true;
+                
+                // Call completeTask immediately
+                window.completeTask(true);
+            }
+        } else {
+            statusValue.textContent = 'OFF';
+            statusValue.classList.remove('enabled');
+            subSettings.classList.remove('enabled');
+            
+            // Disable sub-toggles
+            subToggles.forEach(toggle => {
+                if (toggle) toggle.disabled = true;
+            });
+            
+            // Show error message if toggled back to OFF
+            if (!isTaskComplete) {
+                window.recordMistake(
+                    'toggle_turned_off',
+                    'User toggled the switch to OFF instead of ON',
+                    'Please toggle the switch to turn notifications ON.'
+                );
+            }
+        }
+    });
+    
+    // Add a subtle hint after a delay if user hasn't completed the task
+    setTimeout(() => {
+        if (!isTaskComplete) {
+            const toggleLabel = document.querySelector('.toggle-switch');
+            if (toggleLabel) {
+            toggleLabel.style.animation = "pulse-toggle 2s infinite";
+            
+            setTimeout(() => {
+                    if (!isTaskComplete && toggleLabel) {
+                    toggleLabel.style.animation = "";
+                }
+            }, 3000);
+            }
+        }
+    }, 5000);
+    
+    // For sub-toggles, just toggle them without affecting task completion
+    subToggles.forEach(toggle => {
+        if (toggle) {
+        toggle.addEventListener('change', function() {
+            // Just for visual feedback, no task completion impact
+        });
+        }
+    });
+});
+</script> 

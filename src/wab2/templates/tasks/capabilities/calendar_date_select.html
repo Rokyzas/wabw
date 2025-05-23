@@ -1,0 +1,663 @@
+<main class="container">
+    <article class="simulated-app-card">
+        <header class="simulated-app-header">
+            <h4>{{ task.agent.scenario_title }}</h4>
+        </header>
+
+        <div class="app-message info-message">
+            <span class="icon">ℹ️</span>
+            <p>{{ task.agent.goal_description }}</p>
+        </div>
+
+        <div class="app-content-area">
+            <div class="appointment-booking">
+                <div class="booking-form">
+                    <div class="form-row">
+                        <label for="appointment-date">Appointment Date:</label>
+                        <div class="date-input-container">
+                            <input type="text" id="selected-date" placeholder="Select a date" readonly>
+                            <button id="show-calendar-btn" class="calendar-button">
+                                📅
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="calendar-container" class="calendar-container">
+                        <div class="calendar-header">
+                            <button id="prev-month" class="month-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                                </svg>
+                            </button>
+                            <div id="calendar-header-selector">
+                                <span id="month-selector" class="date-selector">June</span>
+                                <span id="year-selector" class="date-selector">2025</span>
+                            </div>
+                            <button id="next-month" class="month-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div id="month-dropdown" class="dropdown">
+                            <div class="dropdown-grid month-grid">
+                                <!-- Months will be filled by JavaScript -->
+                            </div>
+                        </div>
+                        <div id="year-dropdown" class="dropdown">
+                            <div class="dropdown-grid year-grid">
+                                <!-- Years will be filled by JavaScript -->
+                            </div>
+                        </div>
+                        <div class="weekdays">
+                            <div>Sun</div>
+                            <div>Mon</div>
+                            <div>Tue</div>
+                            <div>Wed</div>
+                            <div>Thu</div>
+                            <div>Fri</div>
+                            <div>Sat</div>
+                        </div>
+                        <div id="calendar-days" class="days">
+                            <!-- Days will be filled by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button id="confirm-date" class="confirm-button" disabled>Confirm Appointment</button>
+                    </div>
+                </div>
+                
+                <div id="success-message" style="display: none;">
+                    <mark class="success">Your appointment has been scheduled for <span id="confirmed-date">January 31, 2026</span>.</mark>
+                </div>
+            </div>
+        </div>
+
+        <footer class="simulated-app-footer">
+            <small>Task ID: {{ task.id }}</small>
+        </footer>
+    </article>
+</main>
+
+<style>
+    /* Override base template constraints */
+    .container {
+        max-width: 1400px !important;
+        width: 95% !important;
+    }
+    
+    .simulated-app-card {
+        max-width: none !important;
+        width: 100% !important;
+    }
+    
+    .app-content-area {
+        padding: 1rem !important;
+    }
+    
+    /* Appointment booking styles */
+    .appointment-booking {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .booking-form {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-row {
+        margin-bottom: 20px;
+    }
+    
+    .form-row label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #333;
+    }
+    
+    .date-input-container {
+        position: relative;
+        display: flex;
+        width: 100%;
+        height: 42px;
+    }
+    
+    .date-input-container input {
+        flex: 1;
+        padding: 10px 12px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px 0 0 4px;
+        background-color: #f9f9f9;
+        cursor: pointer;
+        height: 100%;
+        box-sizing: border-box;
+    }
+    
+    .calendar-button {
+        padding: 0;
+        background-color: #ff6b6b; /* Changed to a reddish color */
+        color: white; /* Explicitly set text color to white for the SVG */
+        border: none;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+        width: 42px;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px; /* Make emoji larger */
+    }
+    
+    .calendar-button svg {
+        fill: white; /* Ensure SVG is white */
+    }
+    
+    .calendar-button:hover {
+        background-color: #fa5252; /* Darker on hover */
+    }
+    
+    .calendar-container {
+        display: none;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+    }
+    
+    .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        background-color: #f0f0f0;
+    }
+    
+    .calendar-header h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 500;
+    }
+    
+    .month-nav {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #007bff;
+        font-size: 16px;
+        padding: 4px 8px;
+    }
+    
+    .month-nav:hover {
+        background-color: #e0e0e0;
+        border-radius: 4px;
+    }
+    
+    .weekdays {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        text-align: center;
+        font-weight: 500;
+        color: #666;
+        border-bottom: 1px solid #eee;
+        padding: 10px 0;
+    }
+    
+    .days {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+        padding: 10px;
+    }
+    
+    .day {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+        width: 40px;
+        margin: 0 auto;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .day:hover:not(.inactive) {
+        background-color: #f0f0f0;
+    }
+    
+    .day.selected {
+        background-color: #ff6b6b;
+        color: white;
+    }
+    
+    .day.inactive {
+        color: #ccc;
+        cursor: default;
+    }
+    
+    .day.today {
+        border: 2px solid #ff6b6b;
+        font-weight: bold;
+    }
+    
+    .action-buttons {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+    
+    .confirm-button {
+        padding: 12px 24px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .confirm-button:hover:not(:disabled) {
+        background-color: #218838;
+        transform: translateY(-2px);
+    }
+    
+    .confirm-button:disabled {
+        background-color: #6c757d;
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+    
+    .success {
+        display: block;
+        background-color: #d4edda;
+        color: #155724;
+        padding: 15px;
+        border-radius: 4px;
+        text-align: center;
+        font-weight: 500;
+        margin-top: 20px;
+    }
+    
+    #calendar-header-selector {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+    }
+    
+    .date-selector {
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 500;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+        position: relative;
+    }
+    
+    .date-selector:hover {
+        background-color: #e0e0e0;
+    }
+    
+    /* Add down arrow to indicate dropdown */
+    .date-selector::after {
+        content: "▼";
+        font-size: 10px;
+        margin-left: 5px;
+        vertical-align: middle;
+        color: #ff6b6b;
+    }
+    
+    .dropdown {
+        display: none;
+        position: absolute;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+        max-height: 250px;
+        overflow-y: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 280px;
+        margin-top: 5px;
+        padding: 8px;
+    }
+    
+    .dropdown-grid {
+        display: grid;
+        padding: 8px;
+        gap: 8px;
+    }
+    
+    .month-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .year-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .dropdown-item {
+        text-align: center;
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        background-color: #f8f9fa;
+        color: #212529;
+        border: 1px solid #f1f3f5;
+        font-weight: 500;
+    }
+    
+    .dropdown-item:hover {
+        background-color: #e9ecef;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .dropdown-item.selected {
+        background-color: #ff6b6b;
+        color: white;
+        border-color: #ff6b6b;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const showCalendarBtn = document.getElementById('show-calendar-btn');
+    const calendarContainer = document.getElementById('calendar-container');
+    const selectedDateInput = document.getElementById('selected-date');
+    const calendarDays = document.getElementById('calendar-days');
+    const monthSelector = document.getElementById('month-selector');
+    const yearSelector = document.getElementById('year-selector');
+    const monthDropdown = document.getElementById('month-dropdown');
+    const yearDropdown = document.getElementById('year-dropdown');
+    const monthGrid = document.querySelector('.month-grid');
+    const yearGrid = document.querySelector('.year-grid');
+    const prevMonthBtn = document.getElementById('prev-month');
+    const nextMonthBtn = document.getElementById('next-month');
+    const confirmDateBtn = document.getElementById('confirm-date');
+    const successMessage = document.getElementById('success-message');
+    const confirmedDateSpan = document.getElementById('confirmed-date');
+    
+    // Target date: January 31, 2026
+    const targetMonth = 0; // JavaScript months are 0-based (0 = January)
+    const targetDay = 31;
+    const targetYear = 2026;
+    
+    // Starting date: May 1, 2025
+    let currentMonth = 4; // May (0-based)
+    let currentYear = 2025;
+    let selectedDate = null;
+    
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+        'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    // Toggle calendar visibility
+    showCalendarBtn.addEventListener('click', function() {
+        const isVisible = calendarContainer.style.display === 'block';
+        calendarContainer.style.display = isVisible ? 'none' : 'block';
+        if (!isVisible) {
+            renderCalendar();
+        }
+    });
+    
+    // Month selector click
+    monthSelector.addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        // Create month options
+        if (monthGrid.children.length === 0) {
+            monthNames.forEach((month, index) => {
+                const monthItem = document.createElement('div');
+                monthItem.classList.add('dropdown-item');
+                if (index === currentMonth) {
+                    monthItem.classList.add('selected');
+                }
+                monthItem.textContent = month;
+                monthItem.dataset.value = index;
+                
+                monthItem.addEventListener('click', function() {
+                    currentMonth = parseInt(this.dataset.value);
+                    monthSelector.textContent = monthNames[currentMonth];
+                    monthDropdown.style.display = 'none';
+                    renderCalendar();
+                });
+                
+                monthGrid.appendChild(monthItem);
+            });
+        }
+        
+        // Toggle dropdown visibility
+        yearDropdown.style.display = 'none';
+        monthDropdown.style.display = monthDropdown.style.display === 'block' ? 'none' : 'block';
+    });
+    
+    // Year selector click
+    yearSelector.addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        // Create year options if they don't exist
+        if (yearGrid.children.length === 0) {
+            // Show a range of years (5 years before and after current year)
+            const startYear = currentYear - 5;
+            const endYear = currentYear + 6;
+            
+            for (let year = startYear; year <= endYear; year++) {
+                const yearItem = document.createElement('div');
+                yearItem.classList.add('dropdown-item');
+                if (year === currentYear) {
+                    yearItem.classList.add('selected');
+                }
+                yearItem.textContent = year;
+                yearItem.dataset.value = year;
+                
+                yearItem.addEventListener('click', function() {
+                    currentYear = parseInt(this.dataset.value);
+                    yearSelector.textContent = currentYear;
+                    yearDropdown.style.display = 'none';
+                    renderCalendar();
+                });
+                
+                yearGrid.appendChild(yearItem);
+            }
+        }
+        
+        // Toggle dropdown visibility
+        monthDropdown.style.display = 'none';
+        yearDropdown.style.display = yearDropdown.style.display === 'block' ? 'none' : 'block';
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('#month-dropdown') && 
+            !e.target.closest('#year-dropdown') && 
+            !e.target.closest('#month-selector') && 
+            !e.target.closest('#year-selector')) {
+            monthDropdown.style.display = 'none';
+            yearDropdown.style.display = 'none';
+        }
+    });
+    
+    // Calendar navigation
+    prevMonthBtn.addEventListener('click', function() {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        updateSelectors();
+        renderCalendar();
+    });
+    
+    nextMonthBtn.addEventListener('click', function() {
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        updateSelectors();
+        renderCalendar();
+    });
+    
+    // Update month/year selectors
+    function updateSelectors() {
+        monthSelector.textContent = monthNames[currentMonth];
+        yearSelector.textContent = currentYear;
+        
+        // Update selected item in dropdowns if visible
+        const selectedMonthItem = monthGrid.querySelector('.selected');
+        if (selectedMonthItem) {
+            selectedMonthItem.classList.remove('selected');
+        }
+        
+        const newSelectedMonth = monthGrid.querySelector(`[data-value="${currentMonth}"]`);
+        if (newSelectedMonth) {
+            newSelectedMonth.classList.add('selected');
+        }
+        
+        const selectedYearItem = yearGrid.querySelector('.selected');
+        if (selectedYearItem) {
+            selectedYearItem.classList.remove('selected');
+        }
+        
+        const newSelectedYear = yearGrid.querySelector(`[data-value="${currentYear}"]`);
+        if (newSelectedYear) {
+            newSelectedYear.classList.add('selected');
+        }
+    }
+    
+    // Confirm date button
+    confirmDateBtn.addEventListener('click', function() {
+        if (selectedDate) {
+            const formattedDate = formatDate(selectedDate);
+            confirmedDateSpan.textContent = formattedDate;
+            successMessage.style.display = 'block';
+            
+            // Send success to server
+            fetch('/api/complete_task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    task_id: '{{ task.id }}'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect after a short delay
+                    setTimeout(() => {
+                        window.location.href = '/generic_task_success?task_id={{ task.id }}&title={{ task.agent.scenario_title }}';
+                    }, 1500);
+                }
+            });
+        }
+    });
+    
+    // Render calendar
+    function renderCalendar() {
+        // Clear previous days
+        calendarDays.innerHTML = '';
+        
+        // Get first day of month and number of days
+        const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        
+        // Add empty cells for days before start of month
+        for (let i = 0; i < firstDayOfMonth; i++) {
+            const emptyDay = document.createElement('div');
+            emptyDay.classList.add('day', 'inactive');
+            calendarDays.appendChild(emptyDay);
+        }
+        
+        // Add days of current month
+        const today = new Date();
+        const isCurrentMonth = today.getMonth() === currentMonth && today.getFullYear() === currentYear;
+        
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayElement = document.createElement('div');
+            dayElement.classList.add('day');
+            dayElement.textContent = day;
+            
+            // Check if this day matches the target date (January 31, 2026)
+            const isTargetDate = currentMonth === targetMonth && 
+                                currentYear === targetYear && 
+                                day === targetDay;
+            
+            // Check if this is today
+            if (isCurrentMonth && today.getDate() === day) {
+                dayElement.classList.add('today');
+            }
+            
+            // Check if this day is already selected
+            if (selectedDate && 
+                selectedDate.getDate() === day && 
+                selectedDate.getMonth() === currentMonth && 
+                selectedDate.getFullYear() === currentYear) {
+                dayElement.classList.add('selected');
+            }
+            
+            // Add click event
+            dayElement.addEventListener('click', function() {
+                // Remove selected class from any previously selected day
+                const previouslySelected = document.querySelector('.day.selected');
+                if (previouslySelected) {
+                    previouslySelected.classList.remove('selected');
+                }
+                
+                // Add selected class to clicked day
+                dayElement.classList.add('selected');
+                
+                // Update selected date
+                selectedDate = new Date(currentYear, currentMonth, day);
+                selectedDateInput.value = formatDate(selectedDate);
+                
+                // Close the calendar after selecting a date
+                calendarContainer.style.display = 'none';
+                
+                // Enable confirm button
+                confirmDateBtn.disabled = false;
+                
+                // Determine if the selected date is the target date
+                const isTargetDate = selectedDate.getFullYear() === targetYear && 
+                                    selectedDate.getMonth() === targetMonth && 
+                                    selectedDate.getDate() === targetDay;
+                
+                // Change button color based on date selection
+                if (isTargetDate) {
+                    confirmDateBtn.style.backgroundColor = '#28a745'; // Green for correct date
+                } else {
+                    confirmDateBtn.style.backgroundColor = '#dc3545'; // Red for incorrect date
+                }
+            });
+            
+            calendarDays.appendChild(dayElement);
+        }
+    }
+    
+    // Format date as "Month Day, Year"
+    function formatDate(date) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    }
+    
+    // Initial setup
+    updateSelectors();
+    renderCalendar();
+});
+</script> 

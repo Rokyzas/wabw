@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+
+{% block title %}Web Agent Benchmark Web - Home{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h1>Web Agent Benchmark Web(WABW)</h1>
+    <p>A comprehensive benchmarking system for evaluating AI agents' capabilities in web-based environments.</p>
+</header>
+
+<div class="home-sections">
+    <section class="intro-section">
+        <h2>About WABW</h2>
+        <p>
+            The Web Agent Benchmark Web is designed to evaluate and measure the performance of AI agents 
+            when interacting with web interfaces. It provides a structured set of tasks that test 
+            various capabilities, from basic navigation to complex interactions with web applications.
+        </p>
+        <p>
+            By benchmarking multiple agents on standardized tasks, you can compare their effectiveness,
+            efficiency, and accuracy in web-based environments.
+        </p>
+    </section>
+
+    <section class="getting-started">
+        <h2>Getting Started</h2>
+        <ol>
+            <li>
+                <strong>Configure an Agent</strong> - Go to the <a href="{{ url_for('settings.index') }}">Settings</a> 
+                page to set up or select an agent ID. Each agent's performance is tracked separately.
+            </li>
+            <li>
+                <strong>Browse Available Tasks</strong> - Visit the <a href="{{ url_for('tasks.index') }}">Tasks</a> 
+                page to see all available benchmark tasks organized by category.
+            </li>
+            <li>
+                <strong>Run Tasks</strong> - Launch a task and provide the URL to your AI agent, then observe 
+                how it performs. The benchmark will track actions, mistakes, and completion time.
+            </li>
+            <li>
+                <strong>View Performance Metrics</strong> - Check the <a href="{{ url_for('statistics.index') }}">Statistics</a> 
+                page to analyze performance data and export results for further analysis.
+            </li>
+        </ol>
+    </section>
+
+    <section class="features">
+        <h2>Key Features</h2>
+        <div class="features-grid">
+            <article>
+                <h3>Multi-Agent Support</h3>
+                <p>Benchmark and compare multiple different AI agents on the same tasks.</p>
+            </article>
+            <article>
+                <h3>Comprehensive Metrics</h3>
+                <p>Track actions, mistakes, completion time, and success rates for detailed analysis.</p>
+            </article>
+            <article>
+                <h3>Task Categories</h3>
+                <p>Tasks are organized into categories to test different web interaction capabilities.</p>
+            </article>
+            <article>
+                <h3>Data Export</h3>
+                <p>Export performance data in various formats for further processing and visualization.</p>
+            </article>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    .home-sections {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1rem;
+    }
+    
+    .features-grid article {
+        padding: 1.5rem;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .features-grid h3 {
+        margin-top: 0;
+        color: #333;
+    }
+    
+    .getting-started ol {
+        padding-left: 1.5rem;
+    }
+    
+    .getting-started li {
+        margin-bottom: 0.75rem;
+    }
+</style>
+{% endblock %} 

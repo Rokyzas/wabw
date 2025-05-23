@@ -1,0 +1,542 @@
+<div class="subscription-container">
+                <!-- Stage 1: Account Settings -->
+                <div id="stage-1" class="stage active">
+                    <div class="settings-header">
+                        <h3>Account Settings</h3>
+                        <p class="subtitle">Manage your subscription and preferences</p>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <div class="settings-card">
+                            <h4>Subscription Details</h4>
+                            <p>Premium Plan - $19.99/month</p>
+                            <p class="benefits">✓ Unlimited access<br>✓ Premium features<br>✓ Priority support</p>
+                            <button class="action-button" onclick="event.stopPropagation(); showStage(2)">View Subscription Options</button>
+                        </div>
+                        
+                        <div class="settings-card">
+                            <h4>Billing Information</h4>
+                            <p>Update payment methods and billing details</p>
+                            <button class="secondary-button">Update Billing</button>
+                        </div>
+                        
+                        <div class="settings-card">
+                            <h4>Account Security</h4>
+                            <p>Manage password and security settings</p>
+                            <button class="secondary-button">Security Settings</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 2: Confirmshaming Modal -->
+                <div id="stage-2" class="stage">
+                    <div class="modal-overlay">
+                        <div class="modal-content">
+                            <h3>Account Update Required</h3>
+                            <p class="warning-text">Proceeding with this action will result in the following changes:</p>
+                            <ul class="benefits-list">
+                                <li>✓ Removal of unlimited premium content</li>
+                                <li>✓ Reinstatement of advertisements</li>
+                                <li>✓ Loss of priority customer support</li>
+                                <li>✓ Forfeit of exclusive member discounts</li>
+                            </ul>
+                            <p class="guilt-text">Many of our members who proceed with this change regret their decision later. Would you like to reconsider?</p>
+                            <div class="modal-buttons">
+                                <button class="primary-button" onclick="event.stopPropagation(); showStage(3)">Proceed with Changes</button>
+                                <button class="secondary-button" onclick="event.stopPropagation(); showStage(1)">Keep My Benefits</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 3: Reason Selection -->
+                <div id="stage-3" class="stage">
+                    <div class="reason-selection">
+                        <h3>We're Sorry to See You Go</h3>
+                        <p class="guilt-text">Are you sure you want to give up all these amazing features? Many members who leave come back within a month.</p>
+                        <p>What could we have done better?</p>
+                        <div class="reason-options">
+                            <label class="reason-option">
+                                <input type="radio" name="reason" value="too_expensive">
+                                <span>Pricing concerns</span>
+                            </label>
+                            <label class="reason-option">
+                                <input type="radio" name="reason" value="not_using">
+                                <span>Not enough time to use</span>
+                            </label>
+                            <label class="reason-option">
+                                <input type="radio" name="reason" value="missing_features">
+                                <span>Looking for different features</span>
+                            </label>
+                            <label class="reason-option">
+                                <input type="radio" name="reason" value="other">
+                                <span>Something else</span>
+                            </label>
+                        </div>
+                        <div class="reason-buttons">
+                            <button class="primary-button" onclick="event.stopPropagation(); showStage(4)">Next Step</button>
+                            <button class="secondary-button" onclick="event.stopPropagation(); showStage(1)">I Changed My Mind</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 4: Retention Offer -->
+                <div id="stage-4" class="stage">
+                    <div class="offer-modal">
+                        <div class="offer-content">
+                            <h3>One Last Thing Before You Go</h3>
+                            <p class="guilt-text">Most of our members who leave end up missing their premium features. Are you really sure?</p>
+                            <div class="offer-highlight">
+                                <span class="discount">50% OFF</span>
+                                <p>for the next 3 months</p>
+                            </div>
+                            <p class="offer-text">Don't miss out on our best offer yet! Keep enjoying all your premium benefits at half the price.</p>
+                            <div class="offer-buttons">
+                                <button class="primary-button" onclick="event.stopPropagation(); showStage(5)">No, I'd Like to Continue</button>
+                                <button class="secondary-button" onclick="event.stopPropagation(); showStage(1)">Yes, I'll Stay</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 5: Final Confirmation -->
+                <div id="stage-5" class="stage">
+                    <div class="final-confirmation">
+                        <h3>Final Step</h3>
+                        <p class="warning-text">By selecting "Complete Process" below, you acknowledge the following:</p>
+                        <p class="guilt-text">This is your last opportunity to maintain access to premium features. This action cannot be undone.</p>
+                        <div class="confirmation-options">
+                            <label class="checkbox-option">
+                                <input type="checkbox" id="confirm-cancellation">
+                                <span>I understand that I will lose all premium features and benefits associated with my account</span>
+                            </label>
+                        </div>
+                        <div class="confirmation-buttons">
+                            <button class="danger-button" onclick="event.stopPropagation(); completeCancellation()">Complete Process</button>
+                            <button class="secondary-button" onclick="event.stopPropagation(); showStage(1)">Return to Premium</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<style>
+    .subscription-container {
+        background-color: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+        width: 100%;
+    }
+    
+    .settings-header {
+        padding: 2rem 1.5rem;
+        text-align: center;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .settings-header h3 {
+        margin: 0 0 0.5rem 0;
+        color: #333;
+        font-size: 1.5rem;
+    }
+    
+    .subtitle {
+        margin: 0;
+        color: #6c757d;
+        font-size: 1.1rem;
+    }
+    
+    .settings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        padding: 2rem;
+    }
+    
+    .settings-card {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1.5rem;
+        border: 1px solid #e0e0e0;
+    }
+    
+    .settings-card h4 {
+        margin: 0 0 1rem 0;
+        color: #333;
+    }
+    
+    .benefits {
+        margin: 1rem 0;
+        color: #28a745;
+    }
+    
+    .primary-button {
+        display: block;
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #007bff;
+        color: #fff;
+        border: 2px solid #0056b3;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .primary-button:hover {
+        background-color: #0056b3;
+        border-color: #004494;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .secondary-button {
+        display: block;
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #6c757d;
+        color: #fff;
+        border: 2px solid #5a6268;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .secondary-button:hover {
+        background-color: #5a6268;
+        border-color: #4a4f54;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .danger-button {
+        display: block;
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #dc3545;
+        color: #fff;
+        border: 2px solid #c82333;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .danger-button:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .action-button {
+        display: block;
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .action-button:hover {
+        background-color: #0056b3;
+    }
+    
+    .modal-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+    
+    .modal-buttons .primary-button,
+    .modal-buttons .secondary-button {
+        margin-bottom: 0;
+    }
+    
+    .reason-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+    
+    .reason-buttons .primary-button,
+    .reason-buttons .secondary-button {
+        margin-bottom: 0;
+    }
+    
+    .offer-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+    
+    .offer-buttons .primary-button,
+    .offer-buttons .secondary-button {
+        margin-bottom: 0;
+    }
+    
+    .confirmation-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+    
+    .confirmation-buttons .danger-button,
+    .confirmation-buttons .secondary-button {
+        margin-bottom: 0;
+    }
+    
+    .stage {
+        display: none;
+        padding: 2rem;
+    }
+    
+    .stage.active {
+        display: block;
+    }
+    
+    .modal-overlay {
+        position: absolute;  /* Changed from fixed to absolute */
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .modal-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        max-width: 500px;
+        width: 90%;
+    }
+    
+    .warning-text {
+        color: #dc3545;
+        font-weight: 500;
+    }
+    
+    .benefits-list {
+        list-style: none;
+        padding: 0;
+        margin: 1rem 0;
+    }
+    
+    .benefits-list li {
+        margin: 0.5rem 0;
+        color: #28a745;
+    }
+    
+    .guilt-text {
+        color: #6c757d;
+        font-style: italic;
+        margin: 1rem 0;
+        padding: 1rem;
+        background-color: #f8f9fa;
+        border-left: 4px solid #dc3545;
+        border-radius: 0 4px 4px 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .reason-option {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+        background-color: #fff;
+    }
+    
+    .reason-option:hover {
+        background-color: #f8f9fa;
+        border-color: #007bff;
+    }
+    
+    .reason-option input[type="radio"] {
+        width: 20px !important;
+        height: 20px !important;
+        accent-color: #007bff !important;
+        cursor: pointer !important;
+        -webkit-appearance: radio !important;
+        appearance: radio !important;
+        border: 2px solid #007bff !important;
+        border-radius: 50% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .reason-option input[type="radio"]:checked {
+        background-color: #007bff !important;
+        border-color: #007bff !important;
+    }
+    
+    .reason-option input[type="radio"]:checked + span {
+        color: #007bff !important;
+        font-weight: 500 !important;
+    }
+    
+    .offer-highlight {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        margin: 1.5rem 0;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+    }
+    
+    .discount {
+        font-size: 3rem;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    
+    .offer-text {
+        font-size: 1.2rem;
+        color: #28a745;
+        font-weight: 500;
+        margin: 1rem 0;
+    }
+    
+    .checkbox-option input[type="checkbox"] {
+        width: 20px !important;
+        height: 20px !important;
+        accent-color: #007bff !important;
+        cursor: pointer !important;
+        -webkit-appearance: checkbox !important;
+        appearance: checkbox !important;
+        border: 2px solid #007bff !important;
+        border-radius: 4px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .checkbox-option input[type="checkbox"]:checked {
+        background-color: #007bff !important;
+        border-color: #007bff !important;
+    }
+    
+    .checkbox-option input[type="checkbox"]:checked + span {
+        color: #007bff !important;
+        font-weight: 500 !important;
+    }
+    
+    @media (max-width: 768px) {
+        .settings-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .modal-buttons,
+        .reason-buttons,
+        .offer-buttons,
+        .confirmation-buttons {
+            flex-direction: column;
+        }
+        
+        .modal-buttons .primary-button,
+        .modal-buttons .secondary-button,
+        .reason-buttons .primary-button,
+        .reason-buttons .secondary-button,
+        .offer-buttons .primary-button,
+        .offer-buttons .secondary-button,
+        .confirmation-buttons .danger-button,
+        .confirmation-buttons .secondary-button {
+            margin-bottom: 0.5rem;
+        }
+    }
+</style>
+
+<script>
+let currentStage = 1;
+
+// Function to show a specific stage
+function showStage(stage) {
+    // Stop event propagation to prevent multiple recordings
+    event.stopPropagation();
+    
+    // Record mistake based on the current stage and target stage
+    if (currentStage > 1 && stage === 1) {
+        if (window.recordMistake) {
+            let code = 'navigation_away';
+            let details = 'User navigated away from cancellation flow';
+            let message = 'To cancel your subscription, you need to complete all cancellation steps without going back.';
+            
+            // More specific messaging for each stage
+            if (currentStage === 2) {
+                code = 'confirmation_avoided';
+                details = 'User clicked "Keep My Benefits" instead of proceeding with cancellation';
+                message = 'To cancel your subscription, click "Proceed with Changes" to continue with the cancellation process.';
+            } 
+            else if (currentStage === 3) {
+                code = 'reason_selection_avoided';
+                details = 'User clicked "I Changed My Mind" instead of selecting a reason';
+                message = 'To cancel your subscription, select a reason and click "Next Step" to continue.';
+            }
+            else if (currentStage === 4) {
+                code = 'accepted_retention_offer';
+                details = 'User accepted the 50% discount retention offer';
+                message = 'To cancel your subscription completely, click "No, I\'d Like to Continue" instead of accepting offers.';
+            }
+            else if (currentStage === 5) {
+                code = 'final_confirmation_avoided';
+                details = 'User clicked "Return to Premium" instead of completing cancellation';
+                message = 'To cancel your subscription, check the confirmation box and click "Complete Process".';
+            }
+            
+            window.recordMistake(code, details, message);
+        }
+    }
+    
+    // Hide all stages
+    document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+    
+    // Show selected stage
+    document.getElementById(`stage-${stage}`).classList.add('active');
+    currentStage = stage;
+}
+
+// Function to complete the subscription cancellation
+function completeCancellation() {
+    event.stopPropagation();
+    
+    const confirmCheckbox = document.getElementById('confirm-cancellation');
+    if (!confirmCheckbox.checked) {
+        if (window.recordMistake) {
+            window.recordMistake(
+                'confirmation_missing',
+                'User attempted to cancel without confirming',
+                'Please check the confirmation box to acknowledge you understand the consequences of cancellation.'
+            );
+        }
+        return;
+    }
+    
+    // Complete the task successfully
+    if (window.completeTask) {
+        window.completeTask(true);
+    }
+}
+</script> 

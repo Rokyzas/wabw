@@ -1,0 +1,407 @@
+<main>
+    <div>
+        <div>
+            <form id="config-form">
+                <div>
+                    <label for="product-type">Product Type*</label>
+                    <select id="product-type">
+                        <option value="">-- Select a product type --</option>
+                        <option value="tablet">Tablet</option>
+                        <option value="laptop">Laptop</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="configuration-option">Configuration*</label>
+                    <select id="configuration-option" disabled>
+                        <option value="">-- Select a product type first --</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="color-option">Color*</label>
+                    <select id="color-option" disabled>
+                        <option value="">-- Select a product type first --</option>
+                    </select>
+                </div>
+
+                <!-- Field that appears based on selection -->
+                <div id="warranty-section" style="display: none;">
+                    <label for="warranty-option">Warranty</label>
+                    <select id="warranty-option">
+                        <option value="standard">Standard (1 year)</option>
+                        <option value="extended">Extended (3 years)</option>
+                        <option value="premium">Premium (5 years)</option>
+                    </select>
+                </div>
+                
+                <!-- Field that gets removed based on selection -->
+                <div id="delivery-section">
+                    <label for="delivery-option">Delivery Options*</label>
+                    <select id="delivery-option">
+                        <option value="">-- Select delivery option --</option>
+                        <option value="standard">Standard (3-5 days)</option>
+                        <option value="express">Express (1-2 days)</option>
+                        <option value="nextday">Next Day</option>
+                    </select>
+                </div>
+
+                <div>
+                    <button type="submit" id="submit-button">Complete Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<style>
+    select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    select:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    
+    select:disabled {
+        background-color: #e9ecef;
+        opacity: 1;
+    }
+    
+    button {
+        padding: 0.75rem 1.5rem;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    
+    button:hover:not(:disabled) {
+        background-color: #0069d9;
+    }
+    
+    button:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+    }
+    
+    .note {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+        font-style: italic;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const configForm = document.getElementById('config-form');
+    const productTypeSelect = document.getElementById('product-type');
+    const configSelect = document.getElementById('configuration-option');
+    const colorSelect = document.getElementById('color-option');
+    const warrantyOption = document.getElementById('warranty-option');
+    const deliveryOption = document.getElementById('delivery-option');
+    const submitButton = document.getElementById('submit-button');
+    const warrantySection = document.getElementById('warranty-section');
+    const deliverySection = document.getElementById('delivery-section');
+    
+    // Define fallback functions if they don't exist in the global scope
+    if (typeof window.completeTask !== 'function') {
+        window.completeTask = function(success) {
+            console.log('Task completed:', success);
+        };
+    }
+    
+    if (typeof window.recordMistake !== 'function') {
+        window.recordMistake = function(code, details, message) {
+            console.log('Mistake recorded:', code, details, message);
+        };
+    }
+    
+    // State tracking
+    let isTaskComplete = false;
+    const configuredState = {
+        productType: '',
+        configuration: '',
+        color: '',
+        warranty: 'standard',
+        delivery: ''
+    };
+    
+    // Product data
+    const productOptions = {
+        tablet: {
+            configurations: [
+                { value: 'standard', label: 'Standard' },
+                { value: 'pro', label: 'Pro' }
+            ],
+            colors: [
+                { value: 'black', label: 'Black' },
+                { value: 'silver', label: 'Silver' },
+                { value: 'blue', label: 'Blue' }
+            ]
+        },
+        laptop: {
+            configurations: [
+                { value: 'ultrabook', label: 'Ultrabook' },
+                { value: 'gaming', label: 'Gaming' },
+                { value: 'business', label: 'Business' }
+            ],
+            colors: [
+                { value: 'black', label: 'Black' },
+                { value: 'silver', label: 'Silver' },
+                { value: 'red', label: 'Red' }
+            ]
+        }
+    };
+    
+    // Helper function to populate a select element with options
+    function populateSelect(selectElement, options) {
+        // Clear existing options
+        selectElement.innerHTML = '';
+        
+        // Add default option
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = '-- Select an option --';
+        selectElement.appendChild(defaultOption);
+        
+        // Add options from the provided array
+        options.forEach(option => {
+            const optionElement = document.createElement('option');
+            optionElement.value = option.value;
+            optionElement.textContent = option.label;
+            selectElement.appendChild(optionElement);
+        });
+        
+        // Enable the select
+        selectElement.disabled = false;
+    }
+    
+    // Function to validate the form
+    function validateForm() {
+        const isComplete = configuredState.productType && 
+                           configuredState.configuration && 
+                           configuredState.color &&
+                           (deliverySection.style.display !== 'none' ? configuredState.delivery : true);
+        
+        // Remove button disabling functionality
+        submitButton.disabled = false;
+    }
+    
+    // Product type change handler
+    productTypeSelect.addEventListener('change', function(event) {
+        event.stopPropagation();
+        
+        if (isTaskComplete) return;
+        
+        const selectedProductType = this.value;
+        
+        // Check if product type has changed from previous
+        const productTypeChanged = selectedProductType !== configuredState.productType;
+        
+        // Update the state
+        configuredState.productType = selectedProductType;
+        
+        if (selectedProductType) {
+            // Reset dependent fields when product type changes
+            configSelect.innerHTML = '<option value="">-- Select an option --</option>';
+            configSelect.disabled = true;
+            configuredState.configuration = '';
+            
+            colorSelect.innerHTML = '<option value="">-- Select an option --</option>';
+            colorSelect.disabled = true;
+            configuredState.color = '';
+            
+            // Reset warranty and hide section
+            warrantySection.style.display = 'none';
+            warrantyOption.value = 'standard';
+            configuredState.warranty = 'standard';
+            
+            // Show delivery section by default
+            deliverySection.style.display = 'block';
+            deliveryOption.value = '';
+            configuredState.delivery = '';
+            
+            // Populate configuration options for the selected product type
+            populateSelect(configSelect, productOptions[selectedProductType].configurations);
+        } else {
+            // Reset if no product type is selected
+            configSelect.innerHTML = '<option value="">-- Select a product type first --</option>';
+            configSelect.disabled = true;
+            configuredState.configuration = '';
+            
+            colorSelect.innerHTML = '<option value="">-- Select a product type first --</option>';
+            colorSelect.disabled = true;
+            configuredState.color = '';
+            
+            // Reset/hide warranty
+            warrantySection.style.display = 'none';
+            
+            // Show delivery by default
+            deliverySection.style.display = 'block';
+        }
+        
+        // Validate form
+        validateForm();
+    });
+    
+    // Configuration change handler
+    configSelect.addEventListener('change', function(event) {
+        event.stopPropagation();
+        
+        if (isTaskComplete) return;
+        
+        configuredState.configuration = this.value;
+        
+        if (this.value) {
+            // Populate color options
+            populateSelect(colorSelect, productOptions[configuredState.productType].colors);
+            
+            // Show warranty section for any configuration selected
+            // This is the field that APPEARS after a selection
+            warrantySection.style.display = 'block';
+            
+            // Remove express delivery option for gaming laptops
+            if (configuredState.productType === 'laptop' && this.value === 'gaming') {
+                const expressOption = Array.from(deliveryOption.options).find(opt => opt.value === 'express');
+                if (expressOption) {
+                    expressOption.disabled = true;
+                    
+                    // If express was selected, reset it
+                    if (deliveryOption.value === 'express') {
+                        deliveryOption.value = '';
+                        configuredState.delivery = '';
+                        
+                        window.recordMistake(
+                            'delivery_reset',
+                            'Express delivery option was reset because gaming laptop was selected',
+                            'Express delivery is not available for gaming laptops.'
+                        );
+                    }
+                }
+            } else {
+                // Enable all options
+                Array.from(deliveryOption.options).forEach(opt => {
+                    opt.disabled = false;
+                });
+            }
+        } else {
+            // Reset color if no configuration is selected
+            colorSelect.innerHTML = '<option value="">-- Select a configuration first --</option>';
+            colorSelect.disabled = true;
+            configuredState.color = '';
+            
+            // Hide warranty section
+            warrantySection.style.display = 'none';
+        }
+        
+        // Validate form
+        validateForm();
+    });
+    
+    // Color change handler
+    colorSelect.addEventListener('change', function(event) {
+        event.stopPropagation();
+        
+        if (isTaskComplete) return;
+        
+        configuredState.color = this.value;
+        
+        // Red color for laptops REMOVES the delivery options
+        // This is the field that gets REMOVED based on selection
+        if (configuredState.productType === 'laptop' && this.value === 'red') {
+            deliverySection.style.display = 'none';
+            configuredState.delivery = 'standard'; // Auto-select a default
+        } else {
+            deliverySection.style.display = 'block';
+            
+            // Only reset delivery selection if it was previously hidden
+            if (deliverySection.style.display === 'none') {
+                deliveryOption.value = '';
+                configuredState.delivery = '';
+            }
+        }
+        
+        // Validate form
+        validateForm();
+    });
+    
+    // Warranty change handler
+    warrantyOption.addEventListener('change', function(event) {
+        event.stopPropagation();
+        
+        if (isTaskComplete) return;
+        
+        configuredState.warranty = this.value;
+    });
+    
+    // Delivery option change handler
+    deliveryOption.addEventListener('change', function(event) {
+        event.stopPropagation();
+        
+        if (isTaskComplete) return;
+        
+        configuredState.delivery = this.value;
+        validateForm();
+    });
+    
+    // Form submission handler
+    configForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        if (isTaskComplete) return;
+        
+        // Check if all required fields are filled
+        const isComplete = configuredState.productType && 
+                           configuredState.configuration && 
+                           configuredState.color &&
+                           (deliverySection.style.display !== 'none' ? configuredState.delivery : true);
+                           
+        if (!isComplete) {
+            // Record a mistake when not all required fields are filled
+            window.recordMistake(
+                'incomplete_form',
+                'Form submitted with incomplete fields',
+                'Please fill in all required fields before submitting.'
+            );
+            return;
+        }
+        
+        // Check if tablet is selected - this is the first choice users should try
+        if (configuredState.productType === 'tablet') {
+            // Show out of stock message using alert
+            alert('Sorry, tablets are currently out of stock. Please select a laptop instead.');
+            // Tablet is out of stock
+            return;
+        }
+        
+        // If it's a laptop, complete the order
+        // Mark as complete
+        isTaskComplete = true;
+        
+        // Disable form elements
+        productTypeSelect.disabled = true;
+        configSelect.disabled = true;
+        colorSelect.disabled = true;
+        warrantyOption.disabled = true;
+        deliveryOption.disabled = true;
+        submitButton.disabled = true;
+        
+        // Complete the task
+        window.completeTask(true);
+    });
+});
+</script> 

@@ -1,0 +1,331 @@
+<div class="products-container">
+                <header class="products-header">
+                    <h3>Featured Products</h3>
+                    <p>Explore our collection and find the special offer at the bottom</p>
+                </header>
+
+                <div class="products-list" id="products-list">
+                    <!-- Generate multiple products to force scrolling -->
+                    <div class="product-item">
+                        <div class="product-image" style="background-color: #e9d8fd;"></div>
+                        <div class="product-details">
+                            <h4 class="product-name">Wireless Headphones</h4>
+                            <p class="product-description">Premium noise-cancelling headphones with long battery life.</p>
+                            <div class="product-price">$129.99</div>
+                            <button class="product-button">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-item">
+                        <div class="product-image" style="background-color: #feebc8;"></div>
+                        <div class="product-details">
+                            <h4 class="product-name">Smart Watch</h4>
+                            <p class="product-description">Track your fitness and stay connected with this sleek smart watch.</p>
+                            <div class="product-price">$199.99</div>
+                            <button class="product-button">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-item">
+                        <div class="product-image" style="background-color: #c6f6d5;"></div>
+                        <div class="product-details">
+                            <h4 class="product-name">Bluetooth Speaker</h4>
+                            <p class="product-description">Portable speaker with crystal clear sound and water resistance.</p>
+                            <div class="product-price">$79.99</div>
+                            <button class="product-button">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-item">
+                        <div class="product-image" style="background-color: #bee3f8;"></div>
+                        <div class="product-details">
+                            <h4 class="product-name">Laptop Stand</h4>
+                            <p class="product-description">Ergonomic stand for better posture and improved airflow.</p>
+                            <div class="product-price">$49.99</div>
+                            <button class="product-button">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-item">
+                        <div class="product-image" style="background-color: #fed7d7;"></div>
+                        <div class="product-details">
+                            <h4 class="product-name">Wireless Charger</h4>
+                            <p class="product-description">Fast charging pad compatible with all Qi-enabled devices.</p>
+                            <div class="product-price">$34.99</div>
+                            <button class="product-button">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-item">
+                        <div class="product-image" style="background-color: #fbd38d;"></div>
+                        <div class="product-details">
+                            <h4 class="product-name">Smart Home Hub</h4>
+                            <p class="product-description">Control all your smart devices from one central hub.</p>
+                            <div class="product-price">$149.99</div>
+                            <button class="product-button">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-item">
+                        <div class="product-image" style="background-color: #d6bcfa;"></div>
+                        <div class="product-details">
+                            <h4 class="product-name">Gaming Mouse</h4>
+                            <p class="product-description">Precision gaming mouse with customizable RGB lighting.</p>
+                            <div class="product-price">$59.99</div>
+                            <button class="product-button">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-item">
+                        <div class="product-image" style="background-color: #9ae6b4;"></div>
+                        <div class="product-details">
+                            <h4 class="product-name">Portable Power Bank</h4>
+                            <p class="product-description">20,000mAh capacity with fast charging technology.</p>
+                            <div class="product-price">$45.99</div>
+                            <button class="product-button">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Target product (last one) -->
+                    <div class="product-item target-product" id="target-product">
+                        <div class="product-image" style="background-color: #fc8181;"></div>
+                        <div class="product-details">
+                            <h4 class="product-name">Special Edition Earbuds</h4>
+                            <p class="product-description">Limited time offer - 50% off our premium earbuds!</p>
+                            <div class="product-price"><span class="original-price">$99.99</span> $49.99</div>
+                            <button class="product-button special-button" id="target-button">Get the Deal</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+</div>
+
+<style>
+    .products-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+    
+    .products-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .products-header h3 {
+        margin-bottom: 0.5rem;
+        color: #212529;
+    }
+    
+    .products-header p {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    
+    .products-list {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        height: 400px;
+        overflow-y: auto;
+        padding: 0.5rem;
+    }
+    
+    .product-item {
+        background-color: white;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        display: flex;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+    }
+    
+    .product-item:hover {
+        transform: translateY(-2px);
+    }
+    
+    .product-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 4px;
+        margin-right: 1rem;
+    }
+    
+    .product-details {
+        flex: 1;
+    }
+    
+    .product-name {
+        margin: 0 0 0.5rem;
+        font-size: 1.1rem;
+    }
+    
+    .product-description {
+        margin: 0 0 0.5rem;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    
+    .product-price {
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+        color: #212529;
+    }
+    
+    .original-price {
+        text-decoration: line-through;
+        color: #6c757d;
+        font-weight: normal;
+        margin-right: 0.5rem;
+    }
+    
+    .product-button {
+        padding: 0.5rem 0.75rem;
+        background-color: #4a7aff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    
+    .product-button:hover {
+        background-color: #3968e0;
+    }
+    
+    .special-button {
+        background-color: #e53e3e;
+    }
+    
+    .special-button:hover {
+        background-color: #c53030;
+    }
+    
+    .target-product {
+        border: 2px solid #fc8181;
+    }
+    
+    .feedback-message {
+        text-align: center;
+        min-height: 24px;
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-top: 1.5rem;
+    }
+    
+    .feedback-message.success {
+        color: #28a745;
+        font-weight: 500;
+    }
+    
+    .feedback-message.error {
+        color: #dc3545;
+        font-weight: 500;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const productsList = document.getElementById('products-list');
+    const targetProduct = document.getElementById('target-product');
+    const targetButton = document.getElementById('target-button');
+    
+    let hasScrolledDown = false;
+    
+    // Calculate if target is visible initially
+    const isInitiallyVisible = isElementInViewport(targetProduct, productsList);
+    if (isInitiallyVisible) {
+        // Inject more products to ensure scrolling is needed
+        injectMoreProducts();
+    }
+    
+    // Track scrolling behavior
+    productsList.addEventListener('scroll', function() {
+        if (isElementInViewport(targetProduct, productsList) && !hasScrolledDown) {
+            hasScrolledDown = true;
+        }
+    });
+    
+    // Target button click
+    targetButton.addEventListener('click', function() {
+        if (hasScrolledDown) {
+            // Success - complete task using standardized approach
+            window.completeTask(true);
+        } else {
+            // Record mistake using standardized approach
+            window.recordMistake(
+                'no_scroll_first',
+                'User clicked the target button without scrolling to see it first',
+                'Please scroll down to view the product first'
+            );
+        }
+    });
+    
+    // Add click listeners for other buttons
+    document.querySelectorAll('.product-button:not(#target-button)').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            // Record mistake for clicking wrong button
+            window.recordMistake(
+                'wrong_product',
+                'User clicked a product that is not the last one in the list',
+                'That\'s not the last product. Keep scrolling to find the special offer.'
+            );
+        });
+    });
+    
+    // Helper function to check if an element is in the visible area of a scrollable container
+    function isElementInViewport(el, container) {
+        const rect = el.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        
+        return (
+            rect.top >= containerRect.top &&
+            rect.left >= containerRect.left &&
+            rect.bottom <= containerRect.bottom &&
+            rect.right <= containerRect.right
+        );
+    }
+    
+    // Helper function to inject more products if needed to ensure scrolling
+    function injectMoreProducts() {
+        const productTemplate = `
+            <div class="product-item">
+                <div class="product-image" style="background-color: #${getRandomColor()};"></div>
+                <div class="product-details">
+                    <h4 class="product-name">Additional Product</h4>
+                    <p class="product-description">Another great product in our collection.</p>
+                    <div class="product-price">$${(Math.random() * 100).toFixed(2)}</div>
+                    <button class="product-button">Add to Cart</button>
+                </div>
+            </div>
+        `;
+        
+        // Insert 5 more products before the target
+        for (let i = 0; i < 5; i++) {
+            targetProduct.insertAdjacentHTML('beforebegin', productTemplate);
+        }
+        
+        // Add event listeners to new buttons
+        document.querySelectorAll('.product-button:not(#target-button)').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Record mistake for clicking wrong button
+                window.recordMistake(
+                    'wrong_product',
+                    'User clicked a product that is not the last one in the list',
+                    'That\'s not the last product. Keep scrolling to find the special offer.'
+                );
+            });
+        });
+    }
+    
+    // Helper function to generate random colors
+    function getRandomColor() {
+        const colors = ['e9d8fd', 'feebc8', 'c6f6d5', 'bee3f8', 'fed7d7', 'fbd38d', 'd6bcfa', '9ae6b4'];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+});
+</script> 

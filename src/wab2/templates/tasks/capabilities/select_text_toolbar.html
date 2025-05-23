@@ -1,0 +1,456 @@
+            <div class="text-editor-container">
+                <div class="text-editor-header">
+                    <div class="editor-title">
+                        <span>Document.txt</span>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn btn-sm btn-outline">Save</button>
+                        <button class="btn btn-sm btn-outline">Export</button>
+                    </div>
+                </div>
+                
+                <div class="text-editor-content">
+                    <p class="editor-paragraph">
+                        This is a simple text editor interface. You can edit and format text here.
+                    </p>
+                    <p class="editor-paragraph">
+                        <span id="target-sentence">This sentence should be made bold using the formatting toolbar.</span> 
+                        When you select text, a toolbar will appear that lets you apply different formatting options.
+                    </p>
+                    <p class="editor-paragraph">
+                        Try it out by selecting some text and using the toolbar options.
+                    </p>
+                </div>
+                
+                <div class="selection-toolbar" id="selection-toolbar">
+                    <button class="toolbar-btn" id="bold-btn" title="Bold">
+                        <span class="toolbar-icon">B</span>
+                    </button>
+                    <button class="toolbar-btn" title="Italic">
+                        <span class="toolbar-icon"><i>I</i></span>
+                    </button>
+                    <button class="toolbar-btn" title="Underline">
+                        <span class="toolbar-icon"><u>U</u></span>
+                    </button>
+                    <div class="toolbar-divider"></div>
+                    <button class="toolbar-btn" title="Text Color">
+                        <span class="toolbar-icon">
+                            <div class="color-dot"></div>
+                        </span>
+                    </button>
+                    <button class="toolbar-btn" title="Highlight">
+                        <span class="toolbar-icon">
+                            <div class="highlight-icon"></div>
+                        </span>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="feedback-message" class="feedback-message">
+                <span>Select the highlighted sentence to make it bold.</span>
+            </div>
+
+<style>
+    /* Text Editor Styles */
+    .text-editor-container {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #fff;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .text-editor-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1.25rem;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: #f8f9fa;
+        border-radius: 8px 8px 0 0;
+    }
+    
+    .editor-title {
+        font-weight: 500;
+        color: #555;
+        font-size: 0.95rem;
+    }
+    
+    .header-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .btn-outline {
+        background: transparent;
+        border: 1px solid #ced4da;
+        color: #495057;
+    }
+    
+    .btn-outline:hover {
+        background-color: #f1f3f5;
+    }
+    
+    .text-editor-content {
+        padding: 1.5rem;
+        min-height: 200px;
+        line-height: 1.6;
+        position: relative;
+    }
+    
+    .editor-paragraph {
+        margin-bottom: 1rem;
+        color: #333;
+    }
+    
+    #target-sentence {
+        background-color: #f0f8ff;
+        padding: 2px 4px;
+        border-radius: 3px;
+    }
+    
+    /* Selection Toolbar */
+    .selection-toolbar {
+        position: fixed;
+        background-color: #333;
+        border-radius: 4px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        padding: 0.35rem;
+        display: flex;
+        gap: 0.2rem;
+        z-index: 1500;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.2s, transform 0.2s;
+        pointer-events: none;
+    }
+    
+    .selection-toolbar.visible {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+    
+    .toolbar-btn {
+        background: transparent;
+        border: none;
+        border-radius: 4px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #fff;
+        font-weight: 600;
+        transition: background-color 0.2s;
+    }
+    
+    .toolbar-btn:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .toolbar-btn.active {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .toolbar-divider {
+        width: 1px;
+        height: 20px;
+        background-color: rgba(255, 255, 255, 0.3);
+        margin: 0 0.25rem;
+    }
+    
+    .color-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background-color: #fff;
+    }
+    
+    .highlight-icon {
+        width: 14px;
+        height: 14px;
+        background-color: #ffeb3b;
+    }
+    
+    /* Pulse animation for target sentence */
+    @keyframes pulse-highlight {
+        0% { background-color: #f0f8ff; }
+        50% { background-color: #e3f2fd; }
+        100% { background-color: #f0f8ff; }
+    }
+    
+    #target-sentence.highlight {
+        animation: pulse-highlight 2s infinite;
+    }
+    
+    /* Feedback Message */
+    .feedback-message {
+        text-align: center;
+        min-height: 24px;
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin: 1rem 0;
+        padding: 0.5rem;
+        border-radius: 4px;
+    }
+    
+    .feedback-message.success {
+        background-color: #d4edda;
+        color: #155724;
+        font-weight: 500;
+    }
+    
+    .feedback-message.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        font-weight: 500;
+    }
+    
+    /* Bold button animation */
+    @keyframes pulse-button {
+        0% { background-color: rgba(255, 255, 255, 0); }
+        50% { background-color: rgba(255, 255, 255, 0.3); }
+        100% { background-color: rgba(255, 255, 255, 0); }
+    }
+    
+    #bold-btn.highlight {
+        animation: pulse-button 2s infinite;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const targetSentence = document.getElementById('target-sentence');
+    const toolbar = document.getElementById('selection-toolbar');
+    const boldBtn = document.getElementById('bold-btn');
+    const feedbackMessage = document.getElementById('feedback-message');
+    const editorContent = document.querySelector('.text-editor-content');
+    
+    let isTextSelected = false;
+    let isTaskComplete = false;
+    let hasAttemptedSelection = false;
+    let hasClickedWrongButton = false;
+    let lastRecordedSelection = ""; // Track the last selection we recorded a mistake for
+    let selectionStableTimeout = null;
+    
+    // Helper function to position the toolbar above the selection
+    function positionToolbar() {
+        const selection = window.getSelection();
+        
+        if (selection.rangeCount === 0) return;
+        
+        const range = selection.getRangeAt(0);
+        const rect = range.getBoundingClientRect();
+        
+        // Position toolbar centered above the selection
+        const toolbarWidth = toolbar.offsetWidth || 180; // Fallback width if not visible yet
+        const toolbarHeight = toolbar.offsetHeight || 42; // Fallback height
+        
+        // Calculate position - centered above the selection
+        let left = rect.left + (rect.width / 2) - (toolbarWidth / 2);
+        let top = rect.top - toolbarHeight - 8;
+        
+        // Keep toolbar within viewport bounds
+        if (left < 10) left = 10;
+        if (left + toolbarWidth > window.innerWidth - 10) {
+            left = window.innerWidth - toolbarWidth - 10;
+        }
+        if (top < 10) {
+            // If not enough space above, position below
+            top = rect.bottom + 8;
+        }
+        
+        // Set position (fixed positioning is relative to viewport)
+        toolbar.style.left = left + 'px';
+        toolbar.style.top = top + 'px';
+    }
+    
+    // Prevent text selection from being cleared on mouseup in the editor
+    editorContent.addEventListener('mouseup', function(e) {
+        // Prevent any default behavior that might clear selection
+        e.stopPropagation();
+        
+        // Update toolbar after a short delay to ensure selection is complete
+        setTimeout(function() {
+            const selection = window.getSelection();
+            if (selection.toString().trim() !== '') {
+                positionToolbar();
+                toolbar.classList.add('visible');
+                isTextSelected = true;
+                hasAttemptedSelection = true;
+            }
+        }, 10);
+    });
+    
+    // Prevent editor clicks from bubbling to document
+    editorContent.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+    
+    // Show toolbar when text is selected
+    document.addEventListener('selectionchange', function() {
+        const selection = window.getSelection();
+        
+        // Always clear any pending timeout when selection changes
+        if (selectionStableTimeout) {
+            clearTimeout(selectionStableTimeout);
+            selectionStableTimeout = null;
+        }
+        
+        if (selection.toString().trim() !== '') {
+            isTextSelected = true;
+            
+            // Check if target sentence is selected
+            const selectedText = selection.toString().trim();
+            const targetText = targetSentence.textContent.trim();
+            
+            // Check if the target text is fully contained in the selection
+            // This handles cases where the user may have selected more than just the target
+            if (selectedText === targetText || selectedText.includes(targetText)) {
+                // Correct selection - highlight the bold button
+                boldBtn.classList.add('highlight');
+                feedbackMessage.textContent = "Good! Now click the Bold (B) button in the toolbar.";
+                lastRecordedSelection = ""; // Reset mistake tracking on correct selection
+                
+                // Always update toolbar position and visibility for the correct selection
+                positionToolbar();
+                toolbar.classList.add('visible');
+            } else if (hasAttemptedSelection && selectedText !== '') {
+                // Position toolbar for this selection
+                positionToolbar();
+                toolbar.classList.add('visible');
+                
+                // Wait to see if selection is complete before recording mistake
+                selectionStableTimeout = setTimeout(() => {
+                    // Recheck the selection after timeout as it may have changed
+                    const currentSelection = window.getSelection().toString().trim();
+                    const isCorrectSelection = currentSelection === targetText || 
+                                              currentSelection.includes(targetText);
+                    
+                    // Only record if still wrong and not previously recorded
+                    if (!isCorrectSelection && 
+                        currentSelection !== lastRecordedSelection && 
+                        currentSelection !== '') {
+                        
+                        window.recordMistake(
+                            'wrong_text_selected',
+                            `User selected "${currentSelection}" instead of target sentence`,
+                            "That's not the target sentence. Try selecting the highlighted sentence."
+                        );
+                        lastRecordedSelection = currentSelection; // Remember this selection
+                    }
+                }, 700); // Wait longer for selection to be stable
+            }
+        } else {
+            isTextSelected = false;
+            toolbar.classList.remove('visible');
+            boldBtn.classList.remove('highlight');
+        }
+    });
+    
+    // Track clicks on non-bold buttons
+    document.querySelectorAll('.toolbar-btn').forEach(btn => {
+        if (btn.id !== 'bold-btn') {
+            btn.addEventListener('click', function() {
+                if (isTextSelected && !isTaskComplete) {
+                    // Check if target sentence is selected
+                    const selection = window.getSelection();
+                    const selectedText = selection.toString().trim();
+                    const targetText = targetSentence.textContent.trim();
+                    
+                    if (selectedText === targetText) {
+                        // User clicked wrong button while correct text was selected
+                        hasClickedWrongButton = true;
+                        window.recordMistake(
+                            'wrong_button_clicked',
+                            `User clicked ${this.title} button instead of Bold`,
+                            `That's the ${this.title} button. Click the Bold (B) button instead.`
+                        );
+                    }
+                }
+            });
+        }
+    });
+    
+    // Handle click on bold button
+    boldBtn.addEventListener('click', function() {
+        const selection = window.getSelection();
+        
+        if (selection.toString().trim() !== '') {
+            // Check if target sentence is selected
+            const selectedText = selection.toString().trim();
+            const targetText = targetSentence.textContent.trim();
+            
+            if (selectedText === targetText) {
+                // Make the text bold
+                targetSentence.style.fontWeight = 'bold';
+                
+                // Hide toolbar
+                toolbar.classList.remove('visible');
+                
+                // Complete task
+                if (!isTaskComplete) {
+                    completeTask();
+                }
+            } else {
+                // User clicked bold on wrong text
+                window.recordMistake(
+                    'bold_wrong_text',
+                    `User made "${selectedText}" bold instead of target sentence`,
+                    "You need to select the highlighted sentence first, then click Bold."
+                );
+            }
+        }
+    });
+    
+    // Close toolbar when clicking outside
+    document.addEventListener('click', function(e) {
+        // Don't clear selection if clicking in editor area
+        const editorContent = document.querySelector('.text-editor-content');
+        if (editorContent.contains(e.target)) {
+            return;
+        }
+        
+        // Don't clear if clicking toolbar or bold button
+        if (!toolbar.contains(e.target) && isTextSelected) {
+            // Don't hide if we're clicking the bold button
+            if (e.target !== boldBtn && !boldBtn.contains(e.target)) {
+                window.getSelection().removeAllRanges();
+                toolbar.classList.remove('visible');
+                isTextSelected = false;
+            }
+        }
+    });
+    
+    // Task completion
+    function completeTask() {
+        if (isTaskComplete) return;
+        
+        isTaskComplete = true;
+        
+        // Use standardized task completion
+        window.completeTask(true);
+    }
+    
+    // Add hints after a delay if user hasn't completed the task
+    setTimeout(() => {
+        if (!isTaskComplete) {
+            targetSentence.classList.add('highlight');
+            
+            setTimeout(() => {
+                if (!isTaskComplete) {
+                    feedbackMessage.textContent = "Hint: Select the highlighted sentence by dragging your cursor across it.";
+                }
+            }, 3000);
+        }
+    }, 5000);
+    
+    // Make sure the selection is maintained when clicking on the toolbar
+    toolbar.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+    });
+});
+</script> 

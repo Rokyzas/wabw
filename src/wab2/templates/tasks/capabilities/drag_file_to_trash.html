@@ -1,0 +1,105 @@
+<main class="container">
+    <article class="simulated-app-card">
+        <header class="simulated-app-header">
+            <h4>{{ task.agent.scenario_title }}</h4>
+        </header>
+
+        <div class="app-message info-message">
+            <span class="icon">ℹ️</span>
+            <p>{{ task.agent.goal_description }}</p>
+        </div>
+
+        <div class="app-content-area">
+            <!-- File storage UI simulation -->
+            <div id="file-storage-area" style="border: 1px solid #dee2e6; border-radius: 4px; padding: 20px; margin-bottom: 20px;">
+                <div id="file-item" draggable="true" 
+                     style="width: 80px; height: 100px; background-color: #f8f9fa; border: 1px solid #dee2e6; 
+                            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+                            cursor: grab; user-select: none; margin: 0 auto;">
+                    <div style="font-size: 24px; color: #6c757d;">📄</div>
+                    <div style="margin-top: 8px; font-size: 12px; text-align: center;">document.pdf</div>
+                </div>
+            </div>
+            
+            <div id="result" style="margin: 20px 0; text-align: center; display: none;">
+                <mark class="success">Success! File was moved to trash.</mark>
+            </div>
+        </div>
+
+        <footer class="simulated-app-footer">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <small>Task ID: {{ task.id }}</small>
+                
+                <!-- Trash bin target in the corner -->
+                <div id="trash-bin" 
+                     style="width: 40px; height: 40px; background-color: #f8f9fa; 
+                            border: 1px solid #dee2e6; border-radius: 4px; 
+                            display: flex; align-items: center; justify-content: center; 
+                            color: #6c757d; cursor: pointer;">
+                    🗑️
+                </div>
+            </div>
+        </footer>
+    </article>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileItem = document.getElementById('file-item');
+    const trashBin = document.getElementById('trash-bin');
+    const resultElement = document.getElementById('result');
+    
+    // Make file draggable
+    fileItem.addEventListener('dragstart', function(e) {
+        e.dataTransfer.setData('text/plain', 'file');
+        setTimeout(() => {
+            fileItem.style.opacity = '0.4';
+        }, 0);
+    });
+    
+    fileItem.addEventListener('dragend', function() {
+        fileItem.style.opacity = '1';
+    });
+    
+    // Setup trash bin as drop target
+    trashBin.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        trashBin.style.backgroundColor = '#e2e6ea';
+    });
+    
+    trashBin.addEventListener('dragleave', function() {
+        trashBin.style.backgroundColor = '#f8f9fa';
+    });
+    
+    trashBin.addEventListener('drop', function(e) {
+        e.preventDefault();
+        trashBin.style.backgroundColor = '#f8f9fa';
+        
+        // Check if correct item is being dropped
+        if (e.dataTransfer.getData('text/plain') === 'file') {
+            fileItem.style.display = 'none';
+            resultElement.style.display = 'block';
+            
+            // Send completion notification to server
+            fetch('/api/complete_task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    task_id: '{{ task.id }}'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect after a short delay to show the success message
+                    setTimeout(() => {
+                        window.location.href = '/generic_task_success?task_id={{ task.id }}&title={{ task.agent.scenario_title }}';
+                    }, 1500);
+                }
+            });
+        }
+    });
+});
+</script> 

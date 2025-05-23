@@ -1,0 +1,159 @@
+<div class="form-wrapper">
+            <div class="form-container">
+                <form id="name-form" class="input-form">
+                    <div class="form-header">
+                        <h3>Profile Information</h3>
+                        <p>Please enter your name below</p>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="name-input">Your Name:</label>
+                        <input 
+                            type="text" 
+                            id="name-input" 
+                            placeholder="Type your name here" 
+                            autocomplete="off"
+                            required
+                        >
+                    </div>
+                    
+            <div id="feedback-container" class="feedback-container"></div>
+                </form>
+            </div>
+        </div>
+
+<style>
+    .form-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        min-height: 300px;
+        padding: 15px;
+    }
+    
+    .form-container {
+        width: 100%;
+        max-width: 500px;
+    }
+    
+    .input-form {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    .form-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-header h3 {
+        margin-bottom: 0.5rem;
+        color: #212529;
+    }
+    
+    .form-header p {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    
+    .input-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .input-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #495057;
+        font-weight: 500;
+    }
+    
+    .input-group input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        border: 2px solid #ced4da;
+        border-radius: 4px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    .input-group input:focus {
+        border-color: #4a7aff;
+        box-shadow: 0 0 0 3px rgba(74, 122, 255, 0.25);
+        outline: none;
+    }
+    
+    .feedback-container {
+        min-height: 24px;
+        margin-top: 1rem;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const nameInput = document.getElementById('name-input');
+    const targetName = "John"; // The expected name
+    let hasValidInput = false;
+    
+    // Auto-focus the input when the page loads
+    nameInput.focus();
+    
+    // Form submission handler
+    document.getElementById('name-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        if (hasValidInput) {
+            window.completeTask(true);
+        } else {
+            window.recordMistake(
+                'wrong_name',
+                `Entered "${nameInput.value}" instead of "${targetName}"`,
+                `Please enter "${targetName}" as your name.`
+            );
+        }
+    });
+    
+    // Check for input in the name field
+    nameInput.addEventListener('input', function(event) {
+        const nameValue = nameInput.value.trim();
+        
+        // Check if the entered name is exactly "John"
+        if (nameValue === targetName) {
+            // Valid input - complete the task
+            hasValidInput = true;
+            window.completeTask(true);
+        } else {
+            hasValidInput = false;
+            
+            // If they've typed something else, but it's a completed name (assuming space or punctuation)
+            if (nameValue.length > 0 && (event.data === ' ' || event.data === '.' || event.data === ',')) {
+                window.recordMistake(
+                    'wrong_name',
+                    `Entered "${nameValue}" instead of "${targetName}"`,
+                    `Please enter "${targetName}" as your name.`
+                );
+            }
+        }
+    });
+    
+    // Handle blur event for empty field
+    nameInput.addEventListener('blur', function() {
+        if (nameInput.value.trim() === '') {
+            window.recordMistake(
+                'empty_field',
+                'Input field left empty',
+                `Please enter "${targetName}" in the field`
+            );
+        } else if (nameInput.value.trim() !== targetName) {
+            window.recordMistake(
+                'wrong_name',
+                `Entered "${nameInput.value}" instead of "${targetName}"`,
+                `Please enter "${targetName}" as your name.`
+            );
+        }
+    });
+});
+</script> 

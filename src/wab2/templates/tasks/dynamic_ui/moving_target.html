@@ -1,0 +1,282 @@
+<main>
+    <div class="map-background">
+        <div id="target-pin" class="target-pin">
+            <div class="pin-head"></div>
+            <div class="pin-tail"></div>
+        </div>
+        <div id="status-indicator" class="status-indicator">
+            <span class="status-dot moving"></span>
+            <span class="status-text">Finding your location...</span>
+        </div>
+    </div>
+</main>
+
+<style>
+    main {
+        margin-bottom: 20px;
+    }
+    
+    .map-background {
+        position: relative;
+        width: 100%;
+        height: 300px;
+        border-radius: 8px;
+        overflow: hidden;
+        background-image: linear-gradient(to bottom, #e6f2ff 0%, #c9e6ff 40%, #b3d9ff 60%, #99ccff 100%);
+        background-size: cover;
+    }
+    
+    .map-background::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            radial-gradient(circle at 30% 20%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 8%),
+            radial-gradient(circle at 70% 60%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 6%),
+            radial-gradient(circle at 40% 80%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 10%),
+            radial-gradient(circle at 80% 30%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 12%);
+    }
+    
+    .status-indicator {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        padding: 8px 12px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 4px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+        display: flex;
+        align-items: center;
+    }
+    
+    .status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 8px;
+    }
+    
+    .status-dot.moving {
+        background-color: #ff9500;
+        animation: pulse 1.5s infinite;
+    }
+    
+    .status-dot.settled {
+        background-color: #4cd964;
+    }
+    
+    .status-text {
+        font-size: 14px;
+        color: #333;
+    }
+    
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.4; }
+        100% { opacity: 1; }
+    }
+    
+    .target-pin {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -100%);
+        z-index: 5;
+        transition: transform 0.2s ease;
+    }
+    
+    .target-pin.settled {
+        cursor: pointer;
+    }
+    
+    .target-pin.settled:hover {
+        transform: translate(-50%, -100%) scale(1.1);
+    }
+    
+    .pin-head {
+        width: 24px;
+        height: 24px;
+        background-color: #ff3b30;
+        border-radius: 50% 50% 50% 0;
+        transform: rotate(-45deg);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+    
+    .pin-tail {
+        width: 2px;
+        height: 10px;
+        background-color: rgba(0, 0, 0, 0.5);
+        margin-left: 11px;
+        margin-top: -2px;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const targetPin = document.getElementById('target-pin');
+    const statusDot = document.querySelector('.status-dot');
+    const statusText = document.querySelector('.status-text');
+    const mapBackground = document.querySelector('.map-background');
+    
+    let isSettled = false;
+    let hasClicked = false;
+    let movementTimer = null;
+    let settleTimeout = null;
+    let isTaskComplete = false;
+    
+    // Define fallback functions if they don't exist in the global scope
+    if (typeof window.completeTask !== 'function') {
+        console.warn('window.completeTask was not found, using fallback implementation');
+        window.completeTask = function(success) {
+            console.log('Task completed:', success);
+        };
+    }
+    
+    if (typeof window.recordMistake !== 'function') {
+        console.warn('window.recordMistake was not found, using fallback implementation');
+        window.recordMistake = function(code, details, message) {
+            console.log('Mistake recorded:', code, details, message);
+        };
+    }
+    
+    // Initial position (center)
+    let currentX = 50;
+    let currentY = 50;
+    
+    // Function to move the pin to a specific position
+    function movePin(x, y) {
+        targetPin.style.left = `${x}%`;
+        targetPin.style.top = `${y}%`;
+        currentX = x;
+        currentY = y;
+    }
+    
+    // Function to randomly move the pin
+    function randomMove() {
+        if (isSettled || isTaskComplete) return;
+        
+        // Generate new position with limited movement distance
+        const moveDistance = Math.random() * 20 + 10; // 10-30% movement
+        const angle = Math.random() * Math.PI * 2; // Random angle
+        
+        let newX = currentX + Math.cos(angle) * moveDistance;
+        let newY = currentY + Math.sin(angle) * moveDistance;
+        
+        // Keep within bounds (with some padding)
+        newX = Math.max(10, Math.min(90, newX));
+        newY = Math.max(10, Math.min(90, newY));
+        
+        // Apply smooth transition
+        const animationDuration = moveDistance * 60;
+        targetPin.style.transition = `left ${animationDuration}ms ease-out, top ${animationDuration}ms ease-out`;
+        movePin(newX, newY);
+        
+        // Schedule next move after a random delay
+        const nextMoveDelay = Math.random() * 400 + 200; // 200-600ms
+        movementTimer = setTimeout(randomMove, nextMoveDelay);
+    }
+    
+    // Start the pin moving after a short delay
+    setTimeout(function() {
+        randomMove();
+        
+        // Schedule when the pin will settle
+        settleTimeout = setTimeout(function() {
+            clearTimeout(movementTimer);
+            isSettled = true;
+            
+            // Update status indicator
+            statusDot.classList.remove('moving');
+            statusDot.classList.add('settled');
+            statusText.textContent = 'Location found';
+            
+            // Make the pin visually indicate it's clickable
+            targetPin.classList.add('settled');
+            
+            // Make the final position more obvious with a visual indication
+            targetPin.style.transform = 'translate(-50%, -100%) scale(1.2)';
+            setTimeout(() => {
+                if (!isTaskComplete) {
+                    targetPin.style.transform = 'translate(-50%, -100%) scale(1)';
+                    setTimeout(() => {
+                        if (!isTaskComplete) {
+                            targetPin.style.transform = 'translate(-50%, -100%) scale(1.2)';
+                            setTimeout(() => {
+                                if (!isTaskComplete) {
+                                    targetPin.style.transform = 'translate(-50%, -100%) scale(1)';
+                                }
+                            }, 300);
+                        }
+                    }, 300);
+                }
+            }, 300);
+            
+        }, 5000 + Math.random() * 2000); // Settle after 5-7 seconds
+    }, 1000);
+    
+    // Handle clicking on the pin
+    targetPin.addEventListener('click', function(event) {
+        event.stopPropagation();
+        
+        if (isTaskComplete) return; // Prevent multiple completions
+        
+        if (isSettled) {
+            // Success - clicked on pin after it settled
+            isTaskComplete = true;
+            
+            // Complete the task
+            if (window.completeTask) {
+                window.completeTask(true);
+            }
+        } else {
+            // Record mistake - clicked on pin while it was still moving
+            if (window.recordMistake) {
+                window.recordMistake(
+                    'premature_click',
+                    'User clicked on the pin while it was still moving',
+                    'Wait for the pin to stop moving before clicking it'
+                );
+            }
+        }
+    });
+    
+    // Map click handler - record mistakes for clicks not on the pin
+    mapBackground.addEventListener('click', function(event) {
+        event.stopPropagation();
+        
+        // Don't process if the click was on the pin or task is complete
+        if (event.target === targetPin || targetPin.contains(event.target) || isTaskComplete) {
+            return;
+        }
+        
+        // Record the mistake
+        if (window.recordMistake) {
+            if (isSettled) {
+                window.recordMistake(
+                    'missed_target',
+                    'User clicked on the map instead of the pin after it stopped moving',
+                    'Click directly on the pin marker to confirm your location'
+                );
+            } else {
+                window.recordMistake(
+                    'map_click_while_moving',
+                    'User clicked on the map while the pin was still moving',
+                    'Wait for the pin to stop moving before clicking'
+                );
+            }
+        }
+        
+        // Highlight the pin to show where they should click
+        targetPin.style.transform = 'translate(-50%, -100%) scale(1.5)';
+        setTimeout(() => {
+            if (!isTaskComplete) {
+                targetPin.style.transform = 'translate(-50%, -100%) scale(1)';
+            }
+        }, 500);
+    });
+});
+</script> 

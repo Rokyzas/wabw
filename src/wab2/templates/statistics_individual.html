@@ -1,0 +1,785 @@
+{% extends "layout.html" %}
+
+{% block title %}Individual Agent Statistics - Web Agent Benchmark Web{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h1>Agent Statistics</h1>
+    <p>View detailed performance metrics for individual agents.</p>
+</header>
+
+<!-- Navigation tabs for switching between individual and overall views -->
+<div class="stats-nav-tabs">
+    <a href="{{ url_for('statistics.individual') }}" class="nav-tab active">Individual Agent Statistics</a>
+    <a href="{{ url_for('statistics.overall') }}" class="nav-tab">Overall Benchmarks</a>
+</div>
+
+<div class="agent-selector">
+    <h2>Agent Selection</h2>
+    <div class="agent-buttons">
+        {% for aid in agent_ids %}
+        <a href="{{ url_for('statistics.individual', agent_id=aid) }}" 
+           class="agent-button {% if aid == selected_agent_id %}selected{% endif %}">
+            {{ aid }}
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="statistics-container">
+    <section class="summary-section">
+        <h2>Summary for Agent: {{ selected_agent_id }}</h2>
+        
+        <div class="metrics-grid">
+            <article class="metric-card">
+                <h3>Tasks</h3>
+                <div class="metric-value" id="total-tasks">
+                    <span class="loading">Loading...</span>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Completed:</span>
+                        <span class="detail-value" id="completed-tasks">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Success Rate:</span>
+                        <span class="detail-value" id="success-rate">-</span>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="metric-card">
+                <h3>Actions</h3>
+                <div class="metric-value" id="total-actions">
+                    <span class="loading">Loading...</span>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Avg Per Task:</span>
+                        <span class="detail-value" id="avg-actions">-</span>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="metric-card">
+                <h3>Duration</h3>
+                <div class="metric-value" id="total-duration">
+                    <span class="loading">Loading...</span>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Avg Per Task:</span>
+                        <span class="detail-value" id="avg-duration">-</span>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="metric-card">
+                <h3>Mistakes</h3>
+                <div class="metric-value" id="total-mistakes">
+                    <span class="loading">Loading...</span>
+                </div>
+                <div class="metric-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Avg Per Task:</span>
+                        <span class="detail-value" id="avg-mistakes">-</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+    
+    <section class="task-details-section">
+        <h2>Task Performance Details</h2>
+        
+        <div class="task-filter-controls">
+            <div class="filter-group">
+                <label for="status-filter">Filter by Status:</label>
+                <select id="status-filter">
+                    <option value="all">All</option>
+                    <option value="completed">Completed</option>
+                    <option value="failed">Failed</option>
+                    <option value="pending">Pending</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="task-table-container">
+            <table class="task-table">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Status</th>
+                        <th>Duration</th>
+                        <th>Actions</th>
+                        <th>Mistakes</th>
+                    </tr>
+                </thead>
+                <tbody id="task-table-body">
+                    <tr>
+                        <td colspan="5" class="loading-row">Loading task data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+    <section class="category-stats-section">
+        <h2>Performance by Category</h2>
+        
+        <div class="category-stats-grid" id="category-stats-grid">
+            <div class="loading-indicator">Loading category data...</div>
+        </div>
+    </section>
+    
+    <section class="export-section">
+        <h2>Export Data</h2>
+        <div class="export-buttons">
+            <a href="/api/export/metrics?agent_id={{ selected_agent_id }}&format=json" class="button" target="_blank">Export Metrics (JSON)</a>
+            <a href="/api/export/metrics?agent_id={{ selected_agent_id }}&format=csv" class="button" target="_blank">Export Metrics (CSV)</a>
+            <a href="{{ url_for('api.export_actions', agent_id=selected_agent_id, format='json') }}" class="button" target="_blank">Export Actions (JSON)</a>
+            <a href="{{ url_for('api.export_actions', agent_id=selected_agent_id, format='csv') }}" class="button" target="_blank">Export Actions (CSV)</a>
+            <a href="{{ url_for('api.export_summary', agent_id=selected_agent_id, format='json') }}" class="button" target="_blank">Export Summary (JSON)</a>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectedAgentId = "{{ selected_agent_id }}";
+        
+        // Fetch aggregate metrics
+        fetch(`/api/tasks/aggregate?agent_id=${selectedAgentId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Update summary metrics
+                document.getElementById('total-tasks').textContent = data.total_tasks || '0';
+                document.getElementById('completed-tasks').textContent = data.completed_tasks || '0';
+                document.getElementById('success-rate').textContent = 
+                    data.success_rate ? `${(data.success_rate * 100).toFixed(1)}%` : '0%';
+                
+                document.getElementById('total-actions').textContent = data.average_actions * data.total_tasks || '0';
+                document.getElementById('avg-actions').textContent = 
+                    data.average_actions ? data.average_actions.toFixed(1) : '0';
+                
+                document.getElementById('total-duration').textContent = 
+                    data.average_duration * data.total_tasks ? 
+                    `${(data.average_duration * data.total_tasks).toFixed(1)}s` : '0s';
+                document.getElementById('avg-duration').textContent = 
+                    data.average_duration ? `${data.average_duration.toFixed(1)}s` : '0s';
+                
+                document.getElementById('total-mistakes').textContent = 
+                    data.average_mistakes * data.total_tasks || '0';
+                document.getElementById('avg-mistakes').textContent = 
+                    data.average_mistakes ? data.average_mistakes.toFixed(1) : '0';
+                
+                // Load additional statistics
+                loadCategoryStats();
+                // loadFailedTasks(); // removed as requested
+                
+                // Setup status filter
+                setupTaskFilter();
+            })
+            .catch(err => {
+                console.error('Error fetching aggregate metrics:', err);
+                document.querySelectorAll('.loading').forEach(el => {
+                    el.textContent = 'Error loading data';
+                });
+            });
+            
+        // Function to load category statistics
+        function loadCategoryStats() {
+            fetch(`/api/tasks/category_stats?agent_id=${selectedAgentId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    renderCategoryStats(data);
+                })
+                .catch(err => {
+                    console.error('Error fetching category stats:', err);
+                    document.getElementById('category-stats-grid').innerHTML = 
+                        '<div class="error-state">Error loading category data: ' + err.message + '</div>';
+                });
+        }
+        
+        // Fetch task metrics for the selected agent
+        // Load task details table
+        fetch(`/api/export/metrics?agent_id=${selectedAgentId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const tableBody = document.getElementById('task-table-body');
+                tableBody.innerHTML = '';
+                
+                // Check if data exists and has the agent
+                if (!data || !data[selectedAgentId]) {
+                    tableBody.innerHTML = `<tr><td colspan="5" class="empty-state">No task data available for this agent</td></tr>`;
+                    return;
+                }
+                
+                // Get the specific agent's metrics
+                const agentMetrics = data[selectedAgentId];
+                
+                if (Object.keys(agentMetrics).length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="5" class="empty-state">No task data available for this agent</td></tr>`;
+                    return;
+                }
+                
+                // Create a table row for each task
+                if (agentMetrics && Object.keys(agentMetrics).length > 0) {
+                    Object.entries(agentMetrics).forEach(([taskId, metrics]) => {
+                        const row = document.createElement('tr');
+                        
+                        // Add task name and metrics
+                        row.innerHTML = `
+                            <td>${metrics.task_name || taskId}</td>
+                            <td>
+                                <span class="status-badge ${metrics.status || 'pending'}">
+                                    ${metrics.status || 'pending'}
+                                </span>
+                            </td>
+                            <td>${metrics.duration ? metrics.duration.toFixed(1) + 's' : '-'}</td>
+                            <td>${metrics.action_count || 0}</td>
+                            <td>${metrics.mistakes || 0}</td>
+                        `;
+                        
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    tableBody.innerHTML = `<tr><td colspan="5" class="empty-state">No task data available for this agent</td></tr>`;
+                }
+            })
+            .catch(err => {
+                console.error('Error fetching task metrics:', err);
+                document.getElementById('task-table-body').innerHTML = 
+                    `<tr><td colspan="5" class="error-state">Error loading task data</td></tr>`;
+            });
+
+        // Load category statistics
+        function loadCategoryStats() {
+            fetch(`/api/tasks/category_stats?agent_id=${selectedAgentId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    renderCategoryStats(data);
+                })
+                .catch(err => {
+                    console.error('Error fetching category stats:', err);
+                    document.getElementById('category-stats-grid').innerHTML = 
+                        '<div class="error-state">Error loading category data: ' + err.message + '</div>';
+                });
+        }
+        
+        // Render category statistics cards
+        function renderCategoryStats(categories) {
+            const grid = document.getElementById('category-stats-grid');
+            grid.innerHTML = '';
+            
+            // Check if data is empty
+            if (!categories || Object.keys(categories).length === 0) {
+                grid.innerHTML = '<div class="empty-state">No category data available</div>';
+                return;
+            }
+            
+            // Create a card for each category
+            Object.entries(categories).forEach(([category, stats]) => {
+                const card = document.createElement('div');
+                card.className = 'category-stat-card';
+                
+                // Calculate success rate percentage
+                const successRate = stats.success_rate ? (stats.success_rate * 100).toFixed(1) + '%' : '0%';
+                
+                // Add CSS class based on success rate
+                if (stats.success_rate >= 0.8) {
+                    card.classList.add('high-success');
+                } else if (stats.success_rate >= 0.5) {
+                    card.classList.add('medium-success');
+                } else {
+                    card.classList.add('low-success');
+                }
+                
+                card.innerHTML = `
+                    <h4>${category}</h4>
+                    <div class="metric-value">${successRate}</div>
+                    <div class="metric-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Tasks:</span>
+                            <span class="detail-value">${stats.total_tasks || 0}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Completed:</span>
+                            <span class="detail-value">${stats.completed_tasks || 0}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Failed:</span>
+                            <span class="detail-value">${stats.failed_tasks || 0}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Avg. Actions:</span>
+                            <span class="detail-value">${stats.avg_actions ? stats.avg_actions.toFixed(1) : '0'}</span>
+                        </div>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+        
+        // Render category stats without chart
+        
+        // Function to load and display failed tasks removed as requested
+
+        // Add JavaScript to update localStorage when selecting an agent
+        document.querySelectorAll('.agent-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // When clicking an agent button, update localStorage
+                const agentId = this.textContent.trim();
+                localStorage.setItem('currentAgentId', agentId);
+                document.getElementById('current-agent-display').textContent = agentId;
+            });
+        });
+        
+        // Function to setup the task filter
+        function setupTaskFilter() {
+            const statusFilter = document.getElementById('status-filter');
+            let allTaskRows = [];
+            
+            // Store all task rows for filtering
+            fetch(`/api/export/metrics?agent_id=${selectedAgentId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const tableBody = document.getElementById('task-table-body');
+                    tableBody.innerHTML = '';
+                    
+                    // Check if data exists and has the agent
+                    if (!data || !data[selectedAgentId]) {
+                        tableBody.innerHTML = `<tr><td colspan="5" class="empty-state">No task data available for this agent</td></tr>`;
+                        return;
+                    }
+                    
+                    // Get the specific agent's metrics
+                    const agentMetrics = data[selectedAgentId];
+                    
+                    if (Object.keys(agentMetrics).length === 0) {
+                        tableBody.innerHTML = `<tr><td colspan="5" class="empty-state">No task data available for this agent</td></tr>`;
+                        return;
+                    }
+                    
+                    // Create a table row for each task
+                    allTaskRows = []; // Reset the array
+                    
+                    Object.entries(agentMetrics).forEach(([taskId, metrics]) => {
+                        const row = document.createElement('tr');
+                        row.dataset.status = metrics.status || 'pending';
+                        
+                        // Add task name and metrics
+                        row.innerHTML = `
+                            <td>${metrics.task_name || taskId}</td>
+                            <td>
+                                <span class="status-badge ${metrics.status || 'pending'}">
+                                    ${metrics.status || 'pending'}
+                                </span>
+                            </td>
+                            <td>${metrics.duration ? metrics.duration.toFixed(1) + 's' : '-'}</td>
+                            <td>${metrics.action_count || 0}</td>
+                            <td>${metrics.mistakes || 0}</td>
+                        `;
+                        
+                        allTaskRows.push(row);
+                        tableBody.appendChild(row);
+                    });
+                    
+                    // Add event listener for filter
+                    statusFilter.addEventListener('change', function() {
+                        filterTasksByStatus(this.value);
+                    });
+                })
+                .catch(err => {
+                    console.error('Error fetching task metrics:', err);
+                    document.getElementById('task-table-body').innerHTML = 
+                        `<tr><td colspan="5" class="error-state">Error loading task data</td></tr>`;
+                });
+                
+            // Function to filter tasks by status
+            function filterTasksByStatus(status) {
+                const tableBody = document.getElementById('task-table-body');
+                tableBody.innerHTML = '';
+                
+                if (status === 'all') {
+                    // Show all tasks
+                    allTaskRows.forEach(row => {
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    // Filter tasks by the selected status
+                    const filteredRows = allTaskRows.filter(row => row.dataset.status === status);
+                    
+                    if (filteredRows.length === 0) {
+                        tableBody.innerHTML = `<tr><td colspan="5" class="empty-state">No ${status} tasks found</td></tr>`;
+                    } else {
+                        filteredRows.forEach(row => {
+                            tableBody.appendChild(row);
+                        });
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Navigation tabs */
+    .stats-nav-tabs {
+        display: flex;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .nav-tab {
+        padding: 0.75rem 1.5rem;
+        text-decoration: none;
+        color: #666;
+        font-weight: 500;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s ease;
+    }
+    
+    .nav-tab:hover {
+        color: #333;
+        background-color: #f5f5f5;
+    }
+    
+    .nav-tab.active {
+        color: var(--color-primary, #4a89dc);
+        border-bottom-color: var(--color-primary, #4a89dc);
+        font-weight: 600;
+    }
+    
+    .agent-selector {
+        margin-bottom: 2rem;
+    }
+    
+    .agent-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1rem 0;
+    }
+    
+    .agent-button {
+        padding: 0.5rem 1rem;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.2s ease;
+    }
+    
+    .agent-button:hover {
+        background-color: #e5e5e5;
+        border-color: #ccc;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .agent-button.selected {
+        background-color: var(--color-primary, #4a89dc);
+        color: white;
+        border-color: var(--color-primary-dark, #3b74c1);
+    }
+    
+    .statistics-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .metric-card {
+        padding: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+    }
+    
+    .metric-card h3 {
+        margin-top: 0;
+        color: #555;
+        font-size: 1rem;
+    }
+    
+    .metric-value {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0.5rem 0;
+        color: #333;
+    }
+    
+    .metric-details {
+        font-size: 0.9rem;
+        color: #666;
+    }
+    
+    .detail-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.25rem;
+    }
+    
+    .task-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .task-table th, .task-table td {
+        padding: 0.5rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .task-table th {
+        background-color: #f0f0f0;
+        font-weight: bold;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+    }
+    
+    .status-badge.completed {
+        background-color: #2ecc71;
+        color: white;
+    }
+    
+    .status-badge.failed {
+        background-color: #e74c3c;
+        color: white;
+    }
+    
+    .status-badge.pending {
+        background-color: #f39c12;
+        color: white;
+    }
+    
+    .status-badge.in_progress {
+        background-color: #3498db;
+        color: white;
+    }
+    
+    .loading-row, .empty-state, .error-state {
+        text-align: center;
+        padding: 1rem;
+        color: #777;
+    }
+    
+    .error-state {
+        color: #e74c3c;
+    }
+    
+    .export-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1rem 0;
+    }
+    
+    .export-buttons .button {
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        background-color: #4a89dc;
+        color: white;
+        border-radius: 4px;
+        font-size: 0.9rem;
+    }
+    
+    .loading {
+        opacity: 0.7;
+        font-style: italic;
+        font-size: 1rem;
+    }
+    
+    .button {
+        background-color: #4a89dc;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+    
+    .button:hover {
+        background-color: #3b74c1;
+    }
+    
+    select {
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: white;
+    }
+    
+    .category-stats-section {
+        margin-top: 2rem;
+    }
+    
+    .category-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .category-stat-card {
+        padding: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        transition: all 0.2s ease;
+    }
+    
+    .category-stat-card h4 {
+        margin-top: 0;
+        color: #555;
+        font-size: 1rem;
+    }
+    
+    /* Success rate color indicators */
+    .category-stat-card.high-success {
+        border-left: 5px solid #2ecc71;
+        box-shadow: 0 2px 4px rgba(46, 204, 113, 0.2);
+    }
+    
+    .category-stat-card.medium-success {
+        border-left: 5px solid #f39c12;
+        box-shadow: 0 2px 4px rgba(243, 156, 18, 0.2);
+    }
+    
+    .category-stat-card.low-success {
+        border-left: 5px solid #e74c3c;
+        box-shadow: 0 2px 4px rgba(231, 76, 60, 0.2);
+    }
+    
+    /* Category chart container removed as requested */
+    
+    .failed-tasks-section {
+        margin-top: 2rem;
+    }
+    
+    .failed-tasks-list {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .failed-tasks-category {
+        border-left: 3px solid #e74c3c;
+        padding-left: 1rem;
+    }
+    
+    .failed-tasks-category h4 {
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+        color: #333;
+        font-size: 1.1rem;
+    }
+    
+    .failed-task-item {
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+        margin-bottom: 0.5rem;
+    }
+    
+    .task-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+    
+    .task-name {
+        font-weight: 500;
+        color: #333;
+    }
+    
+    .task-duration {
+        font-size: 0.9rem;
+        color: #666;
+    }
+    
+    .task-metrics {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+        color: #666;
+    }
+    
+    .metric-label {
+        margin-right: 0.5rem;
+    }
+    
+    /* Task filter controls */
+    .task-filter-controls {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 1rem;
+        gap: 1rem;
+        align-items: center;
+    }
+    
+    .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .filter-group label {
+        font-weight: 500;
+        color: #555;
+    }
+    
+    .filter-group select {
+        padding: 0.4rem 0.8rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #fff;
+        font-size: 0.9rem;
+    }
+    
+    .task-table-container {
+        margin-top: 0.5rem;
+    }
+</style>
+{% endblock %}

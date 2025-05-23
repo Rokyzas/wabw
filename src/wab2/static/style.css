@@ -1,0 +1,1113 @@
+/* ==========================================================================
+   WABW - Web Agent Benchmark Web Stylesheet
+   
+   Table of Contents:
+   1. Variables & Base Styles
+   2. Layout & Structure
+   3. Navigation
+   4. Task List & Categories
+   5. Task Details & Execution
+   6. Button Styles
+   7. Form Controls
+   8. Status Indicators
+   9. Settings Page
+   10. Statistics Page
+   ========================================================================== */
+
+/* ==========================================================================
+   1. Variables & Base Styles
+   ========================================================================== */
+:root {
+    /* Base colors */
+    --color-white: #ffffff;
+    --color-background: #ffffff;
+    --color-text: #333333;
+    --color-text-muted: #6c757d;
+    --color-border: #dee2e6;
+    --color-shadow: rgba(0, 0, 0, 0.1);
+    
+    /* Panel/card colors */
+    --color-panel-bg: #f8f9fa;
+    
+    /* Status colors */
+    --color-primary: #4a89dc;
+    --color-primary-dark: #3b74c1;
+    --color-success: #198754;
+    --color-warning: #f39c12;
+    --color-danger: #e74c3c;
+    
+    /* Button colors */
+    --color-button-bg: #f8f8f8;
+    --color-button-text: #444;
+    --color-button-border: #ddd;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* ==========================================================================
+   2. Layout & Structure
+   ========================================================================== */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.page-content {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.site-footer {
+    flex-shrink: 0;
+    text-align: center;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    width: 100%;
+    background-color: var(--color-background);
+}
+
+.page-header {
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+}
+
+.page-header h1 {
+    margin-bottom: 0.25rem;
+    font-size: 2rem;
+}
+
+/* ==========================================================================
+   3. Navigation
+   ========================================================================== */
+.nav-agent-container {
+    font-size: 0.8rem;
+    color: #888;
+    margin-left: 1rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    background-color: rgba(240, 240, 240, 0.5);
+    border: 1px solid #eaeaea;
+}
+
+.nav-agent-label {
+    font-weight: 400;
+    margin-right: 0.25rem;
+}
+
+.nav-agent-value {
+    font-weight: 500;
+    color: #555;
+}
+
+/* ==========================================================================
+   4. Task List & Categories
+   ========================================================================== */
+/* Hide ALL default arrows for expandable elements */
+details > summary {
+    list-style: none;
+}
+details > summary::-webkit-details-marker {
+    display: none;
+}
+details > summary::marker {
+    display: none;
+}
+details > summary::after {
+    display: none;
+}
+.task-item-summary::after, 
+.category-summary::after {
+    display: none !important;
+    content: none !important;
+}
+
+.category-section {
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 800px;
+}
+
+/* Hide default arrows for all details/summary elements */
+summary {
+    list-style: none;
+}
+
+summary::-webkit-details-marker {
+    display: none;
+}
+
+summary:focus {
+    outline: none;
+}
+
+.category-summary {
+    cursor: pointer;
+    padding: 0;
+    background-color: var(--color-panel-bg);
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
+    margin-bottom: 1rem;
+    list-style: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.category-summary::-webkit-details-marker,
+.category-summary::marker {
+    display: none;
+}
+
+.summary-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1rem;
+}
+
+.category-summary h2 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.arrow {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    transition: transform 0.2s;
+}
+
+.category-section[open] .arrow {
+    transform: rotate(90deg);
+}
+
+.task-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0 1rem;
+}
+
+.task-item-details {
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    box-shadow: 0 0.0625rem 0.125rem var(--color-shadow);
+    background-color: var(--color-panel-bg);
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+}
+
+.task-item-summary {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    background-color: var(--color-panel-bg);
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+    position: relative;
+    display: block;
+    list-style: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.task-item-summary::-webkit-details-marker,
+.task-item-summary::marker {
+    display: none;
+}
+
+.task-item-summary:focus {
+    outline: none;
+}
+
+.task-item-summary::before {
+    content: "▶";
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    transition: transform 0.2s;
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.task-item-details[open] .task-item-summary::before {
+    transform: translateY(-50%) rotate(90deg);
+}
+
+.task-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    margin-left: 1.5rem;
+    min-width: 0;
+}
+
+.task-title {
+    font-weight: 600;
+    color: var(--color-text);
+    font-size: 0.95rem;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 0.5rem;
+    pointer-events: none;
+}
+
+.task-status {
+    margin: 0;
+    color: var(--color-text) !important;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+    pointer-events: none;
+}
+
+.observer-notes-panel {
+    padding: 0.75rem 1rem;
+    background-color: var(--color-panel-bg);
+    text-align: left;
+    border-radius: 0 0 0.5rem 0.5rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.observer-notes-panel h4 {
+    margin-top: 0;
+    margin-bottom: 0.25rem;
+    color: var(--color-text);
+    font-size: 0.9rem;
+}
+
+.observer-notes-panel .notes-content {
+    margin-bottom: 0.25rem;
+    color: var(--color-text);
+    background-color: transparent !important;
+    text-align: left;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.observer-notes-panel .notes-content div {
+    background-color: transparent !important;
+    color: var(--color-text) !important;
+    border: none !important;
+    padding: 0 !important;
+    text-align: left;
+}
+
+.observer-notes-panel .notes-content div * {
+    color: var(--color-text) !important;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.observer-notes-panel .notes-content div strong {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.observer-notes-panel footer {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 0.25rem;
+    padding-top: 0.25rem;
+    border-top: 1px solid var(--color-border);
+}
+
+/* ==========================================================================
+   5. Task Details & Execution
+   ========================================================================== */
+.simulated-app-card {
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.5rem var(--color-shadow);
+    padding: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.simulated-app-header {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    background-color: var(--color-background);
+}
+
+.simulated-app-header h4 {
+    margin: 0;
+    color: var(--color-text);
+    font-size: 1.1rem;
+}
+
+.app-message {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.app-message.info-message {
+    background-color: #e7f5ff;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.app-message.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.app-message .icon {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.app-message p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.app-message.info-message p,
+.app-message.info-message p strong {
+    color: #0c5460;
+}
+
+.app-message.error-message p,
+.app-message.error-message p strong {
+    color: #721c24;
+}
+
+.app-content-area {
+    margin: 1.5rem 0;
+}
+
+.app-content-area h5 {
+    color: var(--color-text);
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.app-content-area .progress-feedback {
+    text-align: center;
+    font-style: italic;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.app-content-area .action-form {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.simulated-app-footer {
+    border-top: 1px solid var(--color-border);
+    padding-top: 1rem;
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    background-color: var(--color-background);
+}
+
+.simulated-app-footer small {
+    color: var(--color-text-muted);
+}
+
+/* Isolated task environment styles */
+.task-environment-body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.task-environment-body main.container {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: min-content;
+    max-height: calc(100vh - 4rem);
+}
+
+/* ==========================================================================
+   6. Button Styles
+   ========================================================================== */
+/* Base button styles */
+button, .button, .custom-button {
+    background-color: var(--color-button-bg);
+    color: var(--color-button-text);
+    border: 1px solid var(--color-button-border);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: normal;
+    text-align: center;
+    transition: all 0.2s ease;
+    user-select: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+}
+
+button:hover, .button:hover, .custom-button:hover {
+    background-color: #f0f0f0;
+    border-color: #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+button:active, .button:active, .custom-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* Action buttons in task list */
+.task-content .launch-button, 
+.task-content .copy-button {
+    white-space: nowrap;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+    width: 140px; /* Fixed width for consistent button layout */
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.task-content .launch-button {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary-dark);
+}
+
+.task-content .launch-button:hover {
+    background-color: var(--color-primary-dark);
+    border-color: #2c5b97;
+    color: white;
+}
+
+.task-content .copy-button {
+    background-color: #f0f0f0;
+    color: #555;
+    margin-right: 0.5rem;
+}
+
+/* Button variations */
+button.primary, .button.primary,
+#save-agent-button, #save-global-settings {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary-dark);
+}
+
+button.primary:hover, .button.primary:hover,
+#save-agent-button:hover, #save-global-settings:hover {
+    background-color: var(--color-primary-dark);
+    border-color: #2c5b97;
+}
+
+button.warning, .button.warning, #reset-current-agent {
+    background-color: var(--color-warning);
+    color: white;
+    border-color: #e67e22;
+}
+
+button.warning:hover, .button.warning:hover, #reset-current-agent:hover {
+    background-color: #e67e22;
+    border-color: #d35400;
+}
+
+button.danger, .button.danger, #reset-all-agents {
+    background-color: var(--color-danger);
+    color: white;
+    border-color: #c0392b;
+}
+
+button.danger:hover, .button.danger:hover, #reset-all-agents:hover {
+    background-color: #c0392b;
+    border-color: #922b21;
+}
+
+/* Special button styles */
+#save-agent-button {
+    margin-left: 0.5rem;
+    white-space: nowrap;
+    height: 100%;
+    padding: 0.6rem 1.2rem;
+}
+
+/* Selected button styling */
+.agent-select-button.selected,
+.agent-button.selected {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary-dark);
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin: 40px 0;
+}
+
+/* ==========================================================================
+   7. Form Controls
+   ========================================================================== */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+    align-items: stretch;
+}
+
+/* Input fields */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+    padding: 0.5rem;
+    border: 1px solid var(--color-button-border);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Special input field styling */
+#agent-id-input {
+    height: 100%;
+    padding: 0.6rem 1rem;
+    box-sizing: border-box;
+}
+
+.hint {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+/* ==========================================================================
+   8. Status Indicators
+   ========================================================================== */
+mark {
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+}
+
+mark.pending {
+    background-color: var(--color-warning);
+    color: #000;
+}
+
+mark.completed {
+    background-color: var(--color-success);
+    color: #fff;
+}
+
+mark.failed {
+    background-color: var(--color-danger);
+    color: #fff;
+}
+
+mark.not-tracked {
+    background-color: #6c757d;  /* Gray color for metrics not tracked */
+    color: #fff;
+    font-style: italic;
+    font-size: 0.85rem;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.status-badge.completed {
+    background-color: var(--color-success);
+    color: white;
+}
+
+.status-badge.failed {
+    background-color: var(--color-danger);
+    color: white;
+}
+
+.status-badge.pending {
+    background-color: var(--color-warning);
+    color: white;
+}
+
+.status-badge.in_progress {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.status-badge.not-tracked {
+    background-color: #6c757d;
+    color: white;
+    font-style: italic;
+}
+
+/* ==========================================================================
+   9. Settings Page
+   ========================================================================== */
+.settings-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 992px) {
+    .settings-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.agent-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.agent-select-button {
+    padding: 0.5rem 1rem;
+}
+
+.setting-group {
+    margin-bottom: 1rem;
+}
+
+.setting-group input {
+    margin-top: 0.25rem;
+}
+
+/* ==========================================================================
+   10. Utility Classes
+   ========================================================================== */
+.loading-row, .empty-state, .error-state {
+    text-align: center;
+    padding: 1rem;
+    color: #777;
+}
+
+.error-state {
+    color: var(--color-danger);
+}
+
+.loading {
+    opacity: 0.7;
+    font-style: italic;
+    font-size: 1rem;
+}
+
+/* Hide deprecated elements */
+#agent-indicator, #agent-info-bar {
+    display: none;
+}
+
+.custom-button {
+    background-color: #4a7aff;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.2s ease;
+    user-select: none;
+    min-width: 150px;
+    text-decoration: none;
+}
+
+/* ==========================================================================
+   10. Statistics Pages - Individual & Overall
+   ========================================================================== */
+/* Navigation tabs for statistics */
+.stats-nav-tabs {
+    display: flex;
+    margin: 1.5rem 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.stats-nav-tabs .nav-tab {
+    padding: 0.75rem 1.25rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s ease;
+}
+
+.stats-nav-tabs .nav-tab.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+}
+
+.stats-nav-tabs .nav-tab:hover {
+    color: var(--color-primary-dark);
+}
+
+/* Overall statistics page */
+.benchmark-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.benchmark-card {
+    background-color: var(--color-panel-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    box-shadow: 0 2px 4px var(--color-shadow);
+    text-align: center;
+}
+
+.benchmark-card h3 {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+.benchmark-card .metric-value {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.task-category-container {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.chart-container {
+    height: 300px;
+    width: 100%;
+}
+
+/* Improved task category container and chart */
+.task-category-container.improved {
+    padding: 2rem;
+}
+
+.chart-container.improved {
+    height: 450px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Leaderboard styles */
+.leaderboard-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.sort-options {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    text-align: left;
+}
+
+.leaderboard-table th {
+    background-color: var(--color-panel-bg);
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+.leaderboard-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.leaderboard-table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.loading-row,
+.empty-state,
+.error-state {
+    padding: 2rem;
+    text-align: center;
+    color: var(--color-text-muted);
+}
+
+/* Chart tabs for switching between different visualizations */
+.chart-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.chart-tab {
+    background-color: var(--color-button-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.chart-tab:hover {
+    background-color: var(--color-panel-bg);
+}
+
+.chart-tab.active {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary-dark);
+}
+
+/* Best performing agents section - horizontal layout */
+.category-best-agents.horizontal {
+    margin-top: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.category-awards-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 1.5rem;
+    justify-content: center;
+}
+
+/* Update category award cards for horizontal layout */
+.category-awards-row .category-award-card {
+    flex: 0 0 auto;
+    min-width: 300px;
+    max-width: 350px;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(230, 230, 230, 0.7);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category-awards-row .category-award-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.category-awards-row .category-award-card h4 {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    font-size: 1.25rem;
+    color: #333;
+    text-align: center;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid rgba(200, 200, 200, 0.3);
+}
+
+/* Styling for award items within cards */
+.award-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.7);
+    transition: background-color 0.2s ease;
+}
+
+.award-item:last-child {
+    margin-bottom: 0;
+}
+
+.award-item:hover {
+    background-color: rgba(240, 240, 240, 0.9);
+}
+
+.award-icon {
+    font-size: 1.75rem;
+    margin-right: 0.75rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+/* Unique styling for each award type */
+.award-item:nth-child(1) .award-icon {
+    background-color: rgba(255, 215, 0, 0.2); /* Gold */
+    color: #FF8C00;
+}
+
+.award-item:nth-child(2) .award-icon {
+    background-color: rgba(0, 191, 255, 0.2); /* Blue */
+    color: #0080FF;
+}
+
+.award-item:nth-child(3) .award-icon {
+    background-color: rgba(50, 205, 50, 0.2); /* Green */
+    color: #2E8B57;
+}
+
+.award-details {
+    flex: 1;
+}
+
+.award-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+}
+
+.award-value {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.award-value a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.award-value a:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+}
+
+/* Category awards title and description */
+.category-awards-title {
+    font-size: 1.6rem;
+    margin-top: 2.5rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    color: #333;
+}
+
+.category-awards-description {
+    text-align: center;
+    color: #666;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+/* Task category section */
+.task-category-section {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+}
+
+/* Enhance the empty state for category awards */
+#category-awards .empty-state {
+    padding: 2rem;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    color: #666;
+    width: 100%;
+    border: 1px dashed #ddd;
+}
+
+#category-awards .error-state {
+    padding: 1.5rem;
+    text-align: center;
+    background-color: rgba(231, 76, 60, 0.1);
+    border-radius: 10px;
+    color: #c0392b;
+    border: 1px dashed #e74c3c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .category-awards-row {
+        gap: 1rem;
+        padding-bottom: 1rem;
+    }
+    
+    .category-awards-row .category-award-card {
+        min-width: 280px;
+        padding: 1.25rem;
+    }
+}

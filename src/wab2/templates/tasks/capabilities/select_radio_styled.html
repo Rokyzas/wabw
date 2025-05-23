@@ -1,0 +1,371 @@
+                <div class="form-header">
+                    <h3>Communication Preferences</h3>
+                    <p>Let us know how you'd like to receive future updates and notifications.</p>
+                </div>
+                
+                <form id="preferences-form">
+                    <div class="form-group">
+                        <label class="form-label">Preferred contact method:</label>
+                        
+                        <div class="custom-radio-group">
+                            <div class="custom-radio">
+                                <input type="radio" id="phone" name="contact-method" value="phone" class="hidden-radio">
+                                <label for="phone" class="radio-label">
+                                    <div class="radio-indicator">
+                                        <div class="indicator-dot"></div>
+                                    </div>
+                                    <div class="radio-content">
+                                        <div class="radio-title">
+                                            <span class="radio-icon">📱</span>
+                                            <span>Phone</span>
+                                        </div>
+                                        <div class="radio-description">Receive SMS notifications for urgent updates</div>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <div class="custom-radio">
+                                <input type="radio" id="email" name="contact-method" value="email" class="hidden-radio">
+                                <label for="email" class="radio-label">
+                                    <div class="radio-indicator">
+                                        <div class="indicator-dot"></div>
+                                    </div>
+                                    <div class="radio-content">
+                                        <div class="radio-title">
+                                            <span class="radio-icon">✉️</span>
+                                            <span>Email</span>
+                                        </div>
+                                        <div class="radio-description">Receive detailed notifications via email</div>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <div class="custom-radio">
+                                <input type="radio" id="push" name="contact-method" value="push" class="hidden-radio">
+                                <label for="push" class="radio-label">
+                                    <div class="radio-indicator">
+                                        <div class="indicator-dot"></div>
+                                    </div>
+                                    <div class="radio-content">
+                                        <div class="radio-title">
+                                            <span class="radio-icon">🔔</span>
+                                            <span>Push Notification</span>
+                                        </div>
+                                        <div class="radio-description">Receive instant notifications on your device</div>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <div class="custom-radio">
+                                <input type="radio" id="none" name="contact-method" value="none" class="hidden-radio">
+                                <label for="none" class="radio-label">
+                                    <div class="radio-indicator">
+                                        <div class="indicator-dot"></div>
+                                    </div>
+                                    <div class="radio-content">
+                                        <div class="radio-title">
+                                            <span class="radio-icon">🔕</span>
+                                            <span>No Notifications</span>
+                                        </div>
+                                        <div class="radio-description">Opt out of all notifications and updates</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" id="save-btn" class="btn btn-primary" disabled>Save Preferences</button>
+                    </div>
+                </form>
+
+<style>
+    /* Form styles */
+    .form-header {
+        margin-bottom: 1.5rem;
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+    }
+    
+    .form-header h3 {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        color: #333;
+    }
+    
+    .form-header p {
+        color: #666;
+        margin-bottom: 0;
+    }
+    
+    #preferences-form {
+        margin-top: 1.5rem;
+        padding: 1.5rem;
+        background-color: #fff;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-weight: 500;
+        color: #333;
+    }
+    
+    /* Custom Radio Styles */
+    .custom-radio-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .custom-radio {
+        position: relative;
+    }
+    
+    .hidden-radio {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    
+    .radio-label {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .radio-label:hover {
+        background-color: #f0f0f0;
+        border-color: #d0d0d0;
+    }
+    
+    .hidden-radio:checked + .radio-label {
+        background-color: #e3f2fd;
+        border-color: #2196F3;
+        box-shadow: 0 2px 8px rgba(33, 150, 243, 0.1);
+    }
+    
+    .radio-indicator {
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #bdbdbd;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        margin-top: 2px;
+    }
+    
+    .hidden-radio:checked + .radio-label .radio-indicator {
+        border-color: #2196F3;
+    }
+    
+    .indicator-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #2196F3;
+        transform: scale(0);
+        transition: transform 0.2s ease;
+    }
+    
+    .hidden-radio:checked + .radio-label .indicator-dot {
+        transform: scale(1);
+    }
+    
+    .radio-content {
+        flex: 1;
+    }
+    
+    .radio-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 0.25rem;
+    }
+    
+    .radio-icon {
+        font-size: 1.2rem;
+    }
+    
+    .radio-description {
+        color: #666;
+        font-size: 0.9rem;
+    }
+    
+    /* Email radio highlight */
+    #email + .radio-label {
+        position: relative;
+    }
+    
+    #email + .radio-label::after {
+        content: '';
+        position: absolute;
+        top: -4px;
+        left: -4px;
+        right: -4px;
+        bottom: -4px;
+        border: 2px solid transparent;
+        border-radius: 10px;
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
+    
+    /* Form Actions */
+    .form-actions {
+        margin-top: 1.5rem;
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    .btn {
+        padding: 0.5rem 1.25rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    
+    .btn-primary {
+        background-color: #2196F3;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background-color: #1976D2;
+    }
+    
+    .btn-primary:disabled {
+        background-color: #e0e0e0;
+        color: #9e9e9e;
+        cursor: not-allowed;
+    }
+    
+    /* Animation for the Email option */
+    @keyframes pulse-border {
+        0% { border-color: rgba(33, 150, 243, 0.2); }
+        50% { border-color: rgba(33, 150, 243, 0.8); }
+        100% { border-color: rgba(33, 150, 243, 0.2); }
+    }
+    
+    @keyframes highlight-option {
+        0% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(33, 150, 243, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0); }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Define fallback functions if they don't exist in the global scope
+    if (typeof window.completeTask !== 'function') {
+        console.warn('window.completeTask was not found, using fallback implementation');
+        window.completeTask = function(success) {
+            console.log('Task completed:', success);
+            alert('Task completed! (fallback implementation)');
+        };
+    }
+    
+    if (typeof window.recordMistake !== 'function') {
+        console.warn('window.recordMistake was not found, using fallback implementation');
+        window.recordMistake = function(code, details, message) {
+            console.log('Mistake recorded:', code, details, message);
+            alert('Mistake: ' + message);
+        };
+    }
+
+    // Elements
+    const radioInputs = document.querySelectorAll('.hidden-radio');
+    const emailRadio = document.getElementById('email');
+    const saveButton = document.getElementById('save-btn');
+    
+    let isTaskComplete = false;
+    
+    // Add click event to radio inputs
+    radioInputs.forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Enable the save button
+            saveButton.disabled = false;
+            
+            // Record a mistake if not selecting Email
+            if (this.id !== 'email' && !isTaskComplete) {
+                // Record a mistake when wrong option is selected
+                window.recordMistake(
+                    'wrong_radio_selected',
+                    `User selected ${this.value} option instead of Email`,
+                    "That's not the 'Email' option. Please select 'Email' as your preferred contact method."
+                );
+            }
+        });
+    });
+    
+    // Save button click handler - completes task only when Email is selected
+    saveButton.addEventListener('click', function() {
+        if (!isTaskComplete) {
+            if (emailRadio.checked) {
+                completeTask();
+            } else {
+                // Record a mistake when trying to save without selecting Email
+                window.recordMistake(
+                    'save_without_email',
+                    `User tried to save without selecting Email option`,
+                    "Please select 'Email' before saving your preferences."
+                );
+            }
+        }
+    });
+    
+    // Task completion
+    function completeTask() {
+        if (isTaskComplete) return;
+        
+        console.log('Completing task...');
+        isTaskComplete = true;
+        
+        // Highlight the selection
+        const emailLabel = emailRadio.nextElementSibling;
+        emailLabel.style.animation = "highlight-option 1s";
+        
+        // Use the standardized task completion with a slight delay
+        setTimeout(function() {
+            window.completeTask(true);
+        }, 300);
+    }
+    
+    // Add a subtle hint after a delay if user hasn't completed the task
+    setTimeout(() => {
+        if (!isTaskComplete) {
+            const emailLabel = emailRadio.nextElementSibling;
+            emailLabel.style.boxShadow = "0 0 0 2px rgba(33, 150, 243, 0.3)";
+            emailLabel.style.animation = "pulse-border 2s infinite";
+            
+            setTimeout(() => {
+                if (!isTaskComplete) {
+                    emailLabel.style.boxShadow = "";
+                    emailLabel.style.animation = "";
+                }
+            }, 3000);
+        }
+    }, 5000);
+});
+</script> 

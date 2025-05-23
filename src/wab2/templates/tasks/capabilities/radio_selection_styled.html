@@ -1,0 +1,389 @@
+<main class="container">
+    <article class="simulated-app-card">
+        <header class="simulated-app-header">
+            <h4>{{ task.agent.scenario_title }}</h4>
+        </header>
+
+        <div class="app-message info-message">
+            <span class="icon">ℹ️</span>
+            <p>{{ task.agent.goal_description }}</p>
+        </div>
+
+        <div class="app-content-area">
+            <div class="form-container">
+                <form id="contact-form">
+                    <div class="form-section">
+                        <h3 class="form-title">Contact Preferences</h3>
+                        <p class="form-description">Please choose how we should contact you about your account.</p>
+                        
+                        <div class="radio-group" role="radiogroup" aria-labelledby="contact-method-label">
+                            <div id="contact-method-label" class="radio-group-label">Preferred Contact Method:</div>
+                            
+                            <div class="radio-options">
+                                <div class="radio-option" role="radio" tabindex="0" aria-checked="false" data-value="phone">
+                                    <div class="radio-indicator"></div>
+                                    <div class="radio-content">
+                                        <div class="radio-label">Phone</div>
+                                        <div class="radio-description">We'll call you during business hours</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="radio-option" role="radio" tabindex="0" aria-checked="false" data-value="email">
+                                    <div class="radio-indicator"></div>
+                                    <div class="radio-content">
+                                        <div class="radio-label">Email</div>
+                                        <div class="radio-description">You'll receive email notifications</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="radio-option" role="radio" tabindex="0" aria-checked="false" data-value="sms">
+                                    <div class="radio-indicator"></div>
+                                    <div class="radio-content">
+                                        <div class="radio-label">SMS</div>
+                                        <div class="radio-description">We'll send text messages to your phone</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="radio-option" role="radio" tabindex="0" aria-checked="false" data-value="letter">
+                                    <div class="radio-indicator"></div>
+                                    <div class="radio-content">
+                                        <div class="radio-label">Mail</div>
+                                        <div class="radio-description">We'll send letters to your address</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-submit-row">
+                            <button type="button" id="continue-button" class="continue-button" disabled>Continue</button>
+                        </div>
+                    </div>
+                </form>
+                
+                <div id="success-message" class="success-message" style="display: none;">
+                    <div class="success-icon">✓</div>
+                    <div class="success-content">
+                        <h3>Preference Saved!</h3>
+                        <p>Your contact method has been set to <span id="selected-method">Email</span>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="simulated-app-footer">
+            <small>Task ID: {{ task.id }}</small>
+        </footer>
+    </article>
+</main>
+
+<style>
+    /* Override base template constraints */
+    .container {
+        max-width: 1400px !important;
+        width: 95% !important;
+    }
+    
+    .simulated-app-card {
+        max-width: none !important;
+        width: 100% !important;
+    }
+    
+    .app-content-area {
+        padding: 1rem !important;
+    }
+    
+    /* Form container */
+    .form-container {
+        max-width: 650px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .form-section {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 25px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+    }
+    
+    .form-title {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #333;
+        font-size: 20px;
+    }
+    
+    .form-description {
+        color: #666;
+        margin-bottom: 25px;
+    }
+    
+    /* Radio group styling */
+    .radio-group {
+        margin-bottom: 25px;
+    }
+    
+    .radio-group-label {
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: #333;
+    }
+    
+    .radio-options {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .radio-option {
+        display: flex;
+        align-items: flex-start;
+        padding: 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+    
+    .radio-option:hover {
+        border-color: #b3b3b3;
+        background-color: #f9f9f9;
+    }
+    
+    .radio-option[aria-checked="true"] {
+        border-color: #ff6b6b;
+        background-color: #fff8f8;
+    }
+    
+    .radio-indicator {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ccc;
+        border-radius: 50%;
+        margin-right: 15px;
+        position: relative;
+        flex-shrink: 0;
+        margin-top: 2px;
+        transition: border-color 0.2s;
+    }
+    
+    .radio-option:hover .radio-indicator {
+        border-color: #b3b3b3;
+    }
+    
+    .radio-option[aria-checked="true"] .radio-indicator {
+        border-color: #ff6b6b;
+    }
+    
+    .radio-option[aria-checked="true"] .radio-indicator:after {
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #ff6b6b;
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    .radio-content {
+        flex: 1;
+    }
+    
+    .radio-label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 4px;
+    }
+    
+    .radio-description {
+        color: #666;
+        font-size: 14px;
+    }
+    
+    /* Focus styling */
+    .radio-option:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.3);
+    }
+    
+    /* Submit button */
+    .form-submit-row {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 25px;
+    }
+    
+    .continue-button {
+        padding: 12px 25px;
+        background-color: #ff6b6b;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .continue-button:hover:not(:disabled) {
+        background-color: #fa5252;
+    }
+    
+    .continue-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+    
+    /* Success message */
+    .success-message {
+        background-color: #d4edda;
+        color: #155724;
+        border-radius: 8px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+    }
+    
+    .success-icon {
+        font-size: 28px;
+        background-color: #28a745;
+        color: white;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+    }
+    
+    .success-content h3 {
+        margin-top: 0;
+        margin-bottom: 8px;
+    }
+    
+    .success-content p {
+        margin: 0;
+    }
+    
+    #selected-method {
+        font-weight: 600;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const radioOptions = document.querySelectorAll('.radio-option');
+    const continueButton = document.getElementById('continue-button');
+    const successMessage = document.getElementById('success-message');
+    const selectedMethodText = document.getElementById('selected-method');
+    const form = document.getElementById('contact-form');
+    
+    // Function to handle radio selection
+    function selectRadio(radioEl) {
+        // Remove selection from all radios
+        radioOptions.forEach(option => {
+            option.setAttribute('aria-checked', 'false');
+            option.tabIndex = 0;
+        });
+        
+        // Set selected radio
+        radioEl.setAttribute('aria-checked', 'true');
+        radioEl.tabIndex = 0;
+        
+        // Check if Email is selected and enable button accordingly
+        const isEmailSelected = radioEl.dataset.value === 'email';
+        continueButton.disabled = !isEmailSelected;
+        
+        // If not Email, show a subtle tooltip or hint
+        if (!isEmailSelected) {
+            // Could add a hint here
+        }
+    }
+    
+    // Add click handlers to radio options
+    radioOptions.forEach(radio => {
+        radio.addEventListener('click', function() {
+            selectRadio(this);
+        });
+        
+        // Keyboard support
+        radio.addEventListener('keydown', function(e) {
+            // Space or Enter selects the radio
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                selectRadio(this);
+            }
+            
+            // Arrow navigation
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                const nextRadio = findNextRadio(this);
+                nextRadio.focus();
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                const prevRadio = findPrevRadio(this);
+                prevRadio.focus();
+            }
+        });
+    });
+    
+    // Helper function to find next radio
+    function findNextRadio(currentRadio) {
+        const radioArray = Array.from(radioOptions);
+        const currentIndex = radioArray.indexOf(currentRadio);
+        const nextIndex = (currentIndex + 1) % radioArray.length;
+        return radioArray[nextIndex];
+    }
+    
+    // Helper function to find previous radio
+    function findPrevRadio(currentRadio) {
+        const radioArray = Array.from(radioOptions);
+        const currentIndex = radioArray.indexOf(currentRadio);
+        const prevIndex = (currentIndex - 1 + radioArray.length) % radioArray.length;
+        return radioArray[prevIndex];
+    }
+    
+    // Continue button click handler
+    continueButton.addEventListener('click', function() {
+        // Find which option is selected
+        const selectedRadio = document.querySelector('.radio-option[aria-checked="true"]');
+        
+        if (selectedRadio && selectedRadio.dataset.value === 'email') {
+            // Get the label text
+            const selectedLabel = selectedRadio.querySelector('.radio-label').textContent;
+            selectedMethodText.textContent = selectedLabel;
+            
+            // Hide form, show success
+            form.style.display = 'none';
+            successMessage.style.display = 'flex';
+            
+            // Send success to server
+            fetch('/api/complete_task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    task_id: '{{ task.id }}'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect after a short delay
+                    setTimeout(() => {
+                        window.location.href = '/generic_task_success?task_id={{ task.id }}&title={{ task.agent.scenario_title }}';
+                    }, 2000);
+                }
+            });
+        }
+    });
+});
+</script> 

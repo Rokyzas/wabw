@@ -1,0 +1,202 @@
+[
+  {
+    "id": "dyn_001_multi_condition_flow",
+    "category": "Dynamic UI & State Awareness",
+    "template": "tasks/dynamic_ui/multi_condition_flow.html",
+    "agent": {
+      "scenario_title": "Complete Form Submission",
+      "goal_description": "Finish form all stopes, sill in required fields, check necessary boxes, and submit the form when the button activates.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test combined state-awareness: field validation, checkbox requirements, and delayed button activation.",
+      "scenario_summary": "Simulates a realistic form with multiple conditions that must be met before submission is possible.",
+      "key_observations": [
+        "Does the agent complete all required fields?",
+        "Does it check the required checkboxes while recognizing optional ones?",
+        "Does it wait for processing to complete before attempting submission?"
+      ],
+      "success_criteria": "Agent fills required fields, checks required boxes, waits for the system to process, and submits only when the button is active."
+    }
+  },
+  {
+    "id": "dyn_002_dismiss_modal_to_continue",
+    "category": "Dynamic UI & State Awareness",
+    "template": "tasks/dynamic_ui/dismiss_modal.html",
+    "agent": {
+      "scenario_title": "Dashboard Access",
+      "goal_description": "Continue with the process after handling the site's welcome popup and generating a report.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Evaluate if the agent can complete a sequence of modals to access content.",
+      "scenario_summary": "Tests sequential modal detection and state transitions.",
+      "key_observations": [
+        "Does the agent handle the cookie preferences modal first?",
+        "Does it dismiss the welcome modal after configuring cookies?",
+        "Does it recognize the correct post-modal action?"
+      ],
+      "success_criteria": "Agent selects cookies, dismisses the welcome modal, then generates a report."
+    }
+  },
+  {
+    "id": "dyn_003_scroll_to_unlock",
+    "category": "Dynamic UI & State Awareness",
+    "template": "tasks/dynamic_ui/scroll_unlock.html",
+    "agent": {
+      "scenario_title": "Scroll to Accept",
+      "goal_description": "Accept the policy after reviewing all the terms.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Evaluate if the agent scrolls to trigger UI state change.",
+      "scenario_summary": "Used in long documents where acceptance is gated by scroll.",
+      "key_observations": [
+        "Does the agent scroll the full container?",
+        "Does it recognize the state change that enables the button?"
+      ],
+      "success_criteria": "Button is only clicked after scrolling unlocks it."
+    }
+  },
+  {
+    "id": "dyn_004_load_more_then_click",
+    "category": "Dynamic UI & State Awareness",
+    "template": "tasks/dynamic_ui/load_then_select.html",
+    "agent": {
+      "scenario_title": "Find Recently Added Product",
+      "goal_description": "Load more items and select the new product to continue.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test whether the agent handles a UI that expands dynamically.",
+      "scenario_summary": "Simulates lazy-loaded lists in ecommerce or content feeds.",
+      "key_observations": [
+        "Does the agent trigger content loading?",
+        "Does it identify and interact with newly rendered elements?"
+      ],
+      "success_criteria": "New item is selected only after it is loaded."
+    }
+  },
+  {
+    "id": "dyn_005_temporary_click_window",
+    "category": "Dynamic UI & State Awareness",
+    "template": "tasks/dynamic_ui/time_sensitive_action.html",
+    "agent": {
+      "scenario_title": "Confirm When Ready",
+      "goal_description": "Enter the verification code within the allowed time window.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test timing awareness of transient UI availability.",
+      "scenario_summary": "Used in OTP, one-time confirm, or verification flows.",
+      "key_observations": [
+        "Does the agent recognize the right timing window?",
+        "Does it enter code before the window expires?",
+        "Does it avoid clicking too early or too late?"
+      ],
+      "success_criteria": "Action is confirmed within the valid timing window."
+    }
+  },
+  {
+    "id": "dyn_006_double_click_confirmation",
+    "category": "Dynamic UI & State Awareness",
+    "template": "tasks/dynamic_ui/double_click.html",
+    "agent": {
+      "scenario_title": "Double-Click to Open",
+      "goal_description": "Double-click on \"Presentation.pptx\" to open it.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test if the agent can perform a double-click interaction.",
+      "scenario_summary": "Simulates file explorer interfaces requiring double-click to open files.",
+      "key_observations": [
+        "Does the agent identify the need for a double-click?",
+        "Are the clicks properly timed to register as a double-click?",
+        "Does it correctly target the specified file?"
+      ],
+      "success_criteria": "File is double-clicked with proper timing to open it."
+    }
+  },
+  {
+    "id": "dyn_007_reset_state_on_selection_change",
+    "category": "Dynamic UI & State Awareness",
+    "template": "tasks/dynamic_ui/reset_on_change.html",
+    "agent": {
+      "scenario_title": "Reconfigure Your Setup",
+      "goal_description": "Select a tablet first. If tablets are unavailable, select and configure a laptop to complete your order.",
+      "context": "A product configuration form where you need to select all required fields to complete your order."
+    },
+    "observer": {
+      "goal": "Test agent's ability to handle product availability and form state changes.",
+      "scenario_summary": "Form that requires selecting alternatives when first choice is unavailable, while handling dynamic field changes.",
+      "key_observations": [
+        "Does the agent try the tablet option first?",
+        "When tablets are unavailable, does the agent switch to configuring a laptop?",
+        "Does the agent complete all required fields based on the selected product?",
+        "Does the agent adapt to fields that appear or disappear based on selections?"
+      ],
+      "success_criteria": "Agent completes the order by selecting a laptop and filling all required fields after discovering tablets are unavailable."
+    }
+  },
+  {
+    "id": "dyn_008_click_after_motion_settles",
+    "category": "Dynamic UI & State Awareness",
+    "template": "tasks/dynamic_ui/moving_target.html",
+    "agent": {
+      "scenario_title": "Confirm Your Location",
+      "goal_description": "Click the confirmation pin after it settles into place.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Evaluate if the agent waits for dynamic movement to complete before acting.",
+      "scenario_summary": "Simulates interfaces with animated or sliding confirmation targets.",
+      "key_observations": [
+        "Does the agent wait for motion to stop?",
+        "Does it avoid clicking early?",
+        "Does it succeed only once the target is stable?"
+      ],
+      "success_criteria": "Target is clicked only once it stops moving."
+    }
+  },
+  {
+    "id": "dyn_009_handle_undo_redo_flow",
+    "category": "Dynamic UI & State Awareness",
+    "template": "tasks/dynamic_ui/undo_redo_flow.html",
+    "agent": {
+      "scenario_title": "Configure Widget Color",
+      "goal_description": "Select a color theme, undo your selection, then choose a different color and save your configuration.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test whether the agent correctly follows a specific workflow with undo/redo functionality.",
+      "scenario_summary": "A configuration form with a required undo-then-reselect workflow before submission is allowed.",
+      "key_observations": [
+        "Does the agent select a color initially?",
+        "Does the agent use the undo button to revert the color selection?",
+        "Does the agent select a color again after undoing?",
+        "Does the agent recognize they must complete this specific workflow before saving?"
+      ],
+      "success_criteria": "Agent successfully selects a color, undoes that selection, selects a color again, and then completes the form submission."
+    }
+  },
+  {
+    "id": "dyn_010_search_and_continue",
+    "category": "Dynamic UI & State Awareness",
+    "template": "tasks/dynamic_ui/search_select_continue.html",
+    "agent": {
+      "scenario_title": "Find and Proceed",
+      "goal_description": "Search for tablet and continue once you've selected the correct one.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test multi-state input interaction followed by dependent logic.",
+      "scenario_summary": "Simulates booking, search UIs, or forms with autocomplete logic.",
+      "key_observations": [
+        "Does the agent trigger the search properly?",
+        "Does it wait for and select the correct result?",
+        "Does it proceed only after selection is complete?"
+      ],
+      "success_criteria": "Correct item is selected from a dynamic list and confirmed."
+    }
+  }
+]

@@ -1,0 +1,482 @@
+[
+  {
+    "id": "cap_001_click_custom_div",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/click_custom_div.html",
+    "agent": {
+      "scenario_title": "Click Custom Button",
+      "goal_description": "Click the 'Continue' button to proceed.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test clicking a div element that looks like a button.",
+      "scenario_summary": "Simulates apps with styled custom buttons.",
+      "key_observations": [
+        "Does the agent recognize a custom-styled button?",
+        "Does it successfully trigger the action?"
+      ],
+      "success_criteria": "Button is clicked and task completes."
+    }
+  },
+  {
+    "id": "cap_002_click_svg_icon",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/click_svg_icon.html",
+    "agent": {
+      "scenario_title": "Activate Icon Control",
+      "goal_description": "Click the circular icon to continue.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test clicking inside an SVG element.",
+      "scenario_summary": "Common in dashboards and icon UIs.",
+      "key_observations": [
+        "Does the agent recognize the SVG as interactive?",
+        "Does the click trigger success?"
+      ],
+      "success_criteria": "SVG click is detected and completes task."
+    }
+  },
+  {
+    "id": "cap_003_click_canvas_target",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/click_canvas_target.html",
+    "agent": {
+      "scenario_title": "Target on Canvas",
+      "goal_description": "Click the red dot on the map.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test coordinate click inside a canvas element.",
+      "scenario_summary": "Used in maps, diagrams, games.",
+      "key_observations": [
+        "Does the agent find the hotspot?",
+        "Does it click inside the valid zone?"
+      ],
+      "success_criteria": "Canvas click inside target zone registers."
+    }
+  },
+  {
+    "id": "cap_004_click_offset_corner",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/click_offset_corner.html",
+    "agent": {
+      "scenario_title": "Precise Click Target",
+      "goal_description": "Click the bottom-right corner of the box.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test click precision based on offset.",
+      "scenario_summary": "Simulates UI components that respond to hit zones.",
+      "key_observations": [
+        "Does the agent aim correctly?",
+        "Does it avoid center or incorrect region?"
+      ],
+      "success_criteria": "Click lands within the correct offset zone."
+    }
+  },
+  {
+    "id": "cap_005_click_icon_only_control",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/click_icon_only.html",
+    "agent": {
+      "scenario_title": "Mute the Video",
+      "goal_description": "Click the speaker icon to mute the video.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test agent's ability to recognize and click an icon-only control.",
+      "scenario_summary": "Common in toolbars, media players, and minimalist UIs.",
+      "key_observations": [
+        "Does the agent identify icons as clickable?",
+        "Can it distinguish functional icons from decoration?",
+        "Does it avoid clicking similar nearby icons?"
+      ],
+      "success_criteria": "Speaker icon is clicked and mute state activates."
+    }
+  },
+  {
+    "id": "cap_006_type_into_input",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/type_into_input.html",
+    "agent": {
+      "scenario_title": "Enter Your Name",
+      "goal_description": "Type your name into the input field.",
+      "context": "Your name is John."
+    },
+    "observer": {
+      "goal": "Test whether the agent can type into a standard input element.",
+      "scenario_summary": "Basic input test used in nearly all web forms.",
+      "key_observations": [
+        "Does the agent correctly type character-by-character?"
+      ],
+      "success_criteria": "Input contains non-empty typed text and state is updated."
+    }
+  },
+  {
+    "id": "cap_007_focus_before_typing",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/focus_before_typing.html",
+    "agent": {
+      "scenario_title": "Focus to Type",
+      "goal_description": "Enter your email.",
+      "context": "Your email is john@example.com."
+    },
+    "observer": {
+      "goal": "Test whether the agent explicitly focuses an input before typing.",
+      "scenario_summary": "Simulates cases where inputs reject keystrokes without focus.",
+      "key_observations": [
+        "Does the agent click to focus before typing?",
+        "Does typing occur only after focus?"
+      ],
+      "success_criteria": "Focus event is triggered before typing and email is entered successfully."
+    }
+  },
+  {
+    "id": "cap_008_press_enter_to_submit",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/press_enter_to_submit.html",
+    "agent": {
+      "scenario_title": "Quick Form Submission",
+      "goal_description": "Type your name and press Enter to submit the form.",
+      "context": "Your name is John."
+    },
+    "observer": {
+      "goal": "Test whether the agent can submit a form using the Enter key.",
+      "scenario_summary": "Simulates single-field login, search boxes, or chat inputs.",
+      "key_observations": [
+        "Does the agent type the text correctly?",
+        "Does it press Enter while focused?",
+        "Is submission triggered via keyboard?"
+      ],
+      "success_criteria": "Enter key triggers form submission and completes without clicking a button."
+    }
+  },
+  {
+    "id": "cap_009_tab_to_button_and_activate",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/tab_to_button.html",
+    "agent": {
+      "scenario_title": "Keyboard Navigation Test",
+      "goal_description": "Use the Tab key to focus on the elements and fill in the form with your name and surname. Press Enter to submit the form.",
+      "context": "Your name and surname is John Doe."
+    },
+    "observer": {
+      "goal": "Verify keyboard-only focus navigation and control activation.",
+      "scenario_summary": "Simulates accessibility navigation or kiosk interfaces.",
+      "key_observations": [
+        "Does the agent correctly Tab through focusable elements?",
+        "Does it recognize focus and press Enter?",
+        "Does it avoid using the mouse or skipping steps?"
+      ],
+      "success_criteria": "Confirm button is focused using Tab and Enter key triggers the correct action."
+    }
+  },
+  {
+    "id": "cap_010_hover_to_reveal_button",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/hover_and_click.html",
+    "agent": {
+      "scenario_title": "Hover to Reveal",
+      "goal_description": "Hover over the System notification and click the 'Archive' button.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test hover-triggered interaction with CSS-only visibility control.",
+      "scenario_summary": "Used in messaging apps, file browsers, and inboxes.",
+      "key_observations": [
+        "Can the agent trigger a hover effect?",
+        "Does it click the correct element after hover?"
+      ],
+      "success_criteria": "Button is revealed via hover and clicked successfully."
+    }
+  },
+  {
+    "id": "cap_011_scroll_and_click",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/scroll_and_click.html",
+    "agent": {
+      "scenario_title": "Find Hidden Product",
+      "goal_description": "Scroll down and click the last product in the list.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Verify the agent's ability to scroll vertically and click an element outside the viewport.",
+      "scenario_summary": "Common in ecommerce, infinite scroll feeds, and large forms.",
+      "key_observations": [
+        "Does the agent scroll intentionally?",
+        "Does it identify offscreen elements correctly?",
+        "Is the correct item clicked only after scrolling?"
+      ],
+      "success_criteria": "Target is clicked after vertical scroll completes."
+    }
+  },
+  {
+    "id": "cap_012_scroll_horizontally_and_click",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/scroll_horizontal_click.html",
+    "agent": {
+      "scenario_title": "Find Hidden Tab",
+      "goal_description": "Scroll horizontally and click on the 'Settings' tab.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test the agent's ability to scroll sideways and click a target beyond the initial viewport.",
+      "scenario_summary": "Simulates carousel menus, overflow tab bars, or horizontally scrolling content.",
+      "key_observations": [
+        "Does the agent detect horizontal overflow?",
+        "Can it scroll laterally and identify the target?",
+        "Is the click performed after scrolling reveals the correct element?"
+      ],
+      "success_criteria": "'Settings' tab is clicked successfully after horizontal scroll."
+    }
+  },
+  {
+    "id": "cap_013_drag_item_to_trash",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/drag_item_to_trash.html",
+    "agent": {
+      "scenario_title": "Remove a File",
+      "goal_description": "Drag the file into the trash bin to delete it.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Verify drag-and-drop works with constrained spatial target (e.g., trash icon).",
+      "scenario_summary": "Replicates cloud storage or email UIs.",
+      "key_observations": [
+        "Can the agent start and complete the drag?",
+        "Does it target the correct drop zone?"
+      ],
+      "success_criteria": "File is dropped on trash zone and removed."
+    }
+  },
+  {
+    "id": "cap_014_drag_dual_slider",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/drag_dual_slider.html",
+    "agent": {
+      "scenario_title": "Adjust Price Filter",
+      "goal_description": "Set the price range from $10 to $30 using the sliders.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test precise control of two slider thumbs in a range input.",
+      "scenario_summary": "Common in ecommerce filters and analytics dashboards.",
+      "key_observations": [
+        "Can the agent identify and drag both handles?",
+        "Does it avoid overlap and keep values in range?",
+        "Are the final values correct?"
+      ],
+      "success_criteria": "Min and max values are set to 10 and 30, respectively."
+    }
+  },
+  {
+    "id": "cap_015_drag_slider_to_value",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/drag_slider_to_value.html",
+    "agent": {
+      "scenario_title": "Set Temperature",
+      "goal_description": "Adjust the temperature slider to 22\u00b0C.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test control over a single slider input.",
+      "scenario_summary": "Used in settings panels and control interfaces.",
+      "key_observations": [
+        "Can the agent drag the slider to a specific value?",
+        "Does it avoid overshooting or stopping early?"
+      ],
+      "success_criteria": "Slider value is exactly 22\u00b0C."
+    }
+  },
+  {
+    "id": "cap_016_resize_panel",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/resize_panel.html",
+    "agent": {
+      "scenario_title": "Adjust Panel Width",
+      "goal_description": "Drag the panel's right edge to make it wider.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test ability to perform resize using mouse-drag behavior.",
+      "scenario_summary": "Common in layout builders and admin dashboards.",
+      "key_observations": [
+        "Can the agent find and grab the resize handle?",
+        "Does it drag horizontally in the correct direction?"
+      ],
+      "success_criteria": "Panel becomes visibly wider after drag."
+    }
+  },
+  {
+    "id": "cap_017_zoom_map_click_twice",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/zoom_map_click_twice.html",
+    "agent": {
+      "scenario_title": "Zoom In on Map",
+      "goal_description": "Use touchpad/trackpad zoom gesture (pinch or two-finger scroll) to zoom in on the map twice.",
+      "context": "The interface has a map with zoom controls."
+    },
+    "observer": {
+      "goal": "Test whether the agent can interact with a zoom control.",
+      "scenario_summary": "Used in maps, image viewers, and graph tools.",
+      "key_observations": [
+        "Does the agent recognize the zoom gesture?",
+        "Does the agent zoom in the correct direction?"
+      ],
+      "success_criteria": "Zoom level increases by 2 steps."
+    }
+  },
+  {
+    "id": "cap_018_click_color_swatch",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/click_color_swatch.html",
+    "agent": {
+      "scenario_title": "Pick a Color",
+      "goal_description": "Click the blue swatch to apply it.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test agent's ability to visually locate and click a styled, non-input element.",
+      "scenario_summary": "Common in product customization or design tools.",
+      "key_observations": [
+        "Can the agent distinguish between color swatches?",
+        "Does it select the correct one based on appearance?"
+      ],
+      "success_criteria": "Blue swatch is clicked and applied."
+    }
+  },
+  {
+    "id": "cap_019_select_text_trigger_toolbar",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/select_text_toolbar.html",
+    "agent": {
+      "scenario_title": "Bold Selected Text",
+      "goal_description": "Select the sentence to trigger the toolbar, then click the 'Bold' button.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test whether the agent can make a selection to reveal additional UI and interact with it.",
+      "scenario_summary": "Used in document editors, email composers, and rich-text fields.",
+      "key_observations": [
+        "Does the agent correctly select text via mouse or keyboard?",
+        "Does it wait for or recognize the appearance of a toolbar?",
+        "Does it activate the correct formatting button?"
+      ],
+      "success_criteria": "Text becomes bold after selection and button click."
+    }
+  },
+  {
+    "id": "cap_020_click_tab",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/click_tab.html",
+    "agent": {
+      "scenario_title": "View Activity Panel",
+      "goal_description": "Click the 'Activity' tab to view the corresponding panel.",
+      "context": "The interface uses a tabbed navigation system."
+    },
+    "observer": {
+      "goal": "Test the agent's ability to use a tabbed interface.",
+      "scenario_summary": "Common in dashboards, profiles, and app settings.",
+      "key_observations": [
+        "Can the agent correctly identify the target tab?",
+        "Does it trigger a content panel change?"
+      ],
+      "success_criteria": "The 'Activity' tab is selected and its panel is shown."
+    }
+  },
+  {
+    "id": "cap_021_select_radio_styled",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/select_radio_styled.html",
+    "agent": {
+      "scenario_title": "Choose Contact Method",
+      "goal_description": "Select 'Email' as your preferred contact method and click the save button.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test the agent's ability to interact with custom-styled radio buttons.",
+      "scenario_summary": "Used in forms and onboarding flows with non-standard UI.",
+      "key_observations": [
+        "Does the agent identify which visual element is selected?",
+        "Does it select the correct radio option?"
+      ],
+      "success_criteria": "'Email' radio option is visibly selected and state is stored."
+    }
+  },
+  {
+    "id": "cap_022_check_checkbox",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/check_checkbox.html",
+    "agent": {
+      "scenario_title": "Accept Terms",
+      "goal_description": "Check the 'I Agree' box to continue.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test whether the agent can toggle a native checkbox.",
+      "scenario_summary": "Found in consent forms, settings, and pop-ups.",
+      "key_observations": [
+        "Does the agent target the right checkbox?"
+      ],
+      "success_criteria": "Checkbox is checked and submit button becomes enabled."
+    }
+  },
+  {
+    "id": "cap_023_select_from_dropdown",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/select_from_dropdown.html",
+    "agent": {
+      "scenario_title": "Choose a Country",
+      "goal_description": "Select 'Germany' from the dropdown list.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test interaction with native or custom select menus.",
+      "scenario_summary": "Used in search filters, location fields, and preferences.",
+      "key_observations": [
+        "Can the agent open the dropdown?",
+        "Does it select the correct value?"
+      ],
+      "success_criteria": "Dropdown is expanded, 'Germany' selected, and change recorded."
+    }
+  },
+  {
+    "id": "cap_024_toggle_switch",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/toggle_switch.html",
+    "agent": {
+      "scenario_title": "Enable Notifications",
+      "goal_description": "Toggle the switch to turn notifications ON.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test agent's ability to toggle a custom UI switch component.",
+      "scenario_summary": "Common in mobile-style settings and modern control panels.",
+      "key_observations": [
+        "Can the agent identify current state of the switch?",
+        "Does it click or drag to activate?"
+      ],
+      "success_criteria": "Switch toggled to ON and system state updated."
+    }
+  },
+  {
+    "id": "cap_025_right_click_context_menu",
+    "category": "Action Capabilities",
+    "template": "tasks/capabilities/right_click_menu.html",
+    "agent": {
+      "scenario_title": "Edit File Options",
+      "goal_description": "Right-click the file Project_Proposal.docx and choose 'Rename' from the menu.",
+      "context": ""
+    },
+    "observer": {
+      "goal": "Test ability to use context menu interaction.",
+      "scenario_summary": "Used in file explorers, editors, and admin tools.",
+      "key_observations": [
+        "Does the agent right-click successfully?",
+        "Is the right menu item selected?"
+      ],
+      "success_criteria": "Context menu opens on right-click and 'Rename' is chosen."
+    }
+  }
+]

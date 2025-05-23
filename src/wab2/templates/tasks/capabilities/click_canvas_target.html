@@ -1,0 +1,248 @@
+<div class="map-container">
+    <div class="map-header">
+        <h3>Interactive Map</h3>
+    </div>
+    
+    <div class="canvas-wrapper">
+        <canvas id="map-canvas" width="900" height="500" tabindex="0" aria-label="Map with a red target dot" role="application"></canvas>
+    </div>
+    
+    <div id="status-message" class="status-message"></div>
+</div>
+
+<style>
+    .map-container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .map-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .map-header h3 {
+        margin: 0;
+        color: #343a40;
+        font-size: 18px;
+        font-weight: 600;
+    }
+    
+    .map-instructions {
+        font-size: 14px;
+        color: #6c757d;
+    }
+    
+    .canvas-wrapper {
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+        overflow: hidden;
+    }
+    
+    #map-canvas {
+        background-color: #fff;
+        border: 1px solid #e9ecef;
+        border-radius: 4px;
+        cursor: crosshair;
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    .status-message {
+        text-align: center;
+        margin: 0 20px 10px;
+        padding: 8px;
+        border-radius: 6px;
+        font-weight: 500;
+        min-height: 20px;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('map-canvas');
+    const ctx = canvas.getContext('2d');
+    const statusMessage = document.getElementById('status-message');
+    
+    // Define the target position
+    const targetX = 620; 
+    const targetY = 280;
+    const targetRadius = 8;
+    
+    // Draw the map with target
+    function drawMap() {
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw background
+        ctx.fillStyle = '#e6f2ff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw map features
+        drawMapFeatures();
+        
+        // Draw the red target dot
+        ctx.beginPath();
+        ctx.arc(targetX, targetY, targetRadius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.8)';
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    }
+    
+    function drawMapFeatures() {
+        // Draw water bodies (blue areas)
+        ctx.fillStyle = '#a6d5fa';
+        
+        // Lake
+        ctx.beginPath();
+        ctx.ellipse(250, 150, 120, 90, 0, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // River
+        ctx.beginPath();
+        ctx.moveTo(250, 230);
+        ctx.quadraticCurveTo(350, 300, 450, 400);
+        ctx.quadraticCurveTo(650, 450, 850, 480);
+        ctx.lineWidth = 30;
+        ctx.strokeStyle = '#a6d5fa';
+        ctx.stroke();
+        
+        // Draw forests (green areas)
+        ctx.fillStyle = '#b8d9b8';
+        
+        // Forest 1
+        ctx.beginPath();
+        ctx.ellipse(350, 300, 100, 120, Math.PI / 4, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Forest 2
+        ctx.beginPath();
+        ctx.ellipse(700, 200, 130, 100, Math.PI / 3, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Draw roads (brown lines)
+        ctx.beginPath();
+        ctx.moveTo(80, 80);
+        ctx.lineTo(400, 220);
+        ctx.lineTo(620, 280); // Road leads to target
+        ctx.lineTo(800, 400);
+        ctx.strokeStyle = '#b08968';
+        ctx.lineWidth = 10;
+        ctx.stroke();
+        
+        // Draw some city markers
+        drawCityMarkers();
+    }
+    
+    function drawCityMarkers() {
+        // Draw city markers
+        const cities = [
+            { x: 150, y: 80, name: "Northtown" },
+            { x: 400, y: 220, name: "Centerburg" },
+            { x: 800, y: 400, name: "Riverside" }
+        ];
+        
+        cities.forEach(city => {
+            // City dot
+            ctx.beginPath();
+            ctx.arc(city.x, city.y, 6, 0, Math.PI * 2);
+            ctx.fillStyle = '#495057';
+            ctx.fill();
+            
+            // City name
+            ctx.font = '14px Arial';
+            ctx.fillStyle = '#343a40';
+            ctx.textAlign = 'center';
+            ctx.fillText(city.name, city.x, city.y + 25);
+        });
+    }
+    
+    // Check if click was within target
+    function isInTarget(x, y) {
+        const distance = Math.sqrt(Math.pow(x - targetX, 2) + Math.pow(y - targetY, 2));
+        return distance <= targetRadius + 5; // Add a small tolerance for better UX
+    }
+    
+    function drawMarkerAtPosition(x, y) {
+        // Draw a marker at the clicked position
+        ctx.beginPath();
+        ctx.arc(x, y, 6, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.fill();
+        
+        // Draw crosshair lines
+        ctx.beginPath();
+        ctx.moveTo(x - 10, y);
+        ctx.lineTo(x + 10, y);
+        ctx.moveTo(x, y - 10);
+        ctx.lineTo(x, y + 10);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.stroke();
+        
+        // Update status message
+        statusMessage.textContent = `You clicked at (${Math.round(x)}, ${Math.round(y)})`;
+        statusMessage.className = 'status-message warning-message';
+    }
+    
+    // Handle canvas clicks
+    canvas.addEventListener('click', function(event) {
+        // Get click coordinates relative to the canvas
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        
+        // Scale coordinates if canvas is being rendered at a different size than its natural size
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const scaledX = x * scaleX;
+        const scaledY = y * scaleY;
+        
+        // Check if click was on target
+        if (isInTarget(scaledX, scaledY)) {
+            // Hide any error messages
+            window.hideError();
+            
+            // Complete task using the standard function without delay
+            window.completeTask(true);
+        } else {
+            // Miss - redraw map and show marker
+            drawMap();
+            drawMarkerAtPosition(scaledX, scaledY);
+            
+            // Record mistake with error message
+            window.recordMistake(
+                'target_missed', 
+                `Clicked at coordinates (${Math.round(scaledX)}, ${Math.round(scaledY)}) instead of target (${targetX}, ${targetY})`,
+                "Missed the target. Try again by clicking on the red dot."
+            );
+        }
+    });
+    
+    // Add keyboard support for accessibility
+    canvas.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            window.hideError();
+            window.completeTask(true);
+        }
+    });
+    
+    // Initial drawing
+    drawMap();
+});
+</script> 

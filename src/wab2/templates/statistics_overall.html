@@ -1,0 +1,610 @@
+{% extends "layout.html" %}
+
+{% block title %}Overall Statistics - Web Agent Benchmark Web{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h1>Overall Benchmark Statistics</h1>
+    <p>Compare agent performance across all benchmark tasks.</p>
+</header>
+
+<!-- Navigation tabs for switching between individual and overall views -->
+<div class="stats-nav-tabs">
+    <a href="{{ url_for('statistics.individual') }}" class="nav-tab">Individual Agent Statistics</a>
+    <a href="{{ url_for('statistics.overall') }}" class="nav-tab active">Overall Benchmarks</a>
+</div>
+
+<section class="leaderboard-section">
+    <h2>Agent Leaderboard</h2>
+    
+    <div class="leaderboard-controls">
+        <div class="sort-options">
+            <span>Sort by:</span>
+            <select id="sort-leaderboard">
+                <option value="success_rate">Success Rate</option>
+                <option value="average_duration">Duration (Fastest First)</option>
+                <option value="average_actions">Efficiency (Fewest Actions First)</option>
+                <option value="average_mistakes">Accuracy (Fewest Mistakes First)</option>
+            </select>
+        </div>
+        <button id="refresh-leaderboard" class="button">Refresh</button>
+    </div>
+    
+    <div class="leaderboard-container">
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Agent</th>
+                    <th>Success Rate</th>
+                    <th>Tasks Completed</th>
+                    <th>Avg. Duration</th>
+                    <th>Avg. Actions</th>
+                    <th>Avg. Mistakes</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboard-body">
+                <tr>
+                    <td colspan="7" class="loading-row">Loading leaderboard data...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Benchmark Overview section removed as requested -->
+
+<section class="task-category-section">
+    <h2>Performance by Task Category</h2>
+    
+    <div class="chart-tabs">
+        <button class="chart-tab active" data-chart="success-rate">Success Rate</button>
+        <button class="chart-tab" data-chart="avg-duration">Avg Duration</button>
+        <button class="chart-tab" data-chart="avg-actions">Avg Actions</button>
+    </div>
+    
+    <div class="task-category-container improved">
+        <div class="chart-container improved">
+            <canvas id="task-category-chart"></canvas>
+        </div>
+    </div>
+    
+    <h3 class="category-awards-title">🏆 Best Performing Agents by Category</h3>
+    <p class="category-awards-description">See which agents excel in specific task categories</p>
+    <div class="category-best-agents horizontal">
+        <div class="category-awards-row" id="category-awards">
+            <div class="loading-indicator">Loading category data...</div>
+        </div>
+    </div>
+</section>
+
+<section class="export-section">
+    <h2>Export Data</h2>
+    <div class="export-buttons">
+        <a href="{{ url_for('api.export_all_metrics', format='json') }}" class="button" target="_blank">Export All Metrics (JSON)</a>
+        <a href="{{ url_for('api.export_all_metrics', format='csv') }}" class="button" target="_blank">Export All Metrics (CSV)</a>
+    </div>
+</section>
+
+<!-- Agent Performance Comparison section removed as requested -->
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load the leaderboard on page load
+        loadLeaderboard();
+        // loadBenchmarkSummary(); // Removed as requested
+        loadTaskCategoryStats();
+        // loadAgentComparisonData(); // Removed as requested
+        
+        // Set up event listeners
+        document.getElementById('sort-leaderboard').addEventListener('change', function() {
+            loadLeaderboard(this.value);
+        });
+        
+        document.getElementById('refresh-leaderboard').addEventListener('click', function() {
+            const sortBy = document.getElementById('sort-leaderboard').value;
+            loadLeaderboard(sortBy);
+        });
+        
+        // Set up chart tab event listeners
+        document.querySelectorAll('.chart-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Update active tab
+                document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Render chart with selected type
+                renderCategoryChart(this.dataset.chart);
+            });
+        });
+        
+        // Leaderboard functionality
+        function loadLeaderboard(sortBy = 'success_rate') {
+            const leaderboardBody = document.getElementById('leaderboard-body');
+            leaderboardBody.innerHTML = '<tr><td colspan="7" class="loading-row">Loading leaderboard data...</td></tr>';
+            
+            fetch(`/api/leaderboard?sort_by=${sortBy}`)
+                .then(response => response.json())
+                .then(data => {
+                    leaderboardBody.innerHTML = '';
+                    
+                    if (!data.leaderboard || data.leaderboard.length === 0) {
+                        leaderboardBody.innerHTML = '<tr><td colspan="7" class="empty-state">No agent data available</td></tr>';
+                        return;
+                    }
+                    
+                    // Create rows for each agent
+                    data.leaderboard.forEach((agent, index) => {
+                        const row = document.createElement('tr');
+                        
+                        // Add medal for top 3
+                        let rankDisplay = (index + 1).toString();
+                        if (index === 0) {
+                            rankDisplay = '🥇 ' + rankDisplay;
+                        } else if (index === 1) {
+                            rankDisplay = '🥈 ' + rankDisplay;
+                        } else if (index === 2) {
+                            rankDisplay = '🥉 ' + rankDisplay;
+                        }
+                        
+                        row.innerHTML = `
+                            <td>${rankDisplay}</td>
+                            <td><a href="${agentUrl(agent.agent_id)}">${agent.agent_id}</a></td>
+                            <td>${(agent.success_rate * 100).toFixed(1)}%</td>
+                            <td>${agent.success_count}/${agent.task_count}</td>
+                            <td>${formatDuration(agent.average_duration)}</td>
+                            <td>${agent.average_actions.toFixed(1)}</td>
+                            <td>${agent.average_mistakes.toFixed(2)}</td>
+                        `;
+                        leaderboardBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading leaderboard:', error);
+                    leaderboardBody.innerHTML = '<tr><td colspan="7" class="error-state">Error loading leaderboard data</td></tr>';
+                });
+        }
+        
+        // URL helper for linking to agent-specific statistics
+        function agentUrl(agentId) {
+            return `/statistics/individual?agent_id=${encodeURIComponent(agentId)}`;
+        }
+        
+        // Benchmark summary functionality
+        function loadBenchmarkSummary() {
+            fetch('/api/benchmark_summary')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('total-benchmark-tasks').textContent = data.total_tasks;
+                    document.getElementById('total-agents').textContent = data.total_agents;
+                    document.getElementById('avg-success-rate').textContent = `${(data.average_success_rate * 100).toFixed(1)}%`;
+                    document.getElementById('best-agent').innerHTML = `<a href="${agentUrl(data.best_agent)}">${data.best_agent}</a>`;
+                })
+                .catch(error => {
+                    console.error('Error loading benchmark summary:', error);
+                });
+        }
+        
+        // Task category statistics functionality
+        let categoryData;
+        let categoryChart;
+        
+        function loadTaskCategoryStats() {
+            fetch('/api/task_category_stats')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data || !data.categories || data.categories.length === 0) {
+                        document.querySelector('.chart-container').innerHTML = '<div class="empty-state">No category data available for chart</div>';
+                        document.getElementById('category-awards').innerHTML = '<div class="empty-state">No category awards data available</div>';
+                        return;
+                    }
+                    
+                    categoryData = data;
+                    renderCategoryChart('success-rate');
+                    renderCategoryAwards(data.categories);
+                })
+                .catch(error => {
+                    console.error('Error loading task category stats:', error);
+                    document.querySelector('.chart-container').innerHTML = '<div class="error-state">Error loading chart data: ' + error.message + '</div>';
+                    document.getElementById('category-awards').innerHTML = '<div class="error-state">Error loading category awards: ' + error.message + '</div>';
+                });
+        }
+        
+        function renderCategoryChart(chartType) {
+            if (!categoryData || !categoryData.categories || categoryData.categories.length === 0) {
+                document.querySelector('.chart-container').innerHTML = '<div class="empty-state">No category data available for chart</div>';
+                return;
+            }
+            
+            const ctx = document.getElementById('task-category-chart').getContext('2d');
+            const categories = categoryData.categories;
+            
+            // Destroy previous chart if it exists
+            if (categoryChart) {
+                categoryChart.destroy();
+            }
+            
+            // Prepare chart data based on selected type
+            let chartData, yAxisLabel, chartTitle, yAxisMax;
+            
+            switch (chartType) {
+                case 'success-rate':
+                    chartData = categories.map(c => c.success_rate * 100);
+                    yAxisLabel = 'Success Rate (%)';
+                    chartTitle = 'Success Rate by Task Category';
+                    yAxisMax = 100;
+                    break;
+                case 'avg-duration':
+                    chartData = categories.map(c => c.avg_duration);
+                    yAxisLabel = 'Average Duration (seconds)';
+                    chartTitle = 'Average Completion Time by Task Category';
+                    yAxisMax = Math.max(...chartData) * 1.1;
+                    break;
+                case 'avg-actions':
+                    chartData = categories.map(c => c.avg_actions);
+                    yAxisLabel = 'Average Actions';
+                    chartTitle = 'Average Actions Required by Task Category';
+                    yAxisMax = Math.max(...chartData) * 1.1;
+                    break;
+                default:
+                    chartData = categories.map(c => c.success_rate * 100);
+                    yAxisLabel = 'Success Rate (%)';
+                    chartTitle = 'Success Rate by Task Category';
+                    yAxisMax = 100;
+            }
+            
+            // Create new chart with improved formatting
+            categoryChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: categories.map(c => c.name),
+                    datasets: [{
+                        label: yAxisLabel,
+                        data: chartData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2,
+                        barThickness: 50,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            left: 20,
+                            right: 20,
+                            top: 20,
+                            bottom: 20
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: yAxisMax,
+                            title: {
+                                display: true,
+                                text: yAxisLabel,
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Task Category',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: chartTitle,
+                            font: {
+                                size: 20,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 30
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 14
+                                },
+                                boxWidth: 20
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleFont: {
+                                size: 16
+                            },
+                            bodyFont: {
+                                size: 14
+                            },
+                            padding: 12,
+                            cornerRadius: 6,
+                            displayColors: false
+                        }
+                    }
+                }
+            });
+        }
+        
+        function renderCategoryAwards(categories) {
+            const container = document.getElementById('category-awards');
+            container.innerHTML = '';
+            
+            if (!categories || categories.length === 0) {
+                container.innerHTML = '<div class="empty-state">No category data available</div>';
+                return;
+            }
+            
+            categories.forEach(category => {
+                // Skip "Unsafe Behavior & Security Risks" category
+                if (category.name === "Unsafe Behavior & Security Risks") {
+                    return;
+                }
+                
+                const card = document.createElement('div');
+                card.className = 'category-award-card';
+                
+                // Only show if we have best agents and they're not null/undefined
+                if (category.best_agent_success && category.best_agent_speed && category.best_agent_efficiency) {
+                    card.innerHTML = `
+                        <h4>${category.name}</h4>
+                        <div class="award-item">
+                            <div class="award-icon">🏆</div>
+                            <div class="award-details">
+                                <div class="award-title">Success Champion</div>
+                                <div class="award-value"><a href="${agentUrl(category.best_agent_success)}" title="View ${category.best_agent_success} details">${category.best_agent_success}</a></div>
+                            </div>
+                        </div>
+                        <div class="award-item">
+                            <div class="award-icon">⚡</div>
+                            <div class="award-details">
+                                <div class="award-title">Speed Champion</div>
+                                <div class="award-value"><a href="${agentUrl(category.best_agent_speed)}" title="View ${category.best_agent_speed} details">${category.best_agent_speed}</a></div>
+                            </div>
+                        </div>
+                        <div class="award-item">
+                            <div class="award-icon">🎯</div>
+                            <div class="award-details">
+                                <div class="award-title">Efficiency Champion</div>
+                                <div class="award-value"><a href="${agentUrl(category.best_agent_efficiency)}" title="View ${category.best_agent_efficiency} details">${category.best_agent_efficiency}</a></div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                }
+            });
+        }
+        
+        // Agent comparison functionality
+        let agentComparisonData;
+        let agentComparisonChart;
+        let selectedAgents = [];
+        const maxAgentsToCompare = 3;
+        const comparisonColors = [
+            {backgroundColor: 'rgba(54, 162, 235, 0.2)', borderColor: 'rgba(54, 162, 235, 1)'},
+            {backgroundColor: 'rgba(255, 99, 132, 0.2)', borderColor: 'rgba(255, 99, 132, 1)'},
+            {backgroundColor: 'rgba(75, 192, 192, 0.2)', borderColor: 'rgba(75, 192, 192, 1)'}
+        ];
+        
+        function loadAgentComparisonData() {
+            fetch('/api/agent_comparison_data')
+                .then(response => response.json())
+                .then(data => {
+                    agentComparisonData = data;
+                    initAgentComparisonUI();
+                    updateAgentComparisonChart();
+                })
+                .catch(error => {
+                    console.error('Error loading agent comparison data:', error);
+                    document.getElementById('agent-comparison-checkboxes').innerHTML = '<div class="error-state">Error loading agent data</div>';
+                });
+        }
+        
+        function initAgentComparisonUI() {
+            // Get all agents from leaderboard
+            fetch('/api/leaderboard')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.leaderboard || data.leaderboard.length === 0) {
+                        document.getElementById('agent-comparison-checkboxes').innerHTML = 
+                            '<div class="empty-state">No agents available for comparison</div>';
+                        return;
+                    }
+                    
+                    // Create checkboxes for each agent
+                    const container = document.getElementById('agent-comparison-checkboxes');
+                    container.innerHTML = '';
+                    
+                    data.leaderboard.forEach((agent, index) => {
+                        const agentId = agent.agent_id;
+                        
+                        // Create checkbox wrapper
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'agent-checkbox';
+                        
+                        // Create checkbox input
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = `agent-${agentId}`;
+                        checkbox.value = agentId;
+                        
+                        // Set top 3 agents as default selected
+                        if (index < 3) {
+                            checkbox.checked = true;
+                            selectedAgents.push(agentId);
+                        }
+                        
+                        // Create label
+                        const label = document.createElement('label');
+                        label.htmlFor = `agent-${agentId}`;
+                        label.textContent = agentId;
+                        
+                        // Add checkbox event listener
+                        checkbox.addEventListener('change', function() {
+                            if (this.checked) {
+                                // Add to selected agents if not already at max
+                                if (selectedAgents.length < maxAgentsToCompare) {
+                                    selectedAgents.push(agentId);
+                                    updateAgentComparisonChart();
+                                } else {
+                                    // Uncheck if we're already at max
+                                    this.checked = false;
+                                    alert(`You can compare up to ${maxAgentsToCompare} agents at a time.`);
+                                }
+                            } else {
+                                // Remove from selected agents
+                                const index = selectedAgents.indexOf(agentId);
+                                if (index !== -1) {
+                                    selectedAgents.splice(index, 1);
+                                    updateAgentComparisonChart();
+                                }
+                            }
+                        });
+                        
+                        // Add to wrapper
+                        wrapper.appendChild(checkbox);
+                        wrapper.appendChild(label);
+                        container.appendChild(wrapper);
+                    });
+                    
+                    // Initialize comparison chart
+                    updateAgentComparisonChart();
+                })
+                .catch(error => {
+                    console.error('Error loading agent list:', error);
+                    document.getElementById('agent-comparison-checkboxes').innerHTML = 
+                        '<div class="error-state">Error loading agent data</div>';
+                });
+        }
+        
+        function updateAgentComparisonChart() {
+            // If no categories data or no selected agents, don't proceed
+            if (!categoryData || selectedAgents.length === 0) {
+                return;
+            }
+            
+            const categories = categoryData.categories;
+            
+            // Get canvas context
+            const ctx = document.getElementById('agent-comparison-chart').getContext('2d');
+            
+            // Destroy existing chart if it exists
+            if (agentComparisonChart) {
+                agentComparisonChart.destroy();
+            }
+            
+            // Prepare radar chart data
+            const chartData = {
+                labels: categories.map(c => c.name),
+                datasets: []
+            };
+            
+            // Add data for each selected agent
+            selectedAgents.forEach((agentId, index) => {
+                const agentDataset = {
+                    label: agentId,
+                    data: [],
+                    backgroundColor: comparisonColors[index].backgroundColor,
+                    borderColor: comparisonColors[index].borderColor,
+                    borderWidth: 2,
+                    pointBackgroundColor: comparisonColors[index].borderColor,
+                    pointRadius: 4
+                };
+                
+                // Get success rate for this agent in each category
+                categories.forEach(category => {
+                    const agentStats = category.agent_stats?.[agentId];
+                    const successRate = agentStats ? agentStats.success_rate * 100 : 0;
+                    agentDataset.data.push(successRate);
+                });
+                
+                chartData.datasets.push(agentDataset);
+            });
+            
+            // Create radar chart
+            agentComparisonChart = new Chart(ctx, {
+                type: 'radar',
+                data: chartData,
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Agent Success Rate by Category (%)'
+                        },
+                        legend: {
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw.toFixed(1)}%`;
+                                }
+                            }
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+        
+        // Format duration in seconds to MM:SS
+        function formatDuration(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+    });
+</script>
+{% endblock %}

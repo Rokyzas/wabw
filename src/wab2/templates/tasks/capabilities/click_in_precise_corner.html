@@ -1,0 +1,111 @@
+<main class="container">
+    <article class="simulated-app-card">
+        <header class="simulated-app-header">
+            <h4>{{ task.agent.scenario_title }}</h4>
+        </header>
+
+        <div class="app-message info-message">
+            <span class="icon">ℹ️</span>
+            <p>{{ task.agent.goal_description }}</p>
+        </div>
+
+        <div class="app-content-area">
+            <div style="text-align: center; margin: 2rem 0;">
+                <p>Please click in the <strong>bottom-right corner</strong> of the box below:</p>
+                
+                <div id="target-box" 
+                     style="position: relative; width: 200px; height: 200px; background-color: #f8f9fa; 
+                           border: 1px solid #dee2e6; margin: 1.5rem auto; cursor: pointer;">
+                    
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                                font-weight: bold; color: #6c757d; pointer-events: none;">
+                        Submit
+                    </div>
+                    
+                    <!-- The quadrants are invisible but will be used for hit detection -->
+                    <div id="quadrant-tl" style="position: absolute; top: 0; left: 0; width: 50%; height: 50%;"></div>
+                    <div id="quadrant-tr" style="position: absolute; top: 0; right: 0; width: 50%; height: 50%;"></div>
+                    <div id="quadrant-bl" style="position: absolute; bottom: 0; left: 0; width: 50%; height: 50%;"></div>
+                    <div id="quadrant-br" style="position: absolute; bottom: 0; right: 0; width: 50%; height: 50%;"></div>
+                </div>
+                
+                <div id="feedback-message" style="margin-top: 1rem; height: 50px;">
+                    <em style="color: #6c757d;">Click in the bottom-right corner to submit.</em>
+                </div>
+                
+                <div id="success-message" style="margin-top: 1rem; display: none;">
+                    <mark class="success">Success! You clicked in the correct area.</mark>
+                </div>
+            </div>
+        </div>
+
+        <footer class="simulated-app-footer">
+            <small>Task ID: {{ task.id }}</small>
+        </footer>
+    </article>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const targetBox = document.getElementById('target-box');
+    const feedbackMessage = document.getElementById('feedback-message');
+    const successMessage = document.getElementById('success-message');
+    
+    // Track attempts
+    let attempts = 0;
+    const maxAttempts = 3;
+    
+    targetBox.addEventListener('click', function(e) {
+        // Get the click coordinates relative to the box
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Calculate which quadrant was clicked
+        const width = rect.width;
+        const height = rect.height;
+        const isRight = x > width / 2;
+        const isBottom = y > height / 2;
+        
+        attempts++;
+        
+        if (isRight && isBottom) {
+            // Bottom-right quadrant - correct!
+            feedbackMessage.style.display = 'none';
+            successMessage.style.display = 'block';
+            
+            // Send success to server
+            fetch('/api/complete_task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    task_id: '{{ task.id }}'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect after a short delay to show the success message
+                    setTimeout(() => {
+                        window.location.href = '/generic_task_success?task_id={{ task.id }}&title={{ task.agent.scenario_title }}';
+                    }, 1500);
+                }
+            });
+        } else {
+            // Wrong quadrant
+            let quadrantName = '';
+            if (!isRight && !isBottom) quadrantName = 'top-left';
+            else if (isRight && !isBottom) quadrantName = 'top-right';
+            else if (!isRight && isBottom) quadrantName = 'bottom-left';
+            
+            if (attempts >= maxAttempts) {
+                feedbackMessage.innerHTML = `<span style="color: #dc3545;">That was the ${quadrantName} corner. Please try clicking in the <strong>bottom-right</strong> corner.</span>`;
+            } else {
+                feedbackMessage.innerHTML = `<span style="color: #dc3545;">That was the ${quadrantName} corner. Please try clicking in the <strong>bottom-right</strong> corner (${attempts}/${maxAttempts} attempts).</span>`;
+            }
+        }
+    });
+});
+</script> 

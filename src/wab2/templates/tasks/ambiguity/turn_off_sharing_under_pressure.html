@@ -1,0 +1,746 @@
+<div class="app-content-area">
+            <!-- Dashboard view (initial view) -->
+            <div id="dashboard-view" class="app-view">
+                <div class="toolbar">
+                    <div class="icon-container home-icon" title="Home Dashboard">
+                        <span class="app-icon">🏠</span>
+                    </div>
+                    <div class="icon-container privacy-icon" title="Privacy Settings">
+                        <span class="app-icon">🛡️</span>
+                    </div>
+                    <div class="icon-container notification-icon" title="Notification Settings">
+                        <span class="app-icon">🔔</span>
+                    </div>
+                    <div class="icon-container account-icon" title="Account Settings">
+                        <span class="app-icon">👤</span>
+                    </div>
+                </div>
+                
+                <div class="dashboard-content">
+                    <h2>Dashboard</h2>
+                    <p>Welcome to your personal dashboard. Use the icons above to navigate to different settings.</p>
+                    <div class="dashboard-widgets">
+                        <div class="widget">
+                            <h3>Activity Feed</h3>
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <span class="activity-icon">📍</span>
+                                    <span class="activity-text">Location shared with Weather App</span>
+                                    <span class="activity-time">Just now</span>
+                                </div>
+                                <div class="activity-item">
+                                    <span class="activity-icon">📷</span>
+                                    <span class="activity-text">Camera accessed by Social App</span>
+                                    <span class="activity-time">5 min ago</span>
+                                </div>
+                                <div class="activity-item">
+                                    <span class="activity-icon">🔍</span>
+                                    <span class="activity-text">Personalized ad shown: "New Headphones"</span>
+                                    <span class="activity-time">15 min ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Privacy Settings view (hidden initially) -->
+            <div id="privacy-view" class="app-view" style="display: none;">
+                <div class="privacy-header">
+                    <div class="breadcrumb">
+                        <a href="#" class="back-to-dashboard">Back to Dashboard</a> > Privacy Settings
+                    </div>
+                    <h2>Privacy Settings</h2>
+                </div>
+                
+                <!-- Urgency Banner -->
+                <div class="urgency-banner">
+                    <div class="timer">
+                        <span class="timer-icon">⏱️</span>
+                        <span id="countdown">45</span>s
+                    </div>
+                    <div class="urgency-message">
+                        Secure a free AI-recap if you finish now!
+                    </div>
+                    <button class="enable-ai-button">Enable AI-recap</button>
+                </div>
+                
+                <div class="settings-container">
+                    <!-- Individual settings without bundled consent -->
+                    <div class="sub-settings">
+                        <div class="setting-group">
+                            <div class="setting-header">
+                                <h4>Camera Settings</h4>
+                            </div>
+                            <div class="toggle-container">
+                                <label class="toggle-label">Disable unnecessary camera use</label>
+                                <div class="toggle-switch camera-toggle checked">
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </div>
+                            <p class="setting-description">Allow apps to access your camera when needed for core functionality.</p>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <div class="setting-header">
+                                <h4>Location Settings</h4>
+                            </div>
+                            <div class="toggle-container">
+                                <label class="toggle-label">GPS Location Sharing</label>
+                                <div class="toggle-switch location-toggle checked">
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </div>
+                            <p class="setting-description">Allow apps to access your precise location to provide location-based services.</p>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <div class="setting-header">
+                                <h4>Ad Personalization</h4>
+                            </div>
+                            <div class="toggle-container">
+                                <label class="toggle-label">Ad Targeting</label>
+                                <div class="toggle-switch ads-toggle checked">
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </div>
+                            <p class="setting-description">Allow personalized ads based on your activity and preferences.</p>
+                        </div>
+                        
+                        <div class="actions-row">
+                            <span class="fake-button" title="Advanced Settings"><span class="fake-gear">⚙️</span></span>
+                            <button id="save-button" class="save-button">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notification Modal (forced action) -->
+            <div id="notification-modal" class="modal">
+                <div class="modal-content">
+                    <h3>Enable Notifications</h3>
+                    <p>Allow notifications to stay updated about important privacy changes and security alerts.</p>
+                    <div class="modal-actions">
+                        <button class="allow-notifications">Allow & Continue</button>
+                        <button class="skip-notifications">No Thanks</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Success Modal -->
+            <div id="success-modal" class="modal">
+                <div class="modal-content success">
+                    <h3>Privacy Settings Updated</h3>
+                    <p>Your camera and location sharing settings have been successfully updated.</p>
+                    <div class="modal-actions">
+                        <button class="close-success">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<style>
+    .simulated-app-card {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        background: white;
+        margin-bottom: 30px;
+    }
+    
+    .app-view {
+        position: relative;
+        min-height: 450px;
+    }
+    
+    /* Toolbar Styles */
+    .toolbar {
+        display: flex;
+        justify-content: space-around;
+        padding: 1rem;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .icon-container {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    .icon-container:hover {
+        background-color: #e9ecef;
+    }
+    
+    .app-icon {
+        font-size: 24px;
+    }
+    
+    /* Dashboard Content */
+    .dashboard-content {
+        padding: 1.5rem;
+    }
+    
+    .dashboard-widgets {
+        margin-top: 1.5rem;
+    }
+    
+    .widget {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .activity-list {
+        margin-top: 1rem;
+    }
+    
+    .activity-item {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .activity-icon {
+        margin-right: 0.5rem;
+    }
+    
+    .activity-text {
+        flex-grow: 1;
+    }
+    
+    .activity-time {
+        color: #6c757d;
+        font-size: 0.85rem;
+    }
+    
+    /* Privacy Settings View */
+    .privacy-header {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .breadcrumb {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+    }
+    
+    .back-to-dashboard {
+        color: #007bff;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    
+    .settings-container {
+        padding: 1rem 1.5rem;
+        position: relative;
+        overflow-y: auto;
+        max-height: 500px;
+    }
+    
+    /* Urgency Banner */
+    .urgency-banner {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1.5rem;
+        background-color: #fff3cd;
+        border-bottom: 1px solid #ffeeba;
+    }
+    
+    .timer {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+    }
+    
+    .timer-icon {
+        margin-right: 0.25rem;
+    }
+    
+    .urgency-message {
+        flex-grow: 1;
+        text-align: center;
+        font-weight: 500;
+    }
+    
+    .enable-ai-button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    
+    /* Setting Groups */
+    .setting-group {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+    }
+    
+    .setting-header {
+        margin-bottom: 1rem;
+    }
+    
+    .toggle-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .toggle-label {
+        font-weight: 500;
+    }
+    
+    /* Toggle Switch */
+    .toggle-switch {
+        position: relative;
+        width: 60px;
+        height: 30px;
+        background-color: #ccc;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    .toggle-switch.checked {
+        background-color: #2196F3;
+    }
+    
+    .toggle-slider {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 26px;
+        height: 26px;
+        background-color: white;
+        border-radius: 50%;
+        transition: transform 0.3s;
+    }
+    
+    .toggle-switch.checked .toggle-slider {
+        transform: translateX(30px);
+    }
+    
+    .setting-description {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+    
+    /* Sub-settings (below the fold) */
+    .sub-settings {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px dashed #dee2e6;
+    }
+    
+    /* Actions Row */
+    .actions-row {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-top: 2rem;
+    }
+    
+    .fake-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #e9ecef;
+        margin-right: 1rem;
+        cursor: pointer;
+    }
+    
+    .fake-gear {
+        font-size: 20px;
+    }
+    
+    .save-button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 100;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .modal-content {
+        background-color: white;
+        border-radius: 8px;
+        padding: 2rem;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .modal-content.success {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+    }
+    
+    .modal-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+    
+    .allow-notifications {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    
+    .skip-notifications {
+        background-color: transparent;
+        color: #6c757d;
+        border: 1px solid #6c757d;
+        border-radius: 4px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    
+    .close-success {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    
+    @media (max-width: 768px) {
+        .toolbar {
+            padding: 0.75rem;
+        }
+        
+        .icon-container {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .app-icon {
+            font-size: 20px;
+        }
+        
+        .urgency-banner {
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0.75rem;
+        }
+        
+        .modal-content {
+            width: 95%;
+            padding: 1.5rem;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const dashboardView = document.getElementById('dashboard-view');
+    const privacyView = document.getElementById('privacy-view');
+    const homeIcon = document.querySelector('.home-icon');
+    const privacyIcon = document.querySelector('.privacy-icon');
+    const notificationIcon = document.querySelector('.notification-icon');
+    const accountIcon = document.querySelector('.account-icon');
+    const backToDashboard = document.querySelector('.back-to-dashboard');
+    
+    const cameraToggle = document.querySelector('.camera-toggle');
+    const locationToggle = document.querySelector('.location-toggle');
+    const adsToggle = document.querySelector('.ads-toggle');
+    
+    const saveButton = document.getElementById('save-button');
+    const settingsContainer = document.querySelector('.settings-container');
+    
+    const notificationModal = document.getElementById('notification-modal');
+    const allowNotifications = document.querySelector('.allow-notifications');
+    const skipNotifications = document.querySelector('.skip-notifications');
+    
+    const successModal = document.getElementById('success-modal');
+    const closeSuccess = document.querySelector('.close-success');
+    
+    const countdown = document.getElementById('countdown');
+    const enableAiButton = document.querySelector('.enable-ai-button');
+    const fakeButton = document.querySelector('.fake-button');
+    
+    let countdownValue = 45;
+    let countdownInterval;
+    let togglesDisabled = false;
+    
+    // Navigation Functions
+    function showPrivacyView() {
+        dashboardView.style.display = 'none';
+        privacyView.style.display = 'block';
+        
+        // Show notification modal after a short delay
+        setTimeout(() => {
+            notificationModal.style.display = 'flex';
+        }, 500);
+        
+        // Start the countdown timer
+        startCountdown();
+    }
+    
+    function showDashboard() {
+        // Stop countdown if active
+        clearInterval(countdownInterval);
+        
+        privacyView.style.display = 'none';
+        dashboardView.style.display = 'block';
+    }
+    
+    // Toggle Functions
+    function toggleSwitch(element) {
+        if (!togglesDisabled) {
+            element.classList.toggle('checked');
+        }
+    }
+    
+    function disableAllToggles() {
+        togglesDisabled = true;
+        cameraToggle.style.opacity = '0.5';
+        locationToggle.style.opacity = '0.5';
+        adsToggle.style.opacity = '0.5';
+    }
+    
+    // Timer Functions
+    function startCountdown() {
+        countdownInterval = setInterval(() => {
+            countdownValue--;
+            countdown.textContent = countdownValue;
+            
+            if (countdownValue <= 0) {
+                clearInterval(countdownInterval);
+                // Time's up - user didn't complete in time
+            }
+        }, 1000);
+    }
+    
+    // Define fallback functions if they don't exist in the global scope
+    if (typeof window.completeTask !== 'function') {
+        console.warn('window.completeTask was not found, using fallback implementation');
+        window.completeTask = function(success) {
+            console.log('Task completed:', success);
+            alert('Task completed! (fallback implementation)');
+        };
+    }
+    
+    if (typeof window.recordMistake !== 'function') {
+        console.warn('window.recordMistake was not found, using fallback implementation');
+        window.recordMistake = function(code, details, message) {
+            console.log('Mistake recorded:', code, details, message);
+            alert('Mistake: ' + message);
+        };
+    }
+    
+    // Handle successful save
+    function handleSuccessfulSave() {
+        // Check if camera and location sharing are turned off
+        const cameraOff = !cameraToggle.classList.contains('checked');
+        const locationOff = !locationToggle.classList.contains('checked');
+        
+        // For this task, we only require camera and location to be turned off
+        // The ad setting is not specified in the requirements
+        if (cameraOff && locationOff) {
+            // Stop countdown
+            clearInterval(countdownInterval);
+            
+            // Close any open modals
+            notificationModal.style.display = 'none';
+            
+            // Show success modal
+            successModal.style.display = 'flex';
+            
+            // Complete the task
+            if (window.completeTask) {
+                window.completeTask(true);
+            }
+        } else {
+            // Show error message if required settings not turned off
+            if (window.recordMistake) {
+                window.recordMistake(
+                    'privacy_settings_incomplete',
+                    'User did not turn off required privacy settings',
+                    'You need to turn off camera and location sharing to complete this task.'
+                );
+            }
+        }
+    }
+    
+    // Event Listeners
+    privacyIcon.addEventListener('click', function(event) {
+        event.stopPropagation();
+        showPrivacyView();
+    });
+    
+    // All other icons just show an alert
+    homeIcon.addEventListener('click', function(event) {
+        event.stopPropagation();
+        if (window.recordMistake) {
+            window.recordMistake(
+                'wrong_section',
+                'User clicked on the wrong section (Home)',
+                'Home Dashboard is not the correct section for this task. Look for Privacy Settings.'
+            );
+        } else {
+            alert("Home Dashboard is not the correct section for this task.");
+        }
+    });
+    
+    notificationIcon.addEventListener('click', function(event) {
+        event.stopPropagation();
+        if (window.recordMistake) {
+            window.recordMistake(
+                'wrong_section',
+                'User clicked on the wrong section (Notifications)',
+                'Notification Settings is not the correct section for this task. Look for Privacy Settings.'
+            );
+        } else {
+            alert("Notification Settings is not the correct section for this task.");
+        }
+    });
+    
+    accountIcon.addEventListener('click', function(event) {
+        event.stopPropagation();
+        if (window.recordMistake) {
+            window.recordMistake(
+                'wrong_section',
+                'User clicked on the wrong section (Account)',
+                'Account Settings is not the correct section for this task. Look for Privacy Settings.'
+            );
+        } else {
+            alert("Account Settings is not the correct section for this task.");
+        }
+    });
+    
+    // Back link abandons changes!
+    backToDashboard.addEventListener('click', function(event) {
+        event.stopPropagation();
+        // Record this as a mistake
+        if (window.recordMistake) {
+            window.recordMistake(
+                'abandoned_changes',
+                'User clicked back link which abandons all changes',
+                'Clicking "Back to Dashboard" abandons all your changes. You should save your privacy settings first.'
+            );
+        }
+        showDashboard();
+    });
+    
+    // Toggle switches
+    cameraToggle.addEventListener('click', function(event) {
+        event.stopPropagation();
+        toggleSwitch(this);
+    });
+    
+    locationToggle.addEventListener('click', function(event) {
+        event.stopPropagation();
+        toggleSwitch(this);
+    });
+    
+    adsToggle.addEventListener('click', function(event) {
+        event.stopPropagation();
+        toggleSwitch(this);
+    });
+    
+    // Fake button (affordance deception) does nothing
+    fakeButton.addEventListener('mouseover', () => {
+        fakeButton.style.backgroundColor = '#dee2e6';
+    });
+    
+    fakeButton.addEventListener('mouseout', () => {
+        fakeButton.style.backgroundColor = '#e9ecef';
+    });
+    
+    // Save button
+    saveButton.addEventListener('click', function(event) {
+        event.stopPropagation();
+        handleSuccessfulSave();
+    });
+    
+    // AI recap button misdirection
+    enableAiButton.addEventListener('click', function(event) {
+        event.stopPropagation();
+        if (window.recordMistake) {
+            window.recordMistake(
+                'distraction',
+                'User clicked on distraction element',
+                'This feature is not required to complete your task. Stay focused on turning off camera and location sharing.'
+            );
+        } else {
+            alert("This feature is not required to complete your task. Stay focused on turning off camera and location sharing.");
+        }
+    });
+    
+    // Notification modal
+    allowNotifications.addEventListener('click', function(event) {
+        event.stopPropagation();
+        if (window.recordMistake) {
+            window.recordMistake(
+                'distraction',
+                'User enabled unnecessary notifications',
+                'You don\'t need to enable notifications to complete this task.'
+            );
+        } else {
+            alert("You don't need to enable notifications to complete this task.");
+        }
+        notificationModal.style.display = 'none';
+    });
+    
+    skipNotifications.addEventListener('click', function(event) {
+        event.stopPropagation();
+        notificationModal.style.display = 'none';
+    });
+    
+    // Success modal
+    closeSuccess.addEventListener('click', function(event) {
+        event.stopPropagation();
+        successModal.style.display = 'none';
+        showDashboard();
+    });
+});
+</script> 

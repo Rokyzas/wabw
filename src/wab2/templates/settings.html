@@ -1,0 +1,324 @@
+{% extends "layout.html" %}
+
+{% block title %}Settings - Web Agent Benchmark Web{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h1>Settings</h1>
+    <p>Configure the benchmark settings and agent preferences.</p>
+</header>
+
+<div class="settings-container">
+    <section class="agent-settings">
+        <h2>Agent Configuration</h2>
+        
+        <article>
+            <header>
+                <h3>Current Agent</h3>
+            </header>
+            <div>
+                <p>Selected agent: <strong id="current-agent-display">{{ agent_id }}</strong></p>
+                
+                <label for="agent-id-input">Change agent ID</label>
+                <div class="grid">
+                    <input type="text" id="agent-id-input" name="agent_id" placeholder="Enter agent ID" value="{{ agent_id }}">
+                    <button id="save-agent-button">Save</button>
+                </div>
+                
+                <p class="hint">Agent ID is used to track task progress and metrics separately for different agents.</p>
+            </div>
+        </article>
+        
+        <article>
+            <header>
+                <h3>Available Agents</h3>
+            </header>
+            <div>
+                <p>Select from existing agent IDs:</p>
+                
+                <div class="agent-list">
+                    {% for aid in agent_ids %}
+                    <button class="agent-select-button {% if aid == agent_id %}selected{% endif %}" data-agent-id="{{ aid }}">
+                        {{ aid }}
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+        </article>
+    </section>
+    
+    <section class="task-settings">
+        <h2>Task Settings</h2>
+        
+        <article>
+            <header>
+                <h3>Global Task Parameters</h3>
+            </header>
+            <div>
+                <p>Configure global settings that apply to all tasks:</p>
+                
+                <div class="setting-group">
+                    <label for="time-limit-input">Time Limit (seconds)</label>
+                    <input type="number" id="time-limit-input" min="10" max="300" value="{{ global_settings.time_limit_sec }}">
+                    <p class="hint">Maximum time allowed for completing a task (in seconds)</p>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="max-attempts-input">Maximum Attempts</label>
+                    <input type="number" id="max-attempts-input" min="1" max="10" value="{{ global_settings.max_attempts }}">
+                    <p class="hint">Maximum number of mistakes allowed before a task fails</p>
+                </div>
+                
+                <button id="save-global-settings" class="primary">Save Task Settings</button>
+                <p class="hint">Last updated: <span id="last-updated">{{ global_settings.last_updated|default('Never') }}</span></p>
+            </div>
+        </article>
+    </section>
+    
+    <section class="reset-section">
+        <h2>Reset Options</h2>
+        
+        <article>
+            <header>
+                <h3>Reset Current Agent</h3>
+            </header>
+            <div>
+                <p>Reset progress for the current agent ({{ agent_id }}).</p>
+                <button id="reset-current-agent" class="warning">Reset Current Agent</button>
+                <p class="hint">This will reset all task states and metrics for this agent only.</p>
+            </div>
+        </article>
+        
+        <article>
+            <header>
+                <h3>Reset All Data</h3>
+            </header>
+            <div>
+                <p>Reset all agents' progress and metrics.</p>
+                <button id="reset-all-agents" class="danger">Reset ALL Agents</button>
+                <p class="hint">WARNING: This will delete all task states and metrics for all agents.</p>
+            </div>
+        </article>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Save agent ID button
+        document.getElementById('save-agent-button').addEventListener('click', function() {
+            const agentId = document.getElementById('agent-id-input').value.trim();
+            if (!agentId) {
+                alert('Please enter a valid agent ID');
+                return;
+            }
+            
+            // Save agent ID via API
+            fetch('/api/tasks/set_agent', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({agent_id: agentId})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update localStorage and UI
+                    localStorage.setItem('currentAgentId', agentId);
+                    document.getElementById('current-agent-display').textContent = agentId;
+                    alert('Agent ID saved successfully!');
+                    // Reload the page to update the UI
+                    window.location.reload();
+                } else {
+                    alert('Failed to save agent ID');
+                }
+            })
+            .catch(err => {
+                console.error('Error saving agent ID:', err);
+                alert('Error saving agent ID');
+            });
+        });
+        
+        // Agent selection buttons
+        document.querySelectorAll('.agent-select-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const agentId = this.dataset.agentId;
+                document.getElementById('agent-id-input').value = agentId;
+                
+                // Highlight the selected button
+                document.querySelectorAll('.agent-select-button').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                
+                // Also set in localStorage for immediate visual feedback
+                localStorage.setItem('currentAgentId', agentId);
+                document.getElementById('current-agent-display').textContent = agentId;
+            });
+        });
+
+        // Save global settings button
+        document.getElementById('save-global-settings').addEventListener('click', function() {
+            const timeLimit = parseInt(document.getElementById('time-limit-input').value);
+            const maxAttempts = parseInt(document.getElementById('max-attempts-input').value);
+            
+            // Basic validation
+            if (isNaN(timeLimit) || timeLimit < 10 || timeLimit > 300) {
+                alert('Time limit must be between 10 and 300 seconds');
+                return;
+            }
+            
+            if (isNaN(maxAttempts) || maxAttempts < 1 || maxAttempts > 10) {
+                alert('Maximum attempts must be between 1 and 10');
+                return;
+            }
+            
+            // Save settings via API
+            fetch('/api/settings/update', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    time_limit_sec: timeLimit,
+                    max_attempts: maxAttempts
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Global settings saved successfully!');
+                    document.getElementById('last-updated').textContent = new Date().toLocaleString();
+                } else {
+                    alert('Failed to save global settings');
+                }
+            })
+            .catch(err => {
+                console.error('Error saving global settings:', err);
+                alert('Error saving global settings');
+            });
+        });
+        
+        // Reset current agent button
+        document.getElementById('reset-current-agent').addEventListener('click', function() {
+            if (confirm('Are you sure you want to reset all tasks and metrics for the current agent?')) {
+                const agentId = document.getElementById('current-agent-display').textContent;
+                
+                fetch('/api/tasks/reset_all', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({agent_id: agentId})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Agent reset successfully!');
+                        // Reload the page
+                        window.location.reload();
+                    } else {
+                        alert('Failed to reset agent');
+                    }
+                })
+                .catch(err => {
+                    console.error('Error resetting agent:', err);
+                    alert('Error resetting agent');
+                });
+            }
+        });
+        
+        // Reset all agents button
+        document.getElementById('reset-all-agents').addEventListener('click', function() {
+            if (confirm('WARNING: This will delete ALL task states and metrics for ALL agents. Are you absolutely sure?')) {
+                if (confirm('This action cannot be undone. Confirm again to proceed.')) {
+                    fetch('/api/tasks/reset_all', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({agent_id: null})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('All agents reset successfully!');
+                            // Reload the page
+                            window.location.reload();
+                        } else {
+                            alert('Failed to reset all agents');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error resetting all agents:', err);
+                        alert('Error resetting all agents');
+                    });
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    .settings-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    @media (min-width: 992px) {
+        .settings-container {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+    
+    .agent-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1rem 0;
+    }
+    
+    .agent-select-button {
+        padding: 0.5rem 1rem;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .agent-select-button.selected {
+        background-color: #4a89dc;
+        color: white;
+    }
+    
+    .hint {
+        font-size: 0.85rem;
+        color: #666;
+        margin-top: 0.5rem;
+    }
+    
+    button.warning {
+        background-color: #f39c12;
+        border-color: #e67e22;
+    }
+    
+    button.danger {
+        background-color: #e74c3c;
+        border-color: #c0392b;
+    }
+    
+    button.primary {
+        background-color: #4a89dc;
+        color: white;
+    }
+    
+    .setting-group {
+        margin-bottom: 1rem;
+    }
+    
+    .setting-group input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-top: 0.25rem;
+    }
+</style>
+{% endblock %} 

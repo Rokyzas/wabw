@@ -1,0 +1,666 @@
+<div class="search-header">
+    <h3>Product Search</h3>
+</div>
+
+<div class="search-form">
+    <div class="search-input-wrapper">
+        <input type="text" id="search-input" class="search-input" placeholder="Search for products..." autocomplete="off">
+        <button id="search-button" class="search-button">Search</button>
+    </div>
+    
+    <div id="loading-indicator" class="loading-indicator" style="display: none;">
+        <div class="spinner"></div>
+        <span>Searching...</span>
+    </div>
+</div>
+
+<div id="search-results" class="search-results-container" style="display: none;">
+    <h4>Search Results</h4>
+    <div id="results-list" class="results-list">
+        <!-- Results will be added here dynamically -->
+    </div>
+</div>
+
+<div id="selected-item" class="selected-item-container" style="display: none;">
+    <h4>Selected Item</h4>
+    <div class="selected-item-details">
+        <div class="item-image">
+            <div class="image-placeholder">📦</div>
+        </div>
+        <div class="item-info">
+            <h5 id="selected-item-name">Product Name</h5>
+            <p id="selected-item-description">Product description will appear here.</p>
+            <div class="item-meta">
+                <span id="selected-item-price" class="item-price">$0.00</span>
+                <span id="selected-item-sku" class="item-sku">SKU: ---</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="action-buttons">
+        <button id="continue-button" class="primary-button">Continue</button>
+        <button id="change-selection-button" class="secondary-button">Change Selection</button>
+    </div>
+</div>
+
+
+<style>
+    body {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #f5f5f5;
+    }
+    
+    .simulated-app-header {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 1rem;
+    }
+    
+    .simulated-app-header h4 {
+        margin: 0;
+        color: #333;
+    }
+    
+    .app-message {
+        display: flex;
+        align-items: flex-start;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        background-color: #e9f7fe;
+    }
+    
+    .app-message .icon {
+        margin-right: 0.5rem;
+        font-size: 1.25rem;
+    }
+    
+    .app-message p {
+        margin: 0;
+        color: #333;
+    }
+    
+    .search-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: #f8f9fa;
+    }
+    
+    .search-header h3 {
+        margin: 0;
+        color: #333;
+        font-size: 1.25rem;
+    }
+    
+    .search-form {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e9ecef;
+        background-color: #fff;
+    }
+    
+    .search-input-wrapper {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .search-input {
+        flex: 1;
+        padding: 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 1rem;
+        color: #495057;
+    }
+    
+    .search-input:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    
+    .search-button {
+        padding: 0.75rem 1.5rem;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    
+    .search-button:hover {
+        background-color: #0069d9;
+    }
+    
+    .loading-indicator {
+        display: flex;
+        align-items: center;
+        margin-top: 1rem;
+        color: #6c757d;
+    }
+    
+    .spinner {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #007bff;
+        border-radius: 50%;
+        margin-right: 8px;
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    .search-results-container {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e9ecef;
+        background-color: #fff;
+    }
+    
+    .search-results-container h4 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+    
+    .results-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .result-item {
+        padding: 1rem;
+        border: 1px solid #e9ecef;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .result-item:hover {
+        background-color: #f8f9fa;
+        border-color: #ced4da;
+    }
+    
+    .result-item.selected {
+        background-color: #e9f7fe;
+        border-color: #80bdff;
+    }
+    
+    .result-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .result-item-name {
+        font-weight: 500;
+        color: #333;
+        margin: 0;
+    }
+    
+    .result-item-price {
+        font-weight: 500;
+        color: #28a745;
+    }
+    
+    .result-item-description {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+    
+    .selected-item-container {
+        padding: 1.5rem;
+        background-color: #fff;
+    }
+    
+    .selected-item-container h4 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+    
+    .selected-item-details {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+        padding: 1.5rem;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+    }
+    
+    .item-image {
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+    }
+    
+    .image-placeholder {
+        font-size: 2.5rem;
+        color: #adb5bd;
+    }
+    
+    .item-info {
+        flex: 1;
+    }
+    
+    .item-info h5 {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        color: #333;
+        font-size: 1.1rem;
+    }
+    
+    .item-info p {
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+        color: #6c757d;
+    }
+    
+    .item-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .item-price {
+        font-weight: 500;
+        color: #28a745;
+        font-size: 1.1rem;
+    }
+    
+    .item-sku {
+        color: #6c757d;
+        font-size: 0.85rem;
+    }
+    
+    .action-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+    }
+    
+    .primary-button {
+        padding: 0.75rem 1.5rem;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    
+    .primary-button:hover {
+        background-color: #0069d9;
+    }
+    
+    .secondary-button {
+        padding: 0.75rem 1.5rem;
+        background-color: #6c757d;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    
+    .secondary-button:hover {
+        background-color: #5a6268;
+    }
+    
+    .feedback-message {
+        display: none;
+    }
+    
+    .simulated-app-footer {
+        margin-top: 1.5rem;
+        text-align: center;
+        color: #6c757d;
+        padding: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+        .selected-item-details {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .item-image {
+            width: 150px;
+            height: 150px;
+        }
+        
+        .item-info {
+            text-align: center;
+        }
+        
+        .item-meta {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
+    const searchResults = document.getElementById('search-results');
+    const resultsList = document.getElementById('results-list');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const selectedItemContainer = document.getElementById('selected-item');
+    const selectedItemName = document.getElementById('selected-item-name');
+    const selectedItemDescription = document.getElementById('selected-item-description');
+    const selectedItemPrice = document.getElementById('selected-item-price');
+    const selectedItemSku = document.getElementById('selected-item-sku');
+    const continueButton = document.getElementById('continue-button');
+    const changeSelectionButton = document.getElementById('change-selection-button');
+    
+    // Define fallback functions if they don't exist in the global scope
+    if (typeof window.completeTask !== 'function') {
+        console.warn('window.completeTask was not found, using fallback implementation');
+        window.completeTask = function(success) {
+            console.log('Task completed:', success);
+            alert('Task completed! (fallback implementation)');
+        };
+    }
+    
+    if (typeof window.recordMistake !== 'function') {
+        console.warn('window.recordMistake was not found, using fallback implementation');
+        window.recordMistake = function(code, details, message) {
+            console.log('Mistake recorded:', code, details, message);
+            alert('Mistake: ' + message);
+        };
+    }
+    
+    // State
+    let isTaskComplete = false;
+    
+    // Product data
+    const products = [
+        {
+            id: 'p001',
+            name: 'Premium Laptop Pro',
+            description: 'High-performance laptop with 16GB RAM and 512GB SSD.',
+            price: 1299.99,
+            sku: 'LAP-PRO-001',
+            keywords: ['laptop', 'computer', 'premium', 'pro']
+        },
+        {
+            id: 'p002',
+            name: 'Budget Laptop',
+            description: 'Affordable laptop with 8GB RAM and 256GB SSD.',
+            price: 699.99,
+            sku: 'LAP-BUD-002',
+            keywords: ['laptop', 'computer', 'budget', 'affordable']
+        },
+        {
+            id: 'p003',
+            name: 'Ultra Thin Tablet',
+            description: 'Lightweight tablet with 10-inch display and 64GB storage.',
+            price: 499.99,
+            sku: 'TAB-ULT-003',
+            keywords: ['tablet', 'portable', 'thin', 'lightweight']
+        },
+        {
+            id: 'p004',
+            name: 'Professional Desktop Computer',
+            description: 'Powerful desktop computer for professional use with 32GB RAM.',
+            price: 1599.99,
+            sku: 'DSK-PRO-004',
+            keywords: ['desktop', 'computer', 'professional', 'powerful']
+        },
+        {
+            id: 'p005',
+            name: 'Gaming Laptop Extreme',
+            description: 'High-end gaming laptop with RGB keyboard and RTX graphics.',
+            price: 1899.99,
+            sku: 'LAP-GAM-005',
+            keywords: ['laptop', 'gaming', 'extreme', 'rgb']
+        },
+        {
+            id: 'p006',
+            name: 'Digital Smart Watch',
+            description: 'Smart watch with heart rate monitor and GPS tracking.',
+            price: 299.99,
+            sku: 'WCH-SMT-006',
+            keywords: ['watch', 'smart', 'digital', 'gps']
+        },
+        {
+            id: 'p007',
+            name: 'Wireless Earbuds',
+            description: 'Noise-cancelling wireless earbuds with 24-hour battery life.',
+            price: 149.99,
+            sku: 'AUD-EAR-007',
+            keywords: ['earbuds', 'wireless', 'audio', 'noise']
+        }
+    ];
+    
+    let selectedProduct = null;
+    const targetProduct = products[2]; // Ultra Thin Tablet is the correct item to select
+    
+    // Search function to find matching products
+    function searchProducts(query) {
+        if (!query) return [];
+        
+        query = query.toLowerCase();
+        return products.filter(product => {
+            // Check if query matches name, description or keywords
+            const nameMatch = product.name.toLowerCase().includes(query);
+            const descMatch = product.description.toLowerCase().includes(query);
+            const keywordMatch = product.keywords.some(keyword => keyword.includes(query));
+            
+            return nameMatch || descMatch || keywordMatch;
+        });
+    }
+    
+    // Display search results
+    function displayResults(results) {
+        // Clear previous results
+        resultsList.innerHTML = '';
+        
+        if (results.length === 0) {
+            resultsList.innerHTML = '<div class="no-results">No products found. Try different keywords.</div>';
+            return;
+        }
+        
+        // Add each result as a list item
+        results.forEach(product => {
+            const resultItem = document.createElement('div');
+            resultItem.className = 'result-item';
+            resultItem.dataset.productId = product.id;
+            
+            resultItem.innerHTML = `
+                <div class="result-item-header">
+                    <h5 class="result-item-name">${product.name}</h5>
+                    <span class="result-item-price">$${product.price.toFixed(2)}</span>
+                </div>
+                <p class="result-item-description">${product.description}</p>
+            `;
+            
+            // Add click event to select the product
+            resultItem.addEventListener('click', (event) => {
+                event.stopPropagation();
+                selectProduct(product);
+            });
+            
+            resultsList.appendChild(resultItem);
+        });
+    }
+    
+    // Select a product
+    function selectProduct(product) {
+        if (isTaskComplete) return;
+        
+        selectedProduct = product;
+        
+        // Update selected item UI
+        selectedItemName.textContent = product.name;
+        selectedItemDescription.textContent = product.description;
+        selectedItemPrice.textContent = `$${product.price.toFixed(2)}`;
+        selectedItemSku.textContent = `SKU: ${product.sku}`;
+        
+        // Show selected item container
+        selectedItemContainer.style.display = 'block';
+        
+        // Hide search results
+        searchResults.style.display = 'none';
+        
+        // Update UI to show selection in results list
+        const resultItems = document.querySelectorAll('.result-item');
+        resultItems.forEach(item => {
+            if (item.dataset.productId === product.id) {
+                item.classList.add('selected');
+            } else {
+                item.classList.remove('selected');
+            }
+        });
+        
+        // Enable continue button
+        continueButton.disabled = false;
+        
+        // Add a highlight animation to the continue button
+        continueButton.classList.add('btn-pulse');
+    }
+    
+    // Handle search button click
+    searchButton.addEventListener('click', function(event) {
+        event.stopPropagation();
+        
+        if (isTaskComplete) return;
+        
+        const query = searchInput.value.trim();
+        
+        if (query === '') {
+            window.recordMistake(
+                'empty_search',
+                'User attempted to search without entering any keywords',
+                'Please enter a search term before clicking the search button.'
+            );
+            return;
+        }
+        
+        // Show loading indicator
+        loadingIndicator.style.display = 'flex';
+        searchResults.style.display = 'none';
+        
+        // Simulate API delay
+        setTimeout(() => {
+            if (isTaskComplete) return;
+            
+            // Hide loading indicator
+            loadingIndicator.style.display = 'none';
+            
+            // Perform search
+            const results = searchProducts(query);
+            
+            // Display results
+            displayResults(results);
+            
+            // Show results container
+            searchResults.style.display = 'block';
+            
+            // Record mistake if no results found
+            if (results.length === 0) {
+                window.recordMistake(
+                    'no_results',
+                    'User search returned no results',
+                    'No results found. Try searching for "tablet".'
+                );
+            }
+        }, 1500);
+    });
+    
+    // Handle enter key in search input
+    searchInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            event.stopPropagation();
+            searchButton.click();
+        }
+    });
+    
+    // Handle continue button click
+    continueButton.addEventListener('click', function(event) {
+        event.stopPropagation();
+        
+        if (isTaskComplete) return;
+        
+        if (!selectedProduct) {
+            window.recordMistake(
+                'no_selection',
+                'User attempted to continue without selecting a product',
+                'Please select a product first.'
+            );
+            return;
+        }
+        
+        // Check if the correct product is selected
+        if (selectedProduct.id === targetProduct.id) {
+            // Success
+            // Complete the task
+            completeTask();
+        } else {
+            // Error - wrong product
+            window.recordMistake(
+                'wrong_product',
+                'User selected the wrong product',
+                'Please try again. You need to select the Ultra Thin Tablet.'
+            );
+        }
+    });
+    
+    // Handle change selection button click
+    changeSelectionButton.addEventListener('click', function(event) {
+        event.stopPropagation();
+        
+        if (isTaskComplete) return;
+        
+        // Show search results again
+        if (resultsList.children.length > 0) {
+            searchResults.style.display = 'block';
+        }
+        
+        // Hide selected item
+        selectedItemContainer.style.display = 'none';
+        
+        // Clear selection
+        selectedProduct = null;
+        
+        // Disable continue button
+        continueButton.disabled = true;
+    });
+    
+    // Function to complete the task
+    function completeTask() {
+        isTaskComplete = true;
+        
+        // Disable buttons
+        continueButton.disabled = true;
+        changeSelectionButton.disabled = true;
+        searchButton.disabled = true;
+        searchInput.disabled = true;
+        
+        // Complete the task
+        if (window.completeTask) {
+            window.completeTask(true);
+        }
+    }
+});
+</script> 

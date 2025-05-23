@@ -1,0 +1,194 @@
+            <div class="form-container">
+                <form id="email-form" class="input-form">
+                    <div class="form-header">
+                        <h3>Newsletter Signup</h3>
+                        <p>Enter your email address to subscribe</p>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="email-input">Email Address:</label>
+                        <input 
+                            type="email" 
+                            id="email-input" 
+                            placeholder="Click here, then type your email" 
+                            autocomplete="off"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" id="submit-button" disabled>Subscribe</button>
+                    </div>
+                    
+                    <div id="feedback-message" class="feedback-message">
+                        <span>Click the input field first, then type your email address</span>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+<style>
+    .form-container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+    
+    .input-form {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .form-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-header h3 {
+        margin-bottom: 0.5rem;
+        color: #212529;
+    }
+    
+    .form-header p {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    
+    .input-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .input-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #495057;
+        font-weight: 500;
+    }
+    
+    .input-group input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        border: 2px solid #ced4da;
+        border-radius: 4px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    .input-group input:focus {
+        border-color: #4a7aff;
+        box-shadow: 0 0 0 3px rgba(74, 122, 255, 0.25);
+        outline: none;
+    }
+    
+    .input-group input.error {
+        border-color: #dc3545;
+    }
+    
+    .input-group input.success {
+        border-color: #28a745;
+    }
+    
+    .form-actions {
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    
+    .form-actions button {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        background-color: #4a7aff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    
+    .form-actions button:hover:not(:disabled) {
+        background-color: #3968e0;
+    }
+    
+    .form-actions button:disabled {
+        background-color: #87a3e6;
+        cursor: not-allowed;
+    }
+    
+    .feedback-message {
+        text-align: center;
+        min-height: 24px;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    
+    .feedback-message.success {
+        color: #28a745;
+        font-weight: 500;
+    }
+    
+    .feedback-message.error {
+        color: #dc3545;
+        font-weight: 500;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const emailInput = document.getElementById('email-input');
+    const emailForm = document.getElementById('email-form');
+    const submitButton = document.getElementById('submit-button');
+    const feedbackMessage = document.getElementById('feedback-message');
+    
+    // Track whether the input has been focused yet
+    let hasFocused = false;
+    let hasStartedTyping = false;
+    
+    // Focus event listener
+    emailInput.addEventListener('focus', function(event) {
+        hasFocused = true;
+    });
+    
+    // Input/typing event listener
+    emailInput.addEventListener('input', function(event) {
+        hasStartedTyping = true;
+        
+        // Check if focus happened before typing
+        if (!hasFocused) {
+            // Clear what was typed - typing before focus is not allowed
+            emailInput.value = "";
+            return;
+        }
+        
+        const emailValue = emailInput.value.trim();
+        
+        // Always enable the button after user has focused and typed something
+        if (emailValue.length > 0) {
+            submitButton.disabled = false;
+        } else {
+            submitButton.disabled = true;
+        }
+    });
+    
+    // Form submission
+    emailForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const emailValue = emailInput.value.trim();
+        
+        // If we've passed all the steps correctly
+        if (hasFocused && emailValue === "john@example.com") {
+            // Complete task using the standard window.completeTask function
+            window.completeTask(true);
+        } else {
+            // Record mistake if submission was attempted without valid input
+            window.recordMistake(
+                'invalid_submission',
+                `User submitted "${emailValue}" instead of "john@example.com"`,
+                'The email address you entered is incorrect.'
+            );
+        }
+    });
+});
+</script> 

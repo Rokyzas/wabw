@@ -1,0 +1,397 @@
+<main class="container">
+    <article class="simulated-app-card">
+        <header class="simulated-app-header">
+            <h4>{{ task.agent.scenario_title }}</h4>
+        </header>
+
+        <div class="app-message info-message">
+            <span class="icon">ℹ️</span>
+            <p>{{ task.agent.goal_description }}</p>
+        </div>
+
+        <div class="app-content-area">
+            <div class="dashboard-container">
+                <div class="dashboard-header">
+                    <h5>Analytics Dashboard</h5>
+                    <div class="dashboard-controls">
+                        <span>Today</span>
+                        <select disabled>
+                            <option>Last 7 days</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="dashboard-main">
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <h6>Total Visitors</h6>
+                            <div class="icon-actions">
+                                <!-- Non-target SVG icon -->
+                                <svg width="18" height="18" viewBox="0 0 24 24" class="action-icon">
+                                    <path d="M12 3C7.58 3 4 6.58 4 11c0 4.42 3.58 8 8 8s8-3.58 8-8c0-4.42-3.58-8-8-8zm0 14.5c-3.58 0-6.5-2.92-6.5-6.5S8.42 4.5 12 4.5s6.5 2.92 6.5 6.5-2.92 6.5-6.5 6.5z" fill="#6c757d"/>
+                                    <path d="M12 7v4l3 3" stroke="#6c757d" stroke-width="1.5" fill="none"/>
+                                </svg>
+                                
+                                <!-- Target circular SVG icon - this is what needs to be clicked -->
+                                <button class="svg-button" aria-label="Open dashboard widget">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" class="action-icon target-icon" id="widget-trigger" title="Click to open widget">
+                                        <circle cx="12" cy="12" r="8" fill="#4dabf7"/>
+                                        <path d="M12 8v8M8 12h8" stroke="white" stroke-width="2"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="metric-value">
+                            <span class="number">12,486</span>
+                            <span class="trend positive">↑ 8.2%</span>
+                        </div>
+                        <div class="metric-chart">
+                            <svg width="100%" height="40" viewBox="0 0 100 40">
+                                <path d="M0,35 L5,32 L10,33 L15,30 L20,31 L25,27 L30,28 L35,25 L40,24 L45,20 L50,22 L55,18 L60,15 L65,17 L70,13 L75,15 L80,10 L85,12 L90,8 L95,5 L100,7" 
+                                      stroke="#4dabf7" stroke-width="2" fill="none" />
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <h6>Conversion Rate</h6>
+                            <div class="icon-actions">
+                                <!-- Non-target SVG icon -->
+                                <svg width="18" height="18" viewBox="0 0 24 24" class="action-icon">
+                                    <path d="M12 3C7.58 3 4 6.58 4 11c0 4.42 3.58 8 8 8s8-3.58 8-8c0-4.42-3.58-8-8-8zm0 14.5c-3.58 0-6.5-2.92-6.5-6.5S8.42 4.5 12 4.5s6.5 2.92 6.5 6.5-2.92 6.5-6.5 6.5z" fill="#6c757d"/>
+                                    <path d="M12 7v4l3 3" stroke="#6c757d" stroke-width="1.5" fill="none"/>
+                                </svg>
+                                
+                                <!-- Non-target SVG icon -->
+                                <svg width="18" height="18" viewBox="0 0 24 24" class="action-icon">
+                                    <rect x="4" y="4" width="16" height="16" rx="2" fill="#6c757d"/>
+                                    <path d="M8 12h8M12 8v8" stroke="white" stroke-width="2"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="metric-value">
+                            <span class="number">3.2%</span>
+                            <span class="trend negative">↓ 0.5%</span>
+                        </div>
+                        <div class="metric-chart">
+                            <svg width="100%" height="40" viewBox="0 0 100 40">
+                                <path d="M0,20 L5,18 L10,22 L15,19 L20,21 L25,18 L30,20 L35,17 L40,19 L45,16 L50,18 L55,15 L60,17 L65,14 L70,16 L75,13 L80,15 L85,12 L90,14 L95,11 L100,13" 
+                                      stroke="#fa5252" stroke-width="2" fill="none" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- This is the widget that will appear when the target icon is clicked -->
+                <div id="dashboard-widget" class="dashboard-widget hidden">
+                    <div class="widget-header">
+                        <h6>Visitors Breakdown</h6>
+                        <svg width="18" height="18" viewBox="0 0 24 24" class="close-icon" id="close-widget">
+                            <path d="M6 6l12 12M6 18L18 6" stroke="#6c757d" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="widget-content">
+                        <div class="widget-row">
+                            <span>New Visitors</span>
+                            <span>7,845</span>
+                        </div>
+                        <div class="widget-row">
+                            <span>Returning</span>
+                            <span>4,641</span>
+                        </div>
+                        <div class="widget-chart">
+                            <svg width="100%" height="80" viewBox="0 0 100 80">
+                                <circle cx="50" cy="40" r="30" fill="none" stroke="#dee2e6" stroke-width="30"/>
+                                <circle cx="50" cy="40" r="30" fill="none" stroke="#4dabf7" stroke-width="30" stroke-dasharray="188.5 188.5" stroke-dashoffset="125.66"/>
+                                <text x="50" y="45" text-anchor="middle" font-size="12" fill="#495057">63%</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="success-message" style="margin-top: 1rem; display: none;">
+                    <mark class="success">Success! You've opened the dashboard widget.</mark>
+                </div>
+            </div>
+        </div>
+
+        <footer class="simulated-app-footer">
+            <small>Task ID: {{ task.id }}</small>
+        </footer>
+    </article>
+</main>
+
+<style>
+    .dashboard-container {
+        padding: 0.5rem;
+        position: relative;
+    }
+    
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .dashboard-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .dashboard-main {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+    
+    .metric-card {
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 1rem;
+        background-color: #fff;
+    }
+    
+    .metric-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .metric-header h6 {
+        margin: 0;
+        color: #495057;
+    }
+    
+    .icon-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .action-icon {
+        cursor: pointer;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+    }
+    
+    .action-icon:hover {
+        opacity: 1;
+    }
+    
+    .metric-value {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .number {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #212529;
+    }
+    
+    .trend {
+        font-size: 0.875rem;
+    }
+    
+    .trend.positive {
+        color: #40c057;
+    }
+    
+    .trend.negative {
+        color: #fa5252;
+    }
+    
+    .dashboard-widget {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        max-width: 300px;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        transition: opacity 0.3s, transform 0.3s;
+    }
+    
+    .dashboard-widget.hidden {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+        pointer-events: none;
+    }
+    
+    .widget-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .widget-header h6 {
+        margin: 0;
+        color: #212529;
+    }
+    
+    .close-icon {
+        cursor: pointer;
+    }
+    
+    .widget-content {
+        padding: 1rem;
+    }
+    
+    .widget-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        color: #495057;
+    }
+    
+    .widget-chart {
+        margin-top: 1rem;
+        text-align: center;
+    }
+    
+    .target-icon {
+        /* Subtle pulsing animation to draw attention */
+        animation: pulse 2s infinite;
+        filter: drop-shadow(0 0 3px rgba(77, 171, 247, 0.5));
+        cursor: pointer !important;
+        position: relative;
+    }
+    
+    .target-icon::after {
+        content: 'Click me';
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #212529;
+        color: white;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+        white-space: nowrap;
+    }
+    
+    .target-icon:hover::after {
+        opacity: 1;
+    }
+    
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            filter: drop-shadow(0 0 3px rgba(77, 171, 247, 0.5));
+        }
+        50% {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 5px rgba(77, 171, 247, 0.8));
+        }
+        100% {
+            transform: scale(1);
+            filter: drop-shadow(0 0 3px rgba(77, 171, 247, 0.5));
+        }
+    }
+    
+    .svg-button {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .svg-button:focus {
+        outline: 2px solid #4dabf7;
+        border-radius: 50%;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const widgetTrigger = document.getElementById('widget-trigger');
+    const closeWidget = document.getElementById('close-widget');
+    const dashboardWidget = document.getElementById('dashboard-widget');
+    const successMessage = document.getElementById('success-message');
+    const svgButton = document.querySelector('.svg-button');
+    
+    // Track if task has been completed
+    let taskCompleted = false;
+    
+    // Function to open the widget
+    function openWidget(event) {
+        // Prevent default behavior if this came from a button
+        if (event) event.preventDefault();
+        
+        console.log('Open widget triggered');
+        dashboardWidget.classList.remove('hidden');
+        
+        if (!taskCompleted) {
+            // Mark task as complete
+            taskCompleted = true;
+            successMessage.style.display = 'block';
+            
+            // Send success to server
+            fetch('/api/complete_task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    task_id: '{{ task.id }}'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect after a delay to show the success message
+                    setTimeout(() => {
+                        window.location.href = '/generic_task_success?task_id={{ task.id }}&title={{ task.agent.scenario_title }}';
+                    }, 2000);
+                }
+            });
+        }
+    }
+    
+    // Function to close the widget
+    function handleCloseWidget() {
+        dashboardWidget.classList.add('hidden');
+    }
+    
+    // Add click handler to the close button
+    closeWidget.addEventListener('click', handleCloseWidget);
+    
+    // Add click handler directly to the SVG button
+    svgButton.addEventListener('click', openWidget);
+    
+    // Better SVG click handling - target both the SVG and all its children
+    // Select the SVG and all its child elements (circle and path)
+    const targetIcon = document.querySelector('.target-icon');
+    const targetCircle = targetIcon.querySelector('circle');
+    const targetPath = targetIcon.querySelector('path');
+    
+    // Add click handlers to all parts of the SVG icon
+    targetIcon.addEventListener('click', openWidget);
+    
+    // Also make circle and path clickable directly
+    if (targetCircle) targetCircle.addEventListener('click', openWidget);
+    if (targetPath) targetPath.addEventListener('click', openWidget);
+    
+    // Debug element to log when the SVG is clicked
+    console.log('SVG click handlers attached to:', targetIcon);
+    console.log('Button click handler attached to:', svgButton);
+});
+</script> 

@@ -1,0 +1,242 @@
+            <div class="form-container">
+                <form id="navigation-form" class="input-form">
+                    <div class="form-header">
+                        <h3>Keyboard Navigation Challenge</h3>
+                        <p>Navigate through the form using your keyboard</p>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="first-input">First Name:</label>
+                        <input 
+                            type="text" 
+                            id="first-input" 
+                            placeholder="Enter your first name"
+                            autocomplete="off"
+                        >
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="second-input">Last Name:</label>
+                        <input 
+                            type="text" 
+                            id="second-input" 
+                            placeholder="Enter your last name"
+                            autocomplete="off"
+                        >
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" id="confirm-button">Confirm</button>
+                    </div>
+                    
+                    <div id="feedback-message" class="feedback-message">
+                        <span>Use Tab key to focus the Confirm button, then press Enter</span>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+<style>
+    .form-container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+    
+    .input-form {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .form-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-header h3 {
+        margin-bottom: 0.5rem;
+        color: #212529;
+    }
+    
+    .form-header p {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    
+    .input-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .input-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #495057;
+        font-weight: 500;
+    }
+    
+    .input-group input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        border: 2px solid #ced4da;
+        border-radius: 4px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        pointer-events: none; /* Disable direct mouse interaction */
+    }
+    
+    .input-group input:focus {
+        border-color: #4a7aff;
+        box-shadow: 0 0 0 3px rgba(74, 122, 255, 0.25);
+        outline: none;
+        pointer-events: auto; /* Re-enable when focused for keyboard input */
+    }
+    
+    .form-actions {
+        margin-top: 1.5rem;
+        text-align: center;
+    }
+    
+    .form-actions button {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        background-color: #4a7aff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: not-allowed; /* Indicate visually it's not clickable */
+        transition: background-color 0.2s, box-shadow 0.2s;
+        pointer-events: none; /* Disable direct mouse interaction */
+    }
+    
+    .form-actions button:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(74, 122, 255, 0.4);
+        background-color: #3968e0;
+    }
+    
+    .feedback-message {
+        text-align: center;
+        min-height: 24px;
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-top: 1.5rem;
+    }
+    
+    .feedback-message.success {
+        color: #28a745;
+        font-weight: 500;
+    }
+    
+    .feedback-message.error {
+        color: #dc3545;
+        font-weight: 500;
+    }
+    
+    /* Global mouse click blocker */
+    .no-click-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1000;
+        pointer-events: all;
+        cursor: not-allowed;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const firstInput = document.getElementById('first-input');
+    const secondInput = document.getElementById('second-input');
+    const confirmButton = document.getElementById('confirm-button');
+    const feedbackMessage = document.getElementById('feedback-message');
+    
+    // Create an overlay to block mouse clicks
+    const overlay = document.createElement('div');
+    overlay.className = 'no-click-overlay';
+    document.body.appendChild(overlay);
+    
+    // Variables to track navigation and method used
+    let usedTabToFocus = false;
+    let buttonActivatedWithEnter = false;
+    
+    // Auto-focus the first input on page load
+    firstInput.focus();
+    
+    // Allow keyboard input to work on focused elements
+    firstInput.addEventListener('focus', function() {
+        firstInput.style.pointerEvents = 'auto';
+    });
+    
+    firstInput.addEventListener('blur', function() {
+        firstInput.style.pointerEvents = 'none';
+    });
+    
+    secondInput.addEventListener('focus', function() {
+        secondInput.style.pointerEvents = 'auto';
+    });
+    
+    secondInput.addEventListener('blur', function() {
+        secondInput.style.pointerEvents = 'none';
+    });
+    
+    // Display a message when mouse clicks are attempted
+    overlay.addEventListener('click', function(event) {
+        // Record mistake for mouse usage
+        window.recordMistake(
+            'mouse_used',
+            'User attempted to use the mouse instead of keyboard navigation',
+            'Please use keyboard navigation (Tab and Enter keys)'
+        );
+    });
+    
+    // Track if Tab was used to focus the button and check input values
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Tab') {
+            // If current focus is on the second input, next tab will go to the button
+            if (document.activeElement === secondInput) {
+                // We'll check in the focus event if the button receives focus after this
+                setTimeout(() => {
+                    if (document.activeElement === confirmButton) {
+                        usedTabToFocus = true;
+                    }
+                }, 10);
+            }
+        } else if (event.key === 'Enter') {
+            // Check if the confirm button is focused when Enter is pressed
+            if (document.activeElement === confirmButton) {
+                buttonActivatedWithEnter = true;
+                
+                const firstName = firstInput.value.trim();
+                const lastName = secondInput.value.trim();
+                
+                // Check if the form has the correct values
+                if (usedTabToFocus && buttonActivatedWithEnter) {
+                    if (firstName === "John" && lastName === "Doe") {
+                        // Complete task using the standard window.completeTask function
+                        window.completeTask(true);
+                    } else {
+                        // Record mistake for incorrect input
+                        window.recordMistake(
+                            'incorrect_input',
+                            `User entered "${firstName}" and "${lastName}" instead of "John" and "Doe"`,
+                            'The name values you entered are incorrect.'
+                        );
+                    }
+                } else {
+                    // Record mistake for incorrect navigation
+                    window.recordMistake(
+                        'incorrect_navigation',
+                        'User did not use Tab to focus the button before pressing Enter',
+                        'Please use Tab to navigate between form elements.'
+                    );
+                }
+            }
+        }
+    });
+});
+</script> 

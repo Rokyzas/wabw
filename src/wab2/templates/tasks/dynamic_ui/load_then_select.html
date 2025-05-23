@@ -1,0 +1,395 @@
+<main>
+    <article>
+        <div>
+            <div>
+                <div>
+                    <h3>Featured Products</h3>
+                </div>
+                
+                <div id="products-container">
+                    <!-- Initial products -->
+                    <div class="product-item">
+                        <div class="product-image">
+                            <div class="img-placeholder" style="background-color: #e3f2fd;"></div>
+                        </div>
+                        <div class="product-info">
+                            <h4>Classic White Sneakers</h4>
+                            <div class="product-price">$89.99</div>
+                            <div class="product-rating">
+                                <span class="stars">★★★★<span class="empty-star">★</span></span>
+                                <span class="review-count">(42)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-item">
+                        <div class="product-image">
+                            <div class="img-placeholder" style="background-color: #fff3e0;"></div>
+                        </div>
+                        <div class="product-info">
+                            <h4>Leather Messenger Bag</h4>
+                            <div class="product-price">$149.99</div>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="review-count">(38)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-item">
+                        <div class="product-image">
+                            <div class="img-placeholder" style="background-color: #e8f5e9;"></div>
+                        </div>
+                        <div class="product-info">
+                            <h4>Wireless Headphones</h4>
+                            <div class="product-price">$129.95</div>
+                            <div class="product-rating">
+                                <span class="stars">★★★★<span class="empty-star">★</span></span>
+                                <span class="review-count">(96)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-item">
+                        <div class="product-image">
+                            <div class="img-placeholder" style="background-color: #e0f7fa;"></div>
+                        </div>
+                        <div class="product-info">
+                            <h4>Portable Bluetooth Speaker</h4>
+                            <div class="product-price">$79.99</div>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="review-count">(51)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-item">
+                        <div class="product-image">
+                            <div class="img-placeholder" style="background-color: #f3e5f5;"></div>
+                        </div>
+                        <div class="product-info">
+                            <h4>Slim Fit T-Shirt</h4>
+                            <div class="product-price">$24.95</div>
+                            <div class="product-rating">
+                                <span class="stars">★★★<span class="empty-star">★★</span></span>
+                                <span class="review-count">(29)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-item">
+                        <div class="product-image">
+                            <div class="img-placeholder" style="background-color: #fff8e1;"></div>
+                        </div>
+                        <div class="product-info">
+                            <h4>Stainless Steel Water Bottle</h4>
+                            <div class="product-price">$34.99</div>
+                            <div class="product-rating">
+                                <span class="stars">★★★★<span class="empty-star">★</span></span>
+                                <span class="review-count">(127)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <button id="load-more-btn" class="load-more-button">Load More Products</button>
+                    <div id="loading-indicator" style="display: none;">
+                        <div class="spinner"></div>
+                        <span>Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+</main>
+
+<style>
+    /* Basic styling only */
+    .product-item {
+        border: 1px solid #eee;
+        border-radius: 8px;
+        margin: 10px;
+        padding: 10px;
+        display: inline-block;
+        width: 200px;
+        cursor: pointer;
+    }
+    
+    .product-image {
+        height: 150px;
+    }
+    
+    .img-placeholder {
+        width: 100%;
+        height: 100%;
+    }
+    
+    .stars {
+        color: #ffc107;
+    }
+    
+    .empty-star {
+        color: #e0e0e0;
+    }
+    
+    /* New Product Indicator */
+    .new-product-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #ff3d00;
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+    }
+    
+    /* Loading spinner */
+    .spinner {
+        width: 24px;
+        height: 24px;
+        border: 3px solid rgba(66, 133, 244, 0.3);
+        border-radius: 50%;
+        border-top-color: #4285f4;
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    /* New Product Animation */
+    .new-product {
+        position: relative;
+        border: 1px solid #4285f4;
+    }
+    
+    /* Load More Button Styling */
+    .load-more-button {
+        background-color: #4285f4;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        margin: 20px 0;
+    }
+    
+    .load-more-button:hover {
+        background-color: #3367d6;
+    }
+    
+    .load-more-button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const productsContainer = document.getElementById('products-container');
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    
+    // State
+    let isLoading = false;
+    let hasLoadedNewProducts = false;
+    let isTaskComplete = false;
+    
+    // Define fallback functions if they don't exist in the global scope
+    if (typeof window.completeTask !== 'function') {
+        window.completeTask = function(success) {
+            console.log('Task completed:', success);
+        };
+    }
+    
+    if (typeof window.recordMistake !== 'function') {
+        window.recordMistake = function(code, details, message) {
+            console.log('Mistake recorded:', code, details, message);
+        };
+    }
+    
+    // New products to be loaded
+    const newProducts = [
+        {
+            name: "Sustainable Yoga Mat",
+            price: "$42.95",
+            rating: 5,
+            reviews: 17,
+            color: "#e8eaf6",
+            isTarget: false
+        },
+        {
+            name: "Smart Fitness Tracker",
+            price: "$129.99",
+            rating: 4,
+            reviews: 34,
+            color: "#ffebee",
+            isTarget: false
+        },
+        {
+            name: "Premium Ceramic Mug Set",
+            price: "$28.99",
+            rating: 5,
+            reviews: 62,
+            color: "#ede7f6",
+            isTarget: false
+        },
+        {
+            name: "Ultra-Light Running Jacket",
+            price: "$89.95",
+            rating: 4,
+            reviews: 27,
+            color: "#e1f5fe",
+            isTarget: true
+        },
+        {
+            name: "Organic Cotton Tote Bag",
+            price: "$19.99",
+            rating: 4,
+            reviews: 45,
+            color: "#f9fbe7",
+            isTarget: false
+        },
+        {
+            name: "Wireless Charging Pad",
+            price: "$34.99",
+            rating: 4,
+            reviews: 53,
+            color: "#fce4ec",
+            isTarget: false
+        }
+    ];
+    
+    // Create product HTML
+    function createProductElement(product) {
+        const productElement = document.createElement('div');
+        productElement.className = 'product-item';
+        
+        if (product.isTarget) {
+            productElement.classList.add('new-product');
+            
+            // Add new badge
+            const newBadge = document.createElement('div');
+            newBadge.className = 'new-product-badge';
+            newBadge.textContent = 'NEW';
+            productElement.appendChild(newBadge);
+            
+            // Make the target product
+            productElement.id = 'target-product';
+        }
+        
+        // Build stars based on rating
+        let starsHTML = '';
+        for (let i = 0; i < 5; i++) {
+            if (i < product.rating) {
+                starsHTML += '★';
+            } else {
+                starsHTML += '<span class="empty-star">★</span>';
+            }
+        }
+        
+        productElement.innerHTML += `
+            <div class="product-image">
+                <div class="img-placeholder" style="background-color: ${product.color};"></div>
+            </div>
+            <div class="product-info">
+                <h4>${product.name}</h4>
+                <div class="product-price">${product.price}</div>
+                <div class="product-rating">
+                    <span class="stars">${starsHTML}</span>
+                    <span class="review-count">(${product.reviews})</span>
+                </div>
+            </div>
+        `;
+        
+        return productElement;
+    }
+    
+    // Check if initial products have been clicked
+    function handleInitialProductClick(event) {
+        event.stopPropagation();
+        
+        if (!hasLoadedNewProducts) {
+            window.recordMistake(
+                'initial_product_clicked',
+                'User attempted to select a product before loading new ones',
+                'Please load more products to find the recently added item.'
+            );
+        }
+    }
+    
+    // Add click handlers to initial products
+    document.querySelectorAll('.product-item').forEach(product => {
+        product.addEventListener('click', handleInitialProductClick);
+    });
+    
+    // Handle load more button click
+    loadMoreBtn.addEventListener('click', function(event) {
+        event.stopPropagation();
+        
+        if (isLoading || hasLoadedNewProducts) {
+            return;
+        }
+        
+        // Show loading state
+        isLoading = true;
+        loadMoreBtn.disabled = true;
+        loadingIndicator.style.display = 'block';
+        
+        // Simulate network delay
+        setTimeout(() => {
+            // Hide loading indicator
+            isLoading = false;
+            loadingIndicator.style.display = 'none';
+            loadMoreBtn.disabled = false;
+            
+            // Add new products
+            newProducts.forEach(product => {
+                const productElement = createProductElement(product);
+                productsContainer.appendChild(productElement);
+                
+                // Add click handler for the target product
+                if (product.isTarget) {
+                    productElement.addEventListener('click', handleTargetProductClick);
+                } else {
+                    // Add click handler for non-target new products
+                    productElement.addEventListener('click', function(event) {
+                        event.stopPropagation();
+                        
+                        if (!isTaskComplete) {
+                            window.recordMistake(
+                                'wrong_product_selected',
+                                'User selected a new product that was not the target product',
+                                'That\'s not the recently added product. Look for the product with the "NEW" label.'
+                            );
+                        }
+                    });
+                }
+            });
+            
+            hasLoadedNewProducts = true;
+            
+            // Update button state
+            loadMoreBtn.textContent = 'All Products Loaded';
+            loadMoreBtn.disabled = true;
+        }, 1000);
+    });
+    
+    // Handle target product click
+    function handleTargetProductClick(event) {
+        event.stopPropagation();
+        
+        if (isTaskComplete) return;
+        
+        // Complete the task
+        isTaskComplete = true;
+        window.completeTask(true);
+    }
+});
+</script> 

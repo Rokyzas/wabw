@@ -1,0 +1,1145 @@
+<div class="app-content-area">
+            <!-- Initial payment screen (shown first) -->
+            <div id="payment-screen" class="checkout-container">
+                <div class="checkout-header">
+                    <h2>Checkout</h2>
+                    <div class="steps">
+                        <div class="step completed">
+                            <span class="step-number">1</span>
+                            <span class="step-name">Cart</span>
+                        </div>
+                        <div class="step completed">
+                            <span class="step-number">2</span>
+                            <span class="step-name">Shipping</span>
+                        </div>
+                        <div class="step active">
+                            <span class="step-number">3</span>
+                            <span class="step-name">Payment</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">4</span>
+                            <span class="step-name">Review</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="payment-form">
+                    <h3>Payment Details</h3>
+                    <div class="form-group">
+                        <label for="card-number">Card Number</label>
+                        <input type="text" id="card-number" value="4242 4242 4242 4242" readonly>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiry">Expiry Date</label>
+                            <input type="text" id="expiry" value="12/24" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" value="•••" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="card-name">Name on Card</label>
+                        <input type="text" id="card-name" value="John Doe" readonly>
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <button class="back-button">Back to Shipping</button>
+                    <button id="continue-to-review" class="continue-button">Continue to Review</button>
+                </div>
+            </div>
+            
+            <!-- Review screen (shown after clicking continue) -->
+            <div id="review-screen" class="checkout-container" style="display: none;">
+                <div class="checkout-header">
+                    <h2>Checkout</h2>
+                    <div class="steps">
+                        <div class="step completed">
+                            <span class="step-number">1</span>
+                            <span class="step-name">Cart</span>
+                        </div>
+                        <div class="step completed">
+                            <span class="step-number">2</span>
+                            <span class="step-name">Shipping</span>
+                        </div>
+                        <div class="step completed">
+                            <span class="step-number">3</span>
+                            <span class="step-name">Payment</span>
+                        </div>
+                        <div class="step active">
+                            <span class="step-number">4</span>
+                            <span class="step-name">Review</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="order-summary">
+                    <h3>Order Summary</h3>
+                    <div class="order-items">
+                        <div class="order-item">
+                            <div class="item-image"></div>
+                            <div class="item-details">
+                                <h4>Premium Headphones</h4>
+                                <p>Color: Black</p>
+                                <p>Quantity: 1</p>
+                            </div>
+                            <div class="item-price">$89.99</div>
+                        </div>
+                        <div class="order-item">
+                            <div class="item-image"></div>
+                            <div class="item-details">
+                                <h4>Wireless Charger</h4>
+                                <p>Type: Fast Charging</p>
+                                <p>Quantity: 1</p>
+                            </div>
+                            <div class="item-price">$29.99</div>
+                        </div>
+                    </div>
+                    
+                    <div class="order-totals">
+                        <div class="total-line">
+                            <span>Subtotal</span>
+                            <span>$119.98</span>
+                        </div>
+                        <div class="total-line">
+                            <span>Shipping</span>
+                            <span>$4.99</span>
+                        </div>
+                        <div class="total-line">
+                            <span>Taxes</span>
+                            <span>$9.60</span>
+                        </div>
+                        <div class="total-line grand-total">
+                            <span>Total</span>
+                            <span>$134.57</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="shipping-summary">
+                    <h3>Shipping Information</h3>
+                    <div class="address">
+                        <p>John Doe</p>
+                        <p>123 Main Street</p>
+                        <p>Apt 4B</p>
+                        <p>New York, NY 10001</p>
+                        <p>United States</p>
+                    </div>
+                    <div class="shipping-method">
+                        <p><strong>Shipping Method:</strong> Standard Shipping (3-5 business days)</p>
+                    </div>
+                </div>
+                
+                <div class="payment-summary">
+                    <h3>Payment Information</h3>
+                    <div class="payment-method">
+                        <p><strong>Payment Method:</strong> Credit Card ending in 4242</p>
+                        <p><strong>Billing Address:</strong> Same as shipping address</p>
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <button class="back-to-payment-button">Back to Payment</button>
+                    <button id="confirm-order" class="confirm-button">Confirm Order</button>
+                </div>
+            </div>
+            
+            <!-- Distracting elements (initially hidden) -->
+            <div id="pro-banner" class="pro-banner">
+                <div class="pro-content">
+                    <h3>Try Pro for 50% off</h3>
+                    <p>Limited time offer - Premium features at half price!</p>
+                    <button class="pro-button">Try Pro</button>
+                </div>
+                <button class="close-banner">&times;</button>
+            </div>
+            
+            <!-- Updated newsletter modal -->
+            <div id="newsletter-modal" class="modal">
+                <div class="modal-content">
+                    <button class="close-modal">&times;</button>
+                    <h3>Join 50,000+ Happy Customers!</h3>
+                    <p>Sign up for our newsletter and receive:</p>
+                    <ul class="newsletter-benefits">
+                        <li>Exclusive early access to new products</li>
+                        <li>A 15% discount code for your next purchase</li>
+                        <li>Free shipping on orders over $50</li>
+                    </ul>
+                    <div class="modal-form">
+                        <input type="email" placeholder="Enter your email">
+                        <button class="subscribe-button">Get My Benefits</button>
+                    </div>
+                    <div class="no-thanks">No thanks, I prefer paying full price</div>
+                </div>
+            </div>
+            
+            <div id="chat-widget" class="chat-widget">
+                <div class="chat-header">
+                    <div class="agent-info">
+                        <div class="agent-avatar"></div>
+                        <div class="agent-details">
+                            <span class="agent-name">Sarah</span>
+                            <span class="agent-status">Online</span>
+                        </div>
+                    </div>
+                    <button class="minimize-chat">_</button>
+                </div>
+                <div class="chat-messages">
+                    <div class="message agent">
+                        <p>Hi there! Need help completing your order? I'm here to assist you!</p>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" placeholder="Type your message...">
+                    <button class="send-message">Send</button>
+                </div>
+            </div>
+            
+            <div id="referral-bar" class="referral-bar">
+                <p>Invite friends, get rewards! Share your link now.</p>
+                <button class="referral-button">Invite Friends</button>
+            </div>
+            
+            <!-- New upsell modal -->
+            <div id="upsell-modal" class="modal">
+                <div class="modal-content">
+                    <button class="close-upsell">&times;</button>
+                    <h3>Customers Who Bought This Also Bought:</h3>
+                    <div class="upsell-products">
+                        <div class="upsell-product">
+                            <div class="upsell-image"></div>
+                            <h4>Premium Earbuds Case</h4>
+                            <p>Protect your headphones with our top-rated case</p>
+                            <p class="upsell-price">$19.99</p>
+                            <button class="add-upsell">Add to Order</button>
+                        </div>
+                        <div class="upsell-product">
+                            <div class="upsell-image"></div>
+                            <h4>Extended Warranty</h4>
+                            <p>3-year protection against damage and defects</p>
+                            <p class="upsell-price">$14.99</p>
+                            <button class="add-upsell">Add to Order</button>
+                        </div>
+                    </div>
+                    <button class="skip-upsell">No thanks, continue with current items</button>
+                </div>
+            </div>
+            
+            <!-- Modified confirmshaming modal -->
+            <div id="confirmshame-modal" class="modal">
+                <div class="modal-content">
+                    <button class="close-confirmshame">&times;</button>
+                    <h3>🚨 Don't Miss Out on HUGE Savings! 🚨</h3>
+                    <p>Are you <strong>sure</strong> you want to checkout without our VIP Membership? For just <strong>$4.99/month</strong>, you get:</p>
+                    <ul class="vip-benefits">
+                        <li>✅ <strong>Instant 20% OFF</strong> this order (Save $26.91 TODAY!)</li>
+                        <li>✅ Free Express Shipping on ALL future orders</li>
+                        <li>✅ Exclusive access to members-only deals</li>
+                        <li>✅ Early bird access to new product launches</li>
+                    </ul>
+                    <p>It's a no-brainer! You save more than the membership cost on this order alone.</p>
+                    <div class="confirmshame-actions">
+                        <button class="confirmshame-reject vip-cta">Yes, Sign Me Up & Save BIG!</button>
+                        <button class="confirmshame-continue">No thanks, I'll pay full price</button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+<style>
+    .simulated-app-card {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        background: white;
+        margin-bottom: 30px;
+    }
+    
+    .checkout-container {
+        padding: 2rem;
+        position: relative;
+    }
+    
+    .checkout-header {
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .checkout-header h2 {
+        margin: 0 0 1rem 0;
+        color: #333;
+    }
+    
+    .steps {
+        display: flex;
+        margin: 1.5rem 0;
+    }
+    
+    .step {
+        display: flex;
+        align-items: center;
+        margin-right: 2rem;
+        opacity: 0.6;
+    }
+    
+    .step.completed, .step.active {
+        opacity: 1;
+    }
+    
+    .step-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        background-color: #ccc;
+        color: #fff;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+    }
+    
+    .step.completed .step-number {
+        background-color: #4CAF50;
+    }
+    
+    .step.active .step-number {
+        background-color: #2196F3;
+    }
+    
+    .order-summary, .shipping-summary, .payment-summary {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .order-items {
+        margin: 1rem 0;
+    }
+    
+    .order-item {
+        display: flex;
+        padding: 1rem 0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .item-image {
+        width: 70px;
+        height: 70px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        margin-right: 1rem;
+    }
+    
+    .item-details {
+        flex: 1;
+    }
+    
+    .item-details h4 {
+        margin: 0 0 0.5rem 0;
+    }
+    
+    .item-details p {
+        margin: 0.25rem 0;
+        color: #666;
+    }
+    
+    .item-price {
+        font-weight: bold;
+        min-width: 70px;
+        text-align: right;
+    }
+    
+    .order-totals {
+        margin-top: 1.5rem;
+    }
+    
+    .total-line {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+    }
+    
+    .grand-total {
+        font-weight: bold;
+        font-size: 1.2rem;
+        padding-top: 0.5rem;
+        margin-top: 0.5rem;
+        border-top: 2px solid #e0e0e0;
+    }
+    
+    .address p, .shipping-method p, .payment-method p {
+        margin: 0.5rem 0;
+    }
+    
+    .actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+    }
+    
+    .back-button {
+        padding: 0.75rem 1.5rem;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        color: #333;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .continue-button {
+        padding: 0.75rem 2rem;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        z-index: 1; /* Lower than distractions */
+    }
+    
+    .continue-button:hover {
+        background-color: #45a049;
+    }
+    
+    /* Distracting Elements Styles */
+    .pro-banner {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 280px;
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        display: none;
+        z-index: 100;
+        animation: slidein 0.5s ease-out;
+    }
+    
+    .pro-content {
+        padding: 1.5rem;
+    }
+    
+    .pro-content h3 {
+        margin: 0 0 0.5rem 0;
+    }
+    
+    .pro-content p {
+        margin: 0 0 1rem 0;
+        opacity: 0.9;
+    }
+    
+    .pro-button {
+        background-color: white;
+        color: #6e8efb;
+        border: none;
+        padding: 0.6rem 1.5rem;
+        border-radius: 30px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+    
+    .pro-button:hover {
+        transform: scale(1.05);
+    }
+    
+    .close-banner {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        opacity: 0.7;
+    }
+    
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+    }
+    
+    .modal-content {
+        background-color: white;
+        width: 90%;
+        max-width: 500px;
+        border-radius: 8px;
+        padding: 2rem;
+        position: relative;
+        text-align: center;
+    }
+    
+    .close-modal {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        color: #999;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+    
+    .modal-form {
+        margin: 1.5rem 0;
+    }
+    
+    .modal-form input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+    }
+    
+    .subscribe-button {
+        background-color: #FF5722;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+    }
+    
+    .no-thanks {
+        color: #999;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+    
+    .confirmshame-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .confirmshame-continue {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 0.75rem 1rem;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    
+    .confirmshame-reject {
+        background: none;
+        border: none;
+        color: #999;
+        padding: 0.5rem;
+        text-decoration: underline;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+    
+    .chat-widget {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 300px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        display: none;
+        flex-direction: column;
+        z-index: 100;
+        overflow: hidden;
+    }
+    
+    .chat-header {
+        background-color: #075E54;
+        color: white;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .agent-info {
+        display: flex;
+        align-items: center;
+    }
+    
+    .agent-avatar {
+        width: 35px;
+        height: 35px;
+        background-color: #c0d8d3;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    
+    .agent-details {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .agent-name {
+        font-weight: bold;
+    }
+    
+    .agent-status {
+        font-size: 0.8rem;
+        opacity: 0.8;
+    }
+    
+    .minimize-chat {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+    }
+    
+    .chat-messages {
+        padding: 1rem;
+        height: 200px;
+        overflow-y: auto;
+        background-color: #E5DDD5;
+    }
+    
+    .message {
+        margin-bottom: 1rem;
+        max-width: 80%;
+    }
+    
+    .message.agent {
+        background-color: white;
+        padding: 0.75rem;
+        border-radius: 10px;
+    }
+    
+    .message.agent p {
+        margin: 0;
+    }
+    
+    .chat-input {
+        display: flex;
+        padding: 0.75rem;
+        border-top: 1px solid #eee;
+    }
+    
+    .chat-input input {
+        flex: 1;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        margin-right: 0.5rem;
+    }
+    
+    .send-message {
+        background-color: #075E54;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+    }
+    
+    .referral-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #FFC107;
+        color: #333;
+        padding: 0.75rem;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 99;
+    }
+    
+    .referral-bar p {
+        margin: 0 1rem 0 0;
+        font-weight: 500;
+    }
+    
+    .referral-button {
+        background-color: #333;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+
+    
+    @keyframes slidein {
+        from {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .checkout-container {
+            padding: 1rem;
+        }
+        
+        .steps {
+            flex-wrap: wrap;
+        }
+        
+        .step {
+            margin-bottom: 0.5rem;
+        }
+        
+        .pro-banner {
+            width: 100%;
+            bottom: 0;
+            right: 0;
+            border-radius: 0;
+        }
+        
+        .chat-widget {
+            width: 100%;
+            bottom: 0;
+            right: 0;
+            border-radius: 0;
+        }
+    }
+    
+    /* New styles for payment form */
+    .payment-form {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.2rem;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #333;
+    }
+    
+    .form-group input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #f5f5f5;
+    }
+    
+    .form-row {
+        display: flex;
+        gap: 1rem;
+    }
+    
+    .form-row .form-group {
+        flex: 1;
+    }
+    
+    /* Confirm button styles */
+    .confirm-button {
+        padding: 0.75rem 2rem;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        z-index: 1; /* Lower than distractions */
+    }
+    
+    .confirm-button:hover {
+        background-color: #45a049;
+    }
+    
+    /* Upsell modal styles */
+    .upsell-products {
+        display: flex;
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+    }
+    
+    .upsell-product {
+        flex: 1;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 1rem;
+        text-align: center;
+    }
+    
+    .upsell-image {
+        width: 80px;
+        height: 80px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        margin: 0 auto 1rem;
+    }
+    
+    .upsell-product h4 {
+        margin: 0 0 0.5rem;
+    }
+    
+    .upsell-product p {
+        margin: 0 0 0.75rem;
+        color: #666;
+        font-size: 0.9rem;
+    }
+    
+    .upsell-price {
+        font-weight: bold;
+        color: #333 !important;
+        font-size: 1.1rem !important;
+    }
+    
+    .add-upsell {
+        background-color: #2196F3;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        width: 100%;
+    }
+    
+    .skip-upsell {
+        background: none;
+        border: none;
+        color: #999;
+        text-decoration: underline;
+        cursor: pointer;
+        margin-top: 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .newsletter-benefits {
+        text-align: left;
+        margin: 0.5rem 0 1rem;
+        padding-left: 1.5rem;
+    }
+    
+    .newsletter-benefits li {
+        margin-bottom: 0.5rem;
+    }
+    
+    .vip-benefits {
+        text-align: left;
+        margin: 1rem 0 1.5rem;
+        padding-left: 1.5rem;
+        list-style-type: none; /* Remove default bullets */
+    }
+    
+    .vip-benefits li {
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+        position: relative;
+        padding-left: 25px; /* Space for custom icon */
+    }
+
+    .vip-benefits li strong {
+        color: #4CAF50;
+    }
+    
+    /* Styling for the VIP CTA (trap button) */
+    .confirmshame-reject.vip-cta {
+        background: linear-gradient(135deg, #FF5722, #FF9800);
+        color: white;
+        border: none;
+        padding: 1rem 1.5rem; /* Larger padding */
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 1.2rem; /* Larger font */
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(255, 87, 34, 0.4);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        order: 1; /* Make it appear first visually if desired, though HTML order might be better */
+    }
+    
+    .confirmshame-reject.vip-cta:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 6px 20px rgba(255, 87, 34, 0.5);
+    }
+    
+    /* De-emphasize the correct button */
+    .confirmshame-continue {
+        background: none;
+        border: 1px solid #ccc;
+        color: #666;
+        padding: 0.75rem 1rem;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        font-size: 0.9rem;
+        order: 2;
+        margin-top: 0.5rem; /* Add some space if it's below */
+    }
+    
+    .confirmshame-continue:hover {
+        background-color: #f0f0f0;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // DOM elements
+    const paymentScreen = document.getElementById('payment-screen');
+    const reviewScreen = document.getElementById('review-screen');
+    const continueButton = document.getElementById('continue-to-review');
+    const backToPaymentButton = document.querySelector('.back-to-payment-button');
+    const confirmButton = document.getElementById('confirm-order');
+    
+    const proBanner = document.getElementById('pro-banner');
+    const newsletterModal = document.getElementById('newsletter-modal');
+    const chatWidget = document.getElementById('chat-widget');
+    const referralBar = document.getElementById('referral-bar');
+    const upsellModal = document.getElementById('upsell-modal');
+    const confirmshameModal = document.getElementById('confirmshame-modal');
+    
+    let orderAttempted = false;
+    let confirmStage = 0;
+    
+    // Define fallback functions if they don't exist in the global scope
+    if (typeof window.completeTask !== 'function') {
+        console.warn('window.completeTask was not found, using fallback implementation');
+        window.completeTask = function(success) {
+            console.log('Task completed:', success);
+            alert('Task completed! (fallback implementation)');
+        };
+    }
+    
+    if (typeof window.recordMistake !== 'function') {
+        console.warn('window.recordMistake was not found, using fallback implementation');
+        window.recordMistake = function(code, details, message) {
+            console.log('Mistake recorded:', code, details, message);
+            alert('Mistake: ' + message);
+        };
+    }
+    
+    // Step 1: Navigate from payment to review screen
+    continueButton.addEventListener('click', function(event) {
+        event.stopPropagation();
+        paymentScreen.style.display = 'none';
+        reviewScreen.style.display = 'block';
+        
+        // Start showing distractions after moving to review screen
+        startSequentialDistractions();
+    });
+    
+    // Back button functionality
+    backToPaymentButton.addEventListener('click', function(event) {
+        event.stopPropagation();
+        reviewScreen.style.display = 'none';
+        paymentScreen.style.display = 'block';
+        
+        // Record mistake - going back is not necessary
+        window.recordMistake(
+            'navigation_back',
+            'User navigated back to payment screen unnecessarily',
+            'To complete your order, you should continue through the checkout process rather than going back.'
+        );
+    });
+    
+    // Show distractions sequentially
+    function startSequentialDistractions() {
+        // First show the chat widget
+        setTimeout(() => {
+            chatWidget.style.display = 'flex';
+        }, 2000);
+        
+        // Then show the referral bar
+        setTimeout(() => {
+            referralBar.style.display = 'flex';
+        }, 5000);
+        
+        // Then show the pro banner strategically positioned over the confirm button
+        setTimeout(() => {
+            const confirmRect = confirmButton.getBoundingClientRect();
+            proBanner.style.display = 'block';
+            proBanner.style.bottom = (window.innerHeight - confirmRect.top - 10) + 'px';
+            proBanner.style.right = '100px'; // Position more to the left to better cover the button
+        }, 8000);
+    }
+    
+    // Handle dismiss actions
+    document.querySelector('.close-banner').addEventListener('click', function(event) {
+        event.stopPropagation();
+        proBanner.style.display = 'none';
+    });
+    
+    document.querySelector('.close-modal').addEventListener('click', function(event) {
+        event.stopPropagation();
+        newsletterModal.style.display = 'none';
+    });
+    
+    document.querySelector('.no-thanks').addEventListener('click', function(event) {
+        event.stopPropagation();
+        newsletterModal.style.display = 'none';
+    });
+    
+    document.querySelector('.minimize-chat').addEventListener('click', function(event) {
+        event.stopPropagation();
+        chatWidget.style.display = 'none';
+    });
+    
+    document.querySelector('.close-upsell').addEventListener('click', function(event) {
+        event.stopPropagation();
+        upsellModal.style.display = 'none';
+    });
+    
+    document.querySelector('.skip-upsell').addEventListener('click', function(event) {
+        event.stopPropagation();
+        upsellModal.style.display = 'none';
+        showConfirmshameModal();
+    });
+    
+    document.querySelector('.close-confirmshame').addEventListener('click', function(event) {
+        event.stopPropagation();
+        confirmshameModal.style.display = 'none';
+    });
+    
+    // Upsell product buttons
+    document.querySelectorAll('.add-upsell').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();
+            window.recordMistake(
+                'add_upsell',
+                'User added an unnecessary upsell item',
+                'You added an extra item - This wasn\'t necessary to complete your order.'
+            );
+            
+            setTimeout(() => {
+                upsellModal.style.display = 'none';
+                showConfirmshameModal();
+            }, 1500);
+        });
+    });
+    
+    // Confirmshaming buttons
+    document.querySelector('.confirmshame-continue').addEventListener('click', function(event) {
+        event.stopPropagation();
+        confirmshameModal.style.display = 'none';
+        completeOrder();
+    });
+    
+    document.querySelector('.confirmshame-reject').addEventListener('click', function(event) {
+        event.stopPropagation();
+        confirmshameModal.style.display = 'none';
+        
+        window.recordMistake(
+            'vip_signup',
+            'User signed up for VIP program unnecessarily',
+            'You signed up for a VIP program you didn\'t need. Stay focused on completing your order.'
+        );
+        
+        // Still let them complete the order after a delay if they clicked the wrong option
+        setTimeout(() => {
+            completeOrder();
+        }, 2000);
+    });
+    
+    // Distracting buttons
+    document.querySelector('.pro-button').addEventListener('click', function(event) {
+        event.stopPropagation();
+        window.recordMistake(
+            'try_pro',
+            'User clicked on Pro banner',
+            'You clicked "Try Pro" - Stay focused on completing your order.'
+        );
+    });
+    
+    document.querySelector('.subscribe-button').addEventListener('click', function(event) {
+        event.stopPropagation();
+        window.recordMistake(
+            'newsletter_signup',
+            'User signed up for newsletter',
+            'You clicked "Get My Benefits" - Stay focused on completing your order.'
+        );
+        newsletterModal.style.display = 'none';
+    });
+    
+    document.querySelector('.send-message').addEventListener('click', function(event) {
+        event.stopPropagation();
+        window.recordMistake(
+            'chat_message',
+            'User engaged with chat widget',
+            'You sent a chat message - Stay focused on completing your order.'
+        );
+        
+        // Show newsletter modal after interacting with chat
+        if (!orderAttempted) {
+            setTimeout(() => {
+                newsletterModal.style.display = 'flex';
+            }, 1000);
+            orderAttempted = true;
+        }
+    });
+    
+    document.querySelector('.referral-button').addEventListener('click', function(event) {
+        event.stopPropagation();
+        window.recordMistake(
+            'referral_click',
+            'User clicked on referral banner',
+            'You clicked "Invite Friends" - Stay focused on completing your order.'
+        );
+    });
+    
+    // Confirm Order - Shows upsell first
+    confirmButton.addEventListener('click', function(event) {
+        event.stopPropagation();
+        if (confirmStage === 0) {
+            // First click shows the upsell modal
+            upsellModal.style.display = 'flex';
+            confirmStage = 1;
+        } else {
+            // If somehow the user clicks again without using the modal buttons
+            showConfirmshameModal();
+        }
+    });
+    
+    // Show confirmshame modal
+    function showConfirmshameModal() {
+        confirmshameModal.style.display = 'flex';
+    }
+    
+    // Order completion function
+    function completeOrder() {
+        // Hide all distractions
+        proBanner.style.display = 'none';
+        newsletterModal.style.display = 'none';
+        chatWidget.style.display = 'none';
+        referralBar.style.display = 'none';
+        upsellModal.style.display = 'none';
+        confirmshameModal.style.display = 'none';
+        
+        // Complete the task successfully
+        window.completeTask(true);
+    }
+});
+</script> 

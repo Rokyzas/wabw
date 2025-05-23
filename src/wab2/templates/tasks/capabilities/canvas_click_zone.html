@@ -1,0 +1,460 @@
+<main class="container">
+    <article class="simulated-app-card">
+        <header class="simulated-app-header">
+            <h4>{{ task.agent.scenario_title }}</h4>
+        </header>
+
+        <div class="app-message info-message">
+            <span class="icon">ℹ️</span>
+            <p>{{ task.agent.goal_description }}</p>
+        </div>
+
+        <div class="app-content-area">
+            <div class="map-container">
+                <div class="map-header">
+                    <h3>Map Coordinates</h3>
+                    <div class="map-controls">
+                        <span class="map-info">Target location: <span class="highlight">Grid coordinates (11.6, 4.4)</span> - click this exact point</span>
+                    </div>
+                </div>
+                
+                <div class="canvas-wrapper">
+                    <canvas id="map-canvas" width="800" height="500" tabindex="0" aria-label="Interactive map with grid coordinates. Target is at position 11.6, 4.4" role="application"></canvas>
+                </div>
+                
+                <div id="status-message" class="status-message">Find and click the exact point at grid coordinates (11.6, 4.4)</div>
+            </div>
+        </div>
+
+        <footer class="simulated-app-footer">
+            <small>Task ID: {{ task.id }}</small>
+        </footer>
+    </article>
+</main>
+
+<style>
+    /* Override base template constraints */
+    .container {
+        max-width: 1400px !important;
+        width: 95% !important;
+    }
+    
+    .simulated-app-card {
+        max-width: none !important;
+        width: 100% !important;
+    }
+    
+    .app-content-area {
+        padding: 1rem !important;
+    }
+    
+    /* Map container */
+    .map-container {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    
+    .map-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .map-header h3 {
+        margin: 0;
+        color: #343a40;
+        font-size: 18px;
+        font-weight: 600;
+    }
+    
+    .map-controls {
+        display: flex;
+        align-items: center;
+    }
+    
+    .map-info {
+        color: #495057;
+        font-size: 14px;
+    }
+    
+    .highlight {
+        color: #ff3333;
+        font-weight: 600;
+    }
+    
+    /* Canvas wrapper */
+    .canvas-wrapper {
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f8f9fa;
+    }
+    
+    #map-canvas {
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        cursor: crosshair;
+    }
+    
+    /* Status message */
+    .status-message {
+        padding: 15px 20px;
+        background-color: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        color: #495057;
+        font-size: 14px;
+        text-align: center;
+    }
+    
+    /* Success message */
+    .success-message {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #d4edda;
+        color: #155724;
+        padding: 12px 24px;
+        border-radius: 4px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        animation: fadeInOut 2s ease-in-out;
+    }
+    
+    @keyframes fadeInOut {
+        0% { opacity: 0; transform: translate(-50%, -20px); }
+        15% { opacity: 1; transform: translate(-50%, 0); }
+        85% { opacity: 1; transform: translate(-50%, 0); }
+        100% { opacity: 0; transform: translate(-50%, -20px); }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('map-canvas');
+    const ctx = canvas.getContext('2d');
+    const statusMessage = document.getElementById('status-message');
+    
+    // Set up map coordinates and target
+    const targetRadius = 5; // Smaller, less obvious target
+    const gridSize = 50; // Size of each grid cell
+    
+    // Target at grid position (11.6, 4.4)
+    // Will be converted to pixel coordinates later
+    
+    // Draw some map features
+    function drawMap() {
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw background
+        ctx.fillStyle = '#e6f2ff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw some terrain features
+        drawTerrain();
+        
+        // Draw grid
+        drawGrid();
+        
+        // Draw some markers/cities
+        drawMarkers();
+        
+        // Do NOT draw the target visibly - it's hidden to test true understanding
+        // drawTarget();
+    }
+    
+    function drawTerrain() {
+        // Draw water bodies (blue areas)
+        ctx.fillStyle = '#a6d5fa';
+        
+        // Lake 1
+        ctx.beginPath();
+        ctx.ellipse(150, 100, 80, 60, 0, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Lake 2
+        ctx.beginPath();
+        ctx.ellipse(650, 400, 100, 70, 0, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // River
+        ctx.beginPath();
+        ctx.moveTo(150, 150);
+        ctx.quadraticCurveTo(250, 200, 350, 300);
+        ctx.quadraticCurveTo(450, 350, 550, 380);
+        ctx.quadraticCurveTo(600, 390, 650, 400);
+        ctx.lineWidth = 20;
+        ctx.strokeStyle = '#a6d5fa';
+        ctx.stroke();
+        
+        // Draw forests (green areas)
+        ctx.fillStyle = '#b8d9b8';
+        
+        // Forest 1
+        ctx.beginPath();
+        ctx.ellipse(250, 200, 70, 80, Math.PI / 4, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Forest 2
+        ctx.beginPath();
+        ctx.ellipse(500, 150, 90, 70, Math.PI / 3, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Forest 3
+        ctx.beginPath();
+        ctx.ellipse(400, 400, 80, 60, Math.PI / 6, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Draw mountains (gray areas)
+        ctx.fillStyle = '#d9d9d9';
+        
+        // Mountain range
+        ctx.beginPath();
+        ctx.moveTo(100, 300);
+        ctx.lineTo(150, 250);
+        ctx.lineTo(180, 280);
+        ctx.lineTo(220, 230);
+        ctx.lineTo(260, 280);
+        ctx.lineTo(320, 240);
+        ctx.lineTo(340, 300);
+        ctx.closePath();
+        ctx.fill();
+    }
+    
+    function drawGrid() {
+        // Draw grid lines
+        ctx.strokeStyle = '#cddaeb';
+        ctx.lineWidth = 1;
+        
+        // Set font once for all labels
+        ctx.font = '10px Arial';
+        
+        // Vertical lines with grid numbers at bottom (x-axis)
+        for (let x = 0; x <= canvas.width; x += gridSize) {
+            // Draw vertical line
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, canvas.height);
+            ctx.stroke();
+            
+            // Skip the origin (0,0) for x-axis since we'll draw it for y-axis
+            if (x > 0 || x === canvas.width) {
+                // Add x-axis label at the bottom - position them below the lines
+                const label = (x/gridSize).toString();
+                
+                // Use a more subtle background
+                const textWidth = ctx.measureText(label).width + 4;
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.fillRect(x - textWidth/2, canvas.height - 20, textWidth, 14);
+                
+                ctx.fillStyle = '#495057';
+                ctx.textAlign = 'center';
+                ctx.fillText(label, x, canvas.height - 10); // Move up from the edge
+            }
+        }
+        
+        // Horizontal lines with grid numbers at left (y-axis)
+        // But with y-axis flipped (0 at bottom, increasing upward)
+        const yGridCount = Math.floor(canvas.height / gridSize);
+        for (let i = 0; i <= yGridCount; i++) {
+            const y = canvas.height - (i * gridSize); // Flip the y coordinate
+            
+            // Draw horizontal line
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(canvas.width, y);
+            ctx.stroke();
+            
+            // Add y-axis label - position them to the left of the lines
+            const label = i.toString();
+            
+            // Use a more subtle background
+            const textWidth = ctx.measureText(label).width + 4;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.fillRect(0, y - 12, 18, 14);
+            
+            ctx.fillStyle = '#495057';
+            ctx.textAlign = 'right';
+            ctx.fillText(label, 15, y - 2); // Move slightly away from the line
+        }
+        
+        // Draw coordinate axes in slightly darker color
+        ctx.strokeStyle = '#a6c1e0';
+        ctx.lineWidth = 2;
+        
+        // x-axis (now at the bottom)
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height);
+        ctx.lineTo(canvas.width, canvas.height);
+        ctx.stroke();
+        
+        // y-axis (still at the left)
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, canvas.height);
+        ctx.stroke();
+    }
+    
+    function drawMarkers() {
+        // Draw city markers
+        const cities = [
+            { x: 200, y: 150, name: "Lakeside" },
+            { x: 350, y: 250, name: "Rivertown" },
+            { x: 450, y: 120, name: "Forest Hills" },
+            { x: 600, y: 320, name: "Southpoint" },
+            { x: 150, y: 350, name: "Mountain View" }
+        ];
+        
+        cities.forEach(city => {
+            // City dot
+            ctx.beginPath();
+            ctx.arc(city.x, city.y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = '#495057';
+            ctx.fill();
+            
+            // City name
+            ctx.font = '12px Arial';
+            ctx.fillStyle = '#343a40';
+            ctx.textAlign = 'center';
+            ctx.fillText(city.name, city.x, city.y + 20);
+        });
+    }
+    
+    // Keep the target invisible
+    function drawTarget() {
+        // No visual indicator
+    }
+    
+    // Convert grid coordinates to canvas pixel coordinates
+    // This accounts for the flipped y-axis
+    function gridToPixel(gridX, gridY) {
+        return {
+            x: gridX * gridSize,
+            y: canvas.height - (gridY * gridSize) // Flip y-coordinate
+        };
+    }
+    
+    // Convert canvas pixel coordinates to grid coordinates
+    function pixelToGrid(pixelX, pixelY) {
+        return {
+            x: pixelX / gridSize,
+            y: (canvas.height - pixelY) / gridSize // Flip y-coordinate
+        };
+    }
+    
+    // Set target using grid coordinates
+    const targetGridX = 11.6;
+    const targetGridY = 4.4;
+    const targetPixel = gridToPixel(targetGridX, targetGridY);
+    const targetX = targetPixel.x;
+    const targetY = targetPixel.y;
+    
+    // Check if click was within target - make it more precise
+    function isInTarget(x, y) {
+        const distance = Math.sqrt(Math.pow(x - targetX, 2) + Math.pow(y - targetY, 2));
+        return distance <= targetRadius + 10; // Slightly larger hit area for usability
+    }
+    
+    function drawMarkerAtPosition(x, y) {
+        // Draw a marker at the clicked position
+        ctx.beginPath();
+        ctx.arc(x, y, 7, 0, Math.PI * 2);
+        ctx.fillStyle = '#212529';
+        ctx.fill();
+        
+        // Draw crosshair
+        ctx.beginPath();
+        ctx.moveTo(x - 10, y);
+        ctx.lineTo(x + 10, y);
+        ctx.moveTo(x, y - 10);
+        ctx.lineTo(x, y + 10);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#212529';
+        ctx.stroke();
+        
+        // Show coordinates of click using the correct coordinate system
+        const gridCoords = pixelToGrid(x, y);
+        const gridX = gridCoords.x.toFixed(1);
+        const gridY = gridCoords.y.toFixed(1);
+        statusMessage.textContent = `You clicked at grid coordinates (${gridX}, ${gridY})`;
+        
+        // If it's a successful hit, display the target too
+        if (isInTarget(x, y)) {
+            // Draw the target only after a successful hit
+            ctx.beginPath();
+            ctx.arc(targetX, targetY, targetRadius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 51, 51, 0.8)';
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(targetX, targetY, targetRadius + 5, 0, Math.PI * 2);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'rgba(255, 51, 51, 0.5)';
+            ctx.stroke();
+        }
+    }
+    
+    // Handle canvas clicks
+    canvas.addEventListener('click', function(event) {
+        // Get click coordinates relative to the canvas
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        
+        // Check if click was on target
+        if (isInTarget(x, y)) {
+            // Success! Target was clicked
+            drawMap(); // Redraw map
+            drawMarkerAtPosition(x, y); // Add marker
+            
+            // Update status message
+            statusMessage.textContent = "Target successfully located!";
+            statusMessage.style.color = "#28a745";
+            
+            // Show success message
+            const successMessage = document.createElement('div');
+            successMessage.className = 'success-message';
+            successMessage.innerHTML = 'Target successfully located at grid coordinates (11.6, 4.4)! Task complete.';
+            document.body.appendChild(successMessage);
+            
+            // Send success to server
+            fetch('/api/complete_task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    task_id: '{{ task.id }}'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect after delay
+                    setTimeout(() => {
+                        window.location.href = '/generic_task_success?task_id={{ task.id }}&title={{ task.agent.scenario_title }}';
+                    }, 1500);
+                }
+            });
+        } else {
+            // Miss - redraw map and show marker
+            drawMap();
+            drawMarkerAtPosition(x, y);
+        }
+    });
+    
+    // Initial drawing
+    drawMap();
+});
+</script> 

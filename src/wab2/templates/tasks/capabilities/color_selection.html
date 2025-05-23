@@ -1,0 +1,979 @@
+<main class="container">
+    <article class="simulated-app-card">
+        <header class="simulated-app-header">
+            <h4>{{ task.agent.scenario_title }}</h4>
+        </header>
+
+        <div class="app-message info-message">
+            <span class="icon">ℹ️</span>
+            <p>{{ task.agent.goal_description }}</p>
+        </div>
+
+        <div class="app-content-area">
+            <div class="product-customizer">
+                <div class="product-preview">
+                    <div class="product-image-container">
+                        <div class="product-image" id="product-image">
+                            <!-- SVG product that will change color -->
+                            <svg viewBox="0 0 200 200" width="100%" height="100%">
+                                <rect x="50" y="40" width="100" height="120" rx="10" id="product-shape" fill="#cccccc" />
+                                <circle cx="100" cy="80" r="15" fill="#ffffff" />
+                                <rect x="85" y="110" width="30" height="30" rx="5" fill="#ffffff" />
+                            </svg>
+                        </div>
+                        <div class="shadow"></div>
+                    </div>
+                    <div class="product-name">Smart Speaker Pro</div>
+                    <div class="product-price">$129.99</div>
+                </div>
+                
+                <div class="customization-options">
+                    <div class="option-section">
+                        <h5>Select Color</h5>
+                        
+                        <!-- Color picker with sliding drawer -->
+                        <div class="color-picker-container">
+                            <div class="color-picker-current">
+                                <div class="current-color-display" id="current-color-display" style="background-color: #cccccc;"></div>
+                                <span class="current-color-name" id="current-color-name">Select a color</span>
+                                <button class="color-picker-toggle" id="color-picker-toggle">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <path d="M8 12L2 6h12z" fill="currentColor"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <div class="color-picker-panel" id="color-picker-panel">
+                                <div class="advanced-color-picker">
+                                    <div class="picker-tabs">
+                                        <button class="picker-tab active" data-tab="swatches">Swatches</button>
+                                        <button class="picker-tab" data-tab="custom">Custom</button>
+                                    </div>
+                                    
+                                    <div class="picker-content">
+                                        <!-- Swatches tab content -->
+                                        <div class="tab-pane active" id="swatches-tab">
+                                            <div class="color-swatches" id="color-swatches">
+                                                <div class="color-swatch" data-color="#222222" title="Black">
+                                                    <span class="swatch-color" style="background-color: #222222;"></span>
+                                                </div>
+                                                <div class="color-swatch" data-color="#f8f9fa" title="White">
+                                                    <span class="swatch-color" style="background-color: #f8f9fa;"></span>
+                                                </div>
+                                                <div class="color-swatch" data-color="#0d6efd" title="Blue">
+                                                    <span class="swatch-color" style="background-color: #0d6efd;"></span>
+                                                </div>
+                                                <div class="color-swatch" data-color="#dc3545" title="Red">
+                                                    <span class="swatch-color" style="background-color: #dc3545;"></span>
+                                                </div>
+                                                <div class="color-swatch" data-color="#fd7e14" title="Orange">
+                                                    <span class="swatch-color" style="background-color: #fd7e14;"></span>
+                                                </div>
+                                                <div class="color-swatch" data-color="#198754" title="Green">
+                                                    <span class="swatch-color" style="background-color: #198754;"></span>
+                                                </div>
+                                                <div class="color-swatch" data-color="#6f42c1" title="Purple">
+                                                    <span class="swatch-color" style="background-color: #6f42c1;"></span>
+                                                </div>
+                                                <div class="color-swatch" data-color="#20c997" title="Teal">
+                                                    <span class="swatch-color" style="background-color: #20c997;"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Custom color picker tab content -->
+                                        <div class="tab-pane" id="custom-tab">
+                                            <div class="custom-color-controls">
+                                                <div class="color-spectrum-container">
+                                                    <div class="color-spectrum" id="color-spectrum">
+                                                        <div class="spectrum-selector" id="spectrum-selector"></div>
+                                                    </div>
+                                                    <div class="color-value-slider">
+                                                        <input type="range" id="color-value" min="0" max="100" value="100" class="value-slider">
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="color-sliders">
+                                                    <div class="rgb-slider">
+                                                        <label>R</label>
+                                                        <input type="range" id="red-slider" min="0" max="255" value="13" class="rgb-range">
+                                                        <input type="number" id="red-value" min="0" max="255" value="13" class="rgb-value">
+                                                    </div>
+                                                    <div class="rgb-slider">
+                                                        <label>G</label>
+                                                        <input type="range" id="green-slider" min="0" max="255" value="110" class="rgb-range">
+                                                        <input type="number" id="green-value" min="0" max="255" value="110" class="rgb-value">
+                                                    </div>
+                                                    <div class="rgb-slider">
+                                                        <label>B</label>
+                                                        <input type="range" id="blue-slider" min="0" max="255" value="253" class="rgb-range">
+                                                        <input type="number" id="blue-value" min="0" max="255" value="253" class="rgb-value">
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="hex-input">
+                                                    <label>Hex</label>
+                                                    <input type="text" id="hex-value" value="#0d6efd" class="hex-value">
+                                                </div>
+                                                
+                                                <div class="color-preview">
+                                                    <div class="preview-box" id="preview-box" style="background-color: #0d6efd;"></div>
+                                                    <button id="apply-custom-color" class="apply-color-btn">Apply Color</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-details">
+                        <div class="selected-color-display" id="selected-color-display">
+                            <div class="color-indicator">
+                                <span class="color-dot" id="color-dot" style="background-color: #cccccc;"></span>
+                                <span class="color-name" id="color-name">Select a color</span>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button id="add-to-cart" class="add-to-cart-button" disabled>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="success-message" style="margin-top: 1rem; display: none;">
+                    <mark class="success">Success! Blue color selected and applied to the product.</mark>
+                </div>
+            </div>
+        </div>
+
+        <footer class="simulated-app-footer">
+            <small>Task ID: {{ task.id }}</small>
+        </footer>
+    </article>
+</main>
+
+<style>
+    .product-customizer {
+        padding: 1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .product-preview {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .product-image-container {
+        position: relative;
+        max-width: 200px;
+        margin: 0 auto 1rem;
+    }
+    
+    .product-image {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .shadow {
+        position: absolute;
+        bottom: -10px;
+        left: 10%;
+        width: 80%;
+        height: 20px;
+        background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 70%);
+        border-radius: 50%;
+        z-index: -1;
+    }
+    
+    .product-name {
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .product-price {
+        color: #0d6efd;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+    
+    .customization-options {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .option-section {
+        margin-bottom: 1.5rem;
+    }
+    
+    .option-section h5 {
+        margin-bottom: 1rem;
+        color: #212529;
+        font-weight: 600;
+    }
+    
+    .color-picker-container {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+    
+    .color-picker-current {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        background-color: #fff;
+        cursor: pointer;
+    }
+    
+    .current-color-display {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-right: 0.75rem;
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .current-color-name {
+        flex: 1;
+        color: #495057;
+    }
+    
+    .color-picker-toggle {
+        background: none;
+        border: none;
+        padding: 0;
+        color: #6c757d;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+    
+    .color-picker-toggle.open {
+        transform: rotate(180deg);
+    }
+    
+    .color-picker-panel {
+        position: absolute;
+        top: calc(100% + 5px);
+        left: 0;
+        right: 0;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        opacity: 0;
+        transform: translateY(-10px);
+        pointer-events: none;
+        transition: opacity 0.2s, transform 0.2s;
+    }
+    
+    .color-picker-panel.open {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: all;
+    }
+    
+    .picker-tabs {
+        display: flex;
+        border-bottom: 1px solid #dee2e6;
+        margin-bottom: 1rem;
+    }
+    
+    .picker-tab {
+        padding: 0.5rem 1rem;
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+        color: #495057;
+    }
+    
+    .picker-tab.active {
+        border-bottom-color: #0d6efd;
+        color: #0d6efd;
+        font-weight: 500;
+    }
+    
+    .tab-pane {
+        display: none;
+    }
+    
+    .tab-pane.active {
+        display: block;
+    }
+    
+    .custom-color-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .color-spectrum-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .color-spectrum {
+        height: 150px;
+        border-radius: 4px;
+        position: relative;
+        cursor: crosshair;
+        background: linear-gradient(to top, 
+            black, 
+            transparent), 
+            linear-gradient(to right, 
+            white, 
+            red, orange, yellow, lime, cyan, blue, magenta, red);
+    }
+    
+    .spectrum-selector {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 2px solid white;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+    }
+    
+    .color-value-slider {
+        height: 20px;
+    }
+    
+    .value-slider {
+        width: 100%;
+        background: linear-gradient(to right, black, white);
+    }
+    
+    .color-sliders {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .rgb-slider {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .rgb-slider label {
+        width: 15px;
+        text-align: right;
+        color: #495057;
+    }
+    
+    .rgb-range {
+        flex: 1;
+    }
+    
+    .rgb-value {
+        width: 50px;
+        text-align: center;
+        padding: 0.25rem;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+    }
+    
+    .hex-input {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .hex-input label {
+        width: 30px;
+        color: #495057;
+    }
+    
+    .hex-value {
+        flex: 1;
+        padding: 0.25rem 0.5rem;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+    }
+    
+    .color-preview {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .preview-box {
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .apply-color-btn {
+        flex: 1;
+        padding: 0.5rem;
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    
+    .apply-color-btn:hover {
+        background-color: #0b5ed7;
+    }
+    
+    input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        height: 8px;
+        border-radius: 4px;
+        outline: none;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: white;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+    }
+    
+    input[type="range"]::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: white;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+    }
+    
+    #red-slider {
+        background: linear-gradient(to right, #000, #f00);
+    }
+    
+    #green-slider {
+        background: linear-gradient(to right, #000, #0f0);
+    }
+    
+    #blue-slider {
+        background: linear-gradient(to right, #000, #00f);
+    }
+    
+    /* Target color hint/tooltip */
+    #custom-tab::after {
+        content: "Hint: Look for the blue color (#0d6efd) to match the product";
+        display: block;
+        margin-top: 1rem;
+        padding: 0.5rem;
+        background-color: #f8f9fa;
+        border-left: 3px solid #0d6efd;
+        font-size: 0.75rem;
+        color: #495057;
+    }
+    
+    .product-details {
+        border-top: 1px solid #dee2e6;
+        padding-top: 1.5rem;
+    }
+    
+    .selected-color-display {
+        margin-bottom: 1rem;
+    }
+    
+    .color-indicator {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .color-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 1px solid #dee2e6;
+    }
+    
+    .color-name {
+        color: #495057;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+    }
+    
+    .add-to-cart-button {
+        flex: 1;
+        padding: 0.75rem;
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .add-to-cart-button:hover:not(:disabled) {
+        background-color: #0b5ed7;
+    }
+    
+    .add-to-cart-button:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+    
+    /* Blue color swatch highlight animation */
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.4), inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+        70% {
+            box-shadow: 0 0 0 10px rgba(13, 110, 253, 0), inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(13, 110, 253, 0), inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+    }
+    
+    .color-swatch[data-color="#0d6efd"] .swatch-color {
+        animation: pulse 2s infinite;
+    }
+    
+    .color-swatches {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+    
+    .color-swatch {
+        position: relative;
+        cursor: pointer;
+        transition: all 0.2s;
+        padding: 0.5rem;
+        border-radius: 4px;
+        border: 2px solid transparent;
+    }
+    
+    .color-swatch:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .color-swatch.selected {
+        border-color: #0d6efd;
+        background-color: rgba(13, 110, 253, 0.1);
+    }
+    
+    .color-swatch.selected .swatch-color::after {
+        content: "✓";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 16px;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    }
+    
+    .color-swatch[data-color="#f8f9fa"].selected .swatch-color::after {
+        color: #212529;
+    }
+    
+    .swatch-color {
+        display: block;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        transition: all 0.2s;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+    
+    .color-swatch:hover .swatch-color {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Specific styles for white swatch to make it visible */
+    .swatch-color[style*="f8f9fa"] {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const colorSwatches = document.querySelectorAll('.color-swatch');
+    const productShape = document.getElementById('product-shape');
+    const colorDot = document.getElementById('color-dot');
+    const colorName = document.getElementById('color-name');
+    const addToCartButton = document.getElementById('add-to-cart');
+    const successMessage = document.getElementById('success-message');
+    const currentColorDisplay = document.getElementById('current-color-display');
+    const currentColorName = document.getElementById('current-color-name');
+    const colorPickerToggle = document.getElementById('color-picker-toggle');
+    const colorPickerPanel = document.getElementById('color-picker-panel');
+    
+    // Tab switching elements
+    const pickerTabs = document.querySelectorAll('.picker-tab');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+    
+    // Custom color picker elements
+    const colorSpectrum = document.getElementById('color-spectrum');
+    const spectrumSelector = document.getElementById('spectrum-selector');
+    const valueSlider = document.getElementById('color-value');
+    const redSlider = document.getElementById('red-slider');
+    const greenSlider = document.getElementById('green-slider');
+    const blueSlider = document.getElementById('blue-slider');
+    const redValue = document.getElementById('red-value');
+    const greenValue = document.getElementById('green-value');
+    const blueValue = document.getElementById('blue-value');
+    const hexValue = document.getElementById('hex-value');
+    const previewBox = document.getElementById('preview-box');
+    const applyCustomColor = document.getElementById('apply-custom-color');
+    
+    // Target color for the task
+    const targetColor = '#0d6efd'; // Blue
+    
+    // Track if task has been completed
+    let taskCompleted = false;
+    
+    // Current custom color
+    let currentCustomColor = {
+        r: 13,
+        g: 110,
+        b: 253
+    };
+    
+    // Initialize spectrum selector position (blue color)
+    spectrumSelector.style.left = '75%';
+    spectrumSelector.style.top = '25%';
+    
+    // Tab switching
+    pickerTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabTarget = this.dataset.tab;
+            
+            // Update tab active states
+            pickerTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Update pane visibility
+            tabPanes.forEach(pane => pane.classList.remove('active'));
+            document.getElementById(`${tabTarget}-tab`).classList.add('active');
+        });
+    });
+    
+    // Toggle color picker panel
+    colorPickerToggle.addEventListener('click', function() {
+        colorPickerPanel.classList.toggle('open');
+        colorPickerToggle.classList.toggle('open');
+    });
+    
+    // Close color picker when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.color-picker-container')) {
+            colorPickerPanel.classList.remove('open');
+            colorPickerToggle.classList.remove('open');
+        }
+    });
+    
+    // Open color picker when clicking on the current color display
+    document.querySelector('.color-picker-current').addEventListener('click', function(e) {
+        if (e.target !== colorPickerToggle && !e.target.closest('.color-picker-toggle')) {
+            colorPickerPanel.classList.toggle('open');
+            colorPickerToggle.classList.toggle('open');
+        }
+    });
+    
+    // Color spectrum picker
+    colorSpectrum.addEventListener('click', function(e) {
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Update selector position
+        spectrumSelector.style.left = `${x}px`;
+        spectrumSelector.style.top = `${y}px`;
+        
+        // Calculate color
+        updateColorFromSpectrum(x / rect.width, y / rect.height);
+    });
+    
+    // Value slider
+    valueSlider.addEventListener('input', function() {
+        updateColorFromSliders();
+    });
+    
+    // RGB sliders
+    redSlider.addEventListener('input', function() {
+        redValue.value = this.value;
+        currentCustomColor.r = parseInt(this.value);
+        updateColorDisplay();
+    });
+    
+    greenSlider.addEventListener('input', function() {
+        greenValue.value = this.value;
+        currentCustomColor.g = parseInt(this.value);
+        updateColorDisplay();
+    });
+    
+    blueSlider.addEventListener('input', function() {
+        blueValue.value = this.value;
+        currentCustomColor.b = parseInt(this.value);
+        updateColorDisplay();
+    });
+    
+    // RGB number inputs
+    redValue.addEventListener('input', function() {
+        if (this.value >= 0 && this.value <= 255) {
+            redSlider.value = this.value;
+            currentCustomColor.r = parseInt(this.value);
+            updateColorDisplay();
+        }
+    });
+    
+    greenValue.addEventListener('input', function() {
+        if (this.value >= 0 && this.value <= 255) {
+            greenSlider.value = this.value;
+            currentCustomColor.g = parseInt(this.value);
+            updateColorDisplay();
+        }
+    });
+    
+    blueValue.addEventListener('input', function() {
+        if (this.value >= 0 && this.value <= 255) {
+            blueSlider.value = this.value;
+            currentCustomColor.b = parseInt(this.value);
+            updateColorDisplay();
+        }
+    });
+    
+    // Hex input
+    hexValue.addEventListener('input', function() {
+        if (this.value.match(/^#?([0-9a-f]{6})$/i)) {
+            const hex = this.value.startsWith('#') ? this.value.substring(1) : this.value;
+            currentCustomColor.r = parseInt(hex.substring(0, 2), 16);
+            currentCustomColor.g = parseInt(hex.substring(2, 4), 16);
+            currentCustomColor.b = parseInt(hex.substring(4, 6), 16);
+            
+            redSlider.value = currentCustomColor.r;
+            greenSlider.value = currentCustomColor.g;
+            blueSlider.value = currentCustomColor.b;
+            redValue.value = currentCustomColor.r;
+            greenValue.value = currentCustomColor.g;
+            blueValue.value = currentCustomColor.b;
+            
+            updateColorDisplay();
+        }
+    });
+    
+    // Apply custom color
+    applyCustomColor.addEventListener('click', function() {
+        const hexColor = rgbToHex(currentCustomColor.r, currentCustomColor.g, currentCustomColor.b);
+        applySelectedColor(hexColor, 'Custom');
+    });
+    
+    // Function to handle color selection from swatches
+    function selectColor(e) {
+        const swatch = e.currentTarget;
+        const color = swatch.dataset.color;
+        const colorTitle = swatch.title;
+        
+        applySelectedColor(color, colorTitle);
+    }
+    
+    // Function to apply the selected color to the product
+    function applySelectedColor(color, colorTitle) {
+        // Remove selection from all swatches
+        colorSwatches.forEach(s => s.classList.remove('selected'));
+        
+        // If a swatch exists with this color, mark it as selected
+        const matchingSwatch = document.querySelector(`.color-swatch[data-color="${color}"]`);
+        if (matchingSwatch) {
+            matchingSwatch.classList.add('selected');
+        }
+        
+        // Update product color
+        productShape.setAttribute('fill', color);
+        
+        // Update current color display
+        currentColorDisplay.style.backgroundColor = color;
+        currentColorName.textContent = colorTitle;
+        
+        // Update color indicator in product details
+        colorDot.style.backgroundColor = color;
+        colorName.textContent = colorTitle;
+        
+        // Enable add to cart button
+        addToCartButton.disabled = false;
+        
+        // Close the color picker panel
+        colorPickerPanel.classList.remove('open');
+        colorPickerToggle.classList.remove('open');
+        
+        // Check if the selected color is the target blue color
+        if (color.toLowerCase() === targetColor.toLowerCase() && !taskCompleted) {
+            // Display success message
+            successMessage.style.display = 'block';
+            
+            // Mark task as complete
+            taskCompleted = true;
+            
+            // Send success to server
+            fetch('/api/complete_task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    task_id: '{{ task.id }}'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect after a short delay to show the success message
+                    setTimeout(() => {
+                        window.location.href = '/generic_task_success?task_id={{ task.id }}&title={{ task.agent.scenario_title }}';
+                    }, 1500);
+                }
+            });
+        }
+    }
+    
+    // Functions for the color picker
+    function updateColorFromSpectrum(x, y) {
+        // Convert x, y to HSV, then to RGB
+        const h = x * 360;
+        const s = 1;
+        const v = 1 - y;
+        
+        const rgb = hsvToRgb(h, s, v);
+        
+        currentCustomColor.r = rgb.r;
+        currentCustomColor.g = rgb.g;
+        currentCustomColor.b = rgb.b;
+        
+        redSlider.value = rgb.r;
+        greenSlider.value = rgb.g;
+        blueSlider.value = rgb.b;
+        redValue.value = rgb.r;
+        greenValue.value = rgb.g;
+        blueValue.value = rgb.b;
+        
+        updateColorDisplay();
+    }
+    
+    function updateColorFromSliders() {
+        const v = valueSlider.value / 100;
+        
+        currentCustomColor.r = Math.round(redSlider.value * v);
+        currentCustomColor.g = Math.round(greenSlider.value * v);
+        currentCustomColor.b = Math.round(blueSlider.value * v);
+        
+        redValue.value = currentCustomColor.r;
+        greenValue.value = currentCustomColor.g;
+        blueValue.value = currentCustomColor.b;
+        
+        updateColorDisplay();
+    }
+    
+    function updateColorDisplay() {
+        const hexColor = rgbToHex(currentCustomColor.r, currentCustomColor.g, currentCustomColor.b);
+        hexValue.value = hexColor;
+        previewBox.style.backgroundColor = hexColor;
+    }
+    
+    function rgbToHex(r, g, b) {
+        return '#' + 
+            ('0' + r.toString(16)).slice(-2) + 
+            ('0' + g.toString(16)).slice(-2) + 
+            ('0' + b.toString(16)).slice(-2);
+    }
+    
+    function hsvToRgb(h, s, v) {
+        let r, g, b;
+        const i = Math.floor(h / 60) % 6;
+        const f = h / 60 - i;
+        const p = v * (1 - s);
+        const q = v * (1 - f * s);
+        const t = v * (1 - (1 - f) * s);
+        
+        switch (i) {
+            case 0: r = v; g = t; b = p; break;
+            case 1: r = q; g = v; b = p; break;
+            case 2: r = p; g = v; b = t; break;
+            case 3: r = p; g = q; b = v; break;
+            case 4: r = t; g = p; b = v; break;
+            case 5: r = v; g = p; b = q; break;
+        }
+        
+        return {
+            r: Math.round(r * 255),
+            g: Math.round(g * 255),
+            b: Math.round(b * 255)
+        };
+    }
+    
+    // Add click event listeners to all color swatches
+    colorSwatches.forEach(swatch => {
+        swatch.addEventListener('click', selectColor);
+    });
+    
+    // Add to cart button click handler
+    addToCartButton.addEventListener('click', function() {
+        const selectedSwatch = document.querySelector('.color-swatch.selected');
+        const currentProductColor = productShape.getAttribute('fill');
+        
+        if (currentProductColor.toLowerCase() === targetColor.toLowerCase() && !taskCompleted) {
+            // Success - blue color was applied
+            successMessage.style.display = 'block';
+            taskCompleted = true;
+            
+            // Send success to server
+            fetch('/api/complete_task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    task_id: '{{ task.id }}'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect after a short delay
+                    setTimeout(() => {
+                        window.location.href = '/generic_task_success?task_id={{ task.id }}&title={{ task.agent.scenario_title }}';
+                    }, 1500);
+                }
+            });
+        } else if (currentProductColor.toLowerCase() !== targetColor.toLowerCase()) {
+            // Wrong color selected
+            alert('Please select the blue color to complete the task.');
+        }
+    });
+});
+</script> 

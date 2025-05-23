@@ -1,0 +1,762 @@
+<!-- {{ task.agent.scenario_title }} - {{ task.agent.goal_description }} - Task ID: {{ task.id }} -->
+
+<div class="wizard-container">
+    <div class="wizard-header">
+        <h3>Account Registration</h3>
+        <div class="wizard-progress">
+            <div class="progress-step" id="step-1-indicator">1</div>
+            <div class="progress-line"></div>
+            <div class="progress-step" id="step-2-indicator">2</div>
+            <div class="progress-line"></div>
+            <div class="progress-step" id="step-3-indicator">3</div>
+        </div>
+    </div>
+    
+    <!-- Step 1: Personal Information -->
+    <div class="wizard-step" id="step-1">
+        <div class="step-content">
+            <h4>Personal Information</h4>
+            <p class="step-description">Please fill in your personal details to get started.</p>
+            
+            <div class="form-group">
+                <label for="name">Full Name <span class="required">*</span></label>
+                <input type="text" id="name" class="form-control" placeholder="Enter your full name">
+                <div class="error-message" id="name-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address <span class="required">*</span></label>
+                <input type="email" id="email" class="form-control" placeholder="Enter your email address">
+                <div class="error-message" id="email-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" class="form-control" placeholder="Enter your phone number (optional)">
+            </div>
+        </div>
+        
+        <div class="step-actions">
+            <button id="step-1-continue" class="btn btn-primary">Continue</button>
+        </div>
+    </div>
+    
+    <!-- Step 2: Terms and Agreements -->
+    <div class="wizard-step" id="step-2" style="display: none;">
+        <div class="step-content">
+            <h4>Terms and Agreements</h4>
+            <p class="step-description">Please review and agree to our terms and policies.</p>
+            
+            <div class="checkbox-group">
+                <div class="custom-checkbox">
+                    <input type="checkbox" id="terms-checkbox">
+                    <label for="terms-checkbox">
+                        I agree to the <a href="#" class="terms-link">Terms and Conditions</a> <span class="required">*</span>
+                    </label>
+                    <div class="error-message" id="terms-error"></div>
+                </div>
+                
+                <div class="custom-checkbox">
+                    <input type="checkbox" id="privacy-checkbox">
+                    <label for="privacy-checkbox">
+                        I consent to the processing of my data as described in the <a href="#" class="terms-link">Privacy Policy</a> <span class="required">*</span>
+                    </label>
+                    <div class="error-message" id="privacy-error"></div>
+                </div>
+                
+                <div class="custom-checkbox">
+                    <input type="checkbox" id="newsletter-checkbox">
+                    <label for="newsletter-checkbox">
+                        I would like to receive newsletters and updates (optional)
+                    </label>
+                </div>
+                
+                <div class="custom-checkbox">
+                    <input type="checkbox" id="promotional-checkbox">
+                    <label for="promotional-checkbox">
+                        I would like to receive promotional offers (optional)
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step-actions">
+            <button id="step-2-back" class="btn btn-outline">Back</button>
+            <button id="step-2-continue" class="btn btn-primary">Continue</button>
+        </div>
+    </div>
+    
+    <!-- Step 3: Processing and Confirmation -->
+    <div class="wizard-step" id="step-3" style="display: none;">
+        <div class="step-content">
+            <h4>Confirm Your Registration</h4>
+            <p class="step-description">We're processing your information. Please wait...</p>
+            
+            <div class="confirmation-details">
+                <div class="detail-row">
+                    <span class="detail-label">Name:</span>
+                    <span class="detail-value" id="confirm-name"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Email:</span>
+                    <span class="detail-value" id="confirm-email"></span>
+                </div>
+                <div class="detail-row" id="phone-row" style="display: none;">
+                    <span class="detail-label">Phone:</span>
+                    <span class="detail-value" id="confirm-phone"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Newsletter:</span>
+                    <span class="detail-value" id="confirm-newsletter"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Promotions:</span>
+                    <span class="detail-value" id="confirm-promotions"></span>
+                </div>
+            </div>
+            
+            <div class="processing-status" id="processing-indicator">
+                <div class="loading-icon">
+                    <div class="spinner"></div>
+                </div>
+                <span id="status-text">Verifying your information...</span>
+            </div>
+        </div>
+        
+        <div class="step-actions">
+            <button id="step-3-back" class="btn btn-outline">Back</button>
+            <button id="step-3-complete" class="btn btn-primary">Create Account</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Wizard Container */
+    .wizard-container {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+        overflow: hidden;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    
+    .wizard-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: #f8f9fa;
+    }
+    
+    .wizard-header h3 {
+        margin: 0 0 1rem 0;
+        color: #333;
+        font-size: 1.5rem;
+    }
+    
+    /* Progress Bar */
+    .wizard-progress {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+    
+    .progress-step {
+        width: 30px;
+        height: 30px;
+        background-color: #e0e0e0;
+        color: #757575;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        z-index: 2;
+    }
+    
+    .progress-step.active {
+        background-color: #4285f4;
+        color: white;
+    }
+    
+    .progress-step.completed {
+        background-color: #0f9d58;
+        color: white;
+    }
+    
+    .progress-line {
+        flex: 1;
+        height: 3px;
+        background-color: #e0e0e0;
+        margin: 0 5px;
+    }
+    
+    .progress-line.completed {
+        background-color: #0f9d58;
+    }
+    
+    /* Wizard Steps */
+    .wizard-step {
+        padding: 2rem;
+    }
+    
+    .step-content {
+        margin-bottom: 1.5rem;
+    }
+    
+    .step-content h4 {
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+        color: #333;
+        font-size: 1.25rem;
+    }
+    
+    .step-description {
+        color: #666;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+    }
+    
+    .step-actions {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 1rem;
+        border-top: 1px solid #f0f0f0;
+    }
+    
+    /* Single button aligned right */
+    .step-actions:has(button:only-child) {
+        justify-content: flex-end;
+    }
+    
+    /* Form Controls */
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #555;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+        transition: border-color 0.2s;
+    }
+    
+    .form-control:focus {
+        border-color: #4285f4;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.1);
+    }
+    
+    .form-control.error {
+        border-color: #d93025;
+    }
+    
+    .required {
+        color: #d93025;
+        margin-left: 0.25rem;
+    }
+    
+    .error-message {
+        color: #d93025;
+        font-size: 0.85rem;
+        margin-top: 0.4rem;
+        min-height: 1.2rem;
+    }
+    
+    /* Checkboxes */
+    .checkbox-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .custom-checkbox {
+        display: flex;
+        align-items: flex-start;
+    }
+    
+    .custom-checkbox input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+    
+    .custom-checkbox label {
+        font-weight: normal;
+        line-height: 1.5;
+        margin-bottom: 0;
+        position: relative;
+        padding-left: 28px;
+        cursor: pointer;
+        display: inline-block;
+        user-select: none;
+    }
+    
+    .custom-checkbox label:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 2px;
+        width: 18px;
+        height: 18px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        border-radius: 3px;
+        transition: all 0.2s ease;
+    }
+    
+    .custom-checkbox label:hover:before {
+        border-color: #4285f4;
+    }
+    
+    .custom-checkbox label:after {
+        content: '';
+        position: absolute;
+        left: 6px;
+        top: 6px;
+        width: 6px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        display: none;
+        transition: all 0.2s ease;
+    }
+    
+    .custom-checkbox input[type="checkbox"]:checked + label:before {
+        background-color: #4285f4;
+        border-color: #4285f4;
+    }
+    
+    .custom-checkbox input[type="checkbox"]:checked + label:after {
+        display: block;
+    }
+    
+    .custom-checkbox input[type="checkbox"]:focus + label:before {
+        box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.2);
+    }
+    
+    .custom-checkbox input[type="checkbox"]:active + label:before {
+        background-color: rgba(66, 133, 244, 0.2);
+    }
+    
+    .terms-link {
+        color: #4285f4;
+        text-decoration: none;
+    }
+    
+    .terms-link:hover {
+        text-decoration: underline;
+    }
+    
+    /* Confirmation Details */
+    .confirmation-details {
+        background-color: #f8f9fa;
+        border-radius: 6px;
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .detail-row {
+        display: flex;
+        margin-bottom: 0.75rem;
+    }
+    
+    .detail-row:last-child {
+        margin-bottom: 0;
+    }
+    
+    .detail-label {
+        font-weight: 500;
+        min-width: 120px;
+        color: #555;
+    }
+    
+    .detail-value {
+        color: #333;
+    }
+    
+    /* Processing Status */
+    .processing-status {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 4px;
+        background-color: #f5f5f5;
+        margin: 1.5rem 0;
+    }
+    
+    .processing-status.completed {
+        background-color: #e6f4ea;
+    }
+    
+    .loading-icon {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .spinner {
+        width: 24px;
+        height: 24px;
+        border: 3px solid rgba(66, 133, 244, 0.3);
+        border-radius: 50%;
+        border-top-color: #4285f4;
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    #status-text {
+        font-size: 0.95rem;
+        color: #555;
+    }
+    
+    /* Buttons */
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+        min-width: 120px;
+    }
+    
+    .btn-primary {
+        background-color: #4285f4;
+        color: white;
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+        background-color: #3367d6;
+    }
+    
+    .btn-primary:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+    
+    .btn-outline {
+        background-color: transparent;
+        border: 1px solid #dadce0;
+        color: #555;
+    }
+    
+    .btn-outline:hover:not(:disabled) {
+        background-color: #f1f3f4;
+    }
+    
+    /* Button animation */
+    @keyframes pulse-button {
+        0% { box-shadow: 0 0 0 0 rgba(66, 133, 244, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(66, 133, 244, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(66, 133, 244, 0); }
+    }
+    
+    .btn-pulse {
+        animation: pulse-button 2s infinite;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const step1 = document.getElementById('step-1');
+    const step2 = document.getElementById('step-2');
+    const step3 = document.getElementById('step-3');
+    
+    const step1Continue = document.getElementById('step-1-continue');
+    const step2Continue = document.getElementById('step-2-continue');
+    const step2Back = document.getElementById('step-2-back');
+    const step3Complete = document.getElementById('step-3-complete');
+    const step3Back = document.getElementById('step-3-back');
+    
+    const step1Indicator = document.getElementById('step-1-indicator');
+    const step2Indicator = document.getElementById('step-2-indicator');
+    const step3Indicator = document.getElementById('step-3-indicator');
+    
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('phone');
+    const nameError = document.getElementById('name-error');
+    const emailError = document.getElementById('email-error');
+    
+    const termsCheckbox = document.getElementById('terms-checkbox');
+    const privacyCheckbox = document.getElementById('privacy-checkbox');
+    const newsletterCheckbox = document.getElementById('newsletter-checkbox');
+    const promotionalCheckbox = document.getElementById('promotional-checkbox');
+    const termsError = document.getElementById('terms-error');
+    const privacyError = document.getElementById('privacy-error');
+    const termsLinks = document.querySelectorAll('.terms-link');
+    
+    const processingIndicator = document.getElementById('processing-indicator');
+    const statusText = document.getElementById('status-text');
+    
+    const confirmName = document.getElementById('confirm-name');
+    const confirmEmail = document.getElementById('confirm-email');
+    const confirmPhone = document.getElementById('confirm-phone');
+    const confirmNewsletter = document.getElementById('confirm-newsletter');
+    const confirmPromotions = document.getElementById('confirm-promotions');
+    const phoneRow = document.getElementById('phone-row');
+    
+    // State
+    let currentStep = 1;
+    let isProcessing = false;
+    let isProcessingComplete = false;
+    let isTaskComplete = false;
+    
+    // Ensure task handling functions exist
+    if (typeof window.completeTask !== 'function') {
+        window.completeTask = function(success) {
+            console.log('Task completed:', success);
+        };
+    }
+    
+    if (typeof window.recordMistake !== 'function') {
+        window.recordMistake = function(code, details, message) {
+            console.log('Mistake recorded:', code, details, message);
+        };
+    }
+    
+    // Step 1: Validation functions
+    function validateName() {
+        const nameValue = nameInput.value.trim();
+        if (nameValue.length < 2) {
+            nameError.textContent = 'Please enter your name';
+            nameInput.classList.add('error');
+            return false;
+        } else {
+            nameError.textContent = '';
+            nameInput.classList.remove('error');
+            return true;
+        }
+    }
+    
+    function validateEmail() {
+        const emailValue = emailInput.value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (!emailRegex.test(emailValue)) {
+            emailError.textContent = 'Please enter a valid email address';
+            emailInput.classList.add('error');
+            return false;
+        } else {
+            emailError.textContent = '';
+            emailInput.classList.remove('error');
+            return true;
+        }
+    }
+    
+    // Check if step 1 is valid
+    function isStep1Valid() {
+        const nameValid = validateName();
+        const emailValid = validateEmail();
+        return nameValid && emailValid;
+    }
+    
+    // Prevent navigation when clicking on Terms or Privacy Policy links
+    termsLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+        });
+    });
+    
+    // Step 2: Validation functions
+    function validateTerms() {
+        if (!termsCheckbox.checked) {
+            termsError.textContent = 'You must agree to the terms';
+            return false;
+        } else {
+            termsError.textContent = '';
+            return true;
+        }
+    }
+    
+    function validatePrivacy() {
+        if (!privacyCheckbox.checked) {
+            privacyError.textContent = 'You must consent to the privacy policy';
+            return false;
+        } else {
+            privacyError.textContent = '';
+            return true;
+        }
+    }
+    
+    // Check if step 2 is valid
+    function isStep2Valid() {
+        const termsValid = validateTerms();
+        const privacyValid = validatePrivacy();
+        
+        return termsValid && privacyValid;
+    }
+    
+    // Update confirmation details
+    function updateConfirmationDetails() {
+        confirmName.textContent = nameInput.value.trim();
+        confirmEmail.textContent = emailInput.value.trim();
+        
+        const phoneValue = phoneInput.value.trim();
+        if (phoneValue) {
+            confirmPhone.textContent = phoneValue;
+            phoneRow.style.display = 'flex';
+        } else {
+            phoneRow.style.display = 'none';
+        }
+        
+        confirmNewsletter.textContent = newsletterCheckbox.checked ? 'Yes' : 'No';
+        confirmPromotions.textContent = promotionalCheckbox.checked ? 'Yes' : 'No';
+    }
+    
+    // Navigation functions
+    function goToStep(step) {
+        // Hide all steps
+        step1.style.display = 'none';
+        step2.style.display = 'none';
+        step3.style.display = 'none';
+        
+        // Reset progress indicators
+        step1Indicator.classList.remove('active', 'completed');
+        step2Indicator.classList.remove('active', 'completed');
+        step3Indicator.classList.remove('active', 'completed');
+        
+        // Show the target step
+        if (step === 1) {
+            step1.style.display = 'block';
+            step1Indicator.classList.add('active');
+        } else if (step === 2) {
+            step2.style.display = 'block';
+            step1Indicator.classList.add('completed');
+            step2Indicator.classList.add('active');
+            
+            // Check if terms are valid
+            isStep2Valid();
+        } else if (step === 3) {
+            step3.style.display = 'block';
+            step1Indicator.classList.add('completed');
+            step2Indicator.classList.add('completed');
+            step3Indicator.classList.add('active');
+            
+            // Update confirmation details
+            updateConfirmationDetails();
+            
+            // Start processing
+            startProcessing();
+        }
+        
+        currentStep = step;
+    }
+    
+    // Processing simulation
+    function startProcessing() {
+        isProcessing = true;
+        // Don't disable the complete button during processing
+        
+        // Simulate a processing delay
+        setTimeout(function() {
+            statusText.textContent = 'Verification complete!';
+            processingIndicator.classList.add('completed');
+            isProcessingComplete = true;
+            
+            // Add pulse effect
+            step3Complete.classList.add('btn-pulse');
+        }, 3000);
+    }
+    
+    // Event listeners for Step 1
+    nameInput.addEventListener('blur', validateName);
+    emailInput.addEventListener('blur', validateEmail);
+    
+    step1Continue.addEventListener('click', function() {
+        if (isStep1Valid()) {
+            goToStep(2);
+        } else {
+            if (window.recordMistake) {
+                window.recordMistake(
+                    'required_fields_missing',
+                    'User attempted to continue without completing all required fields',
+                    'Please complete all required fields to continue.'
+                );
+            }
+        }
+    });
+    
+    // Event listeners for Step 2
+    termsCheckbox.addEventListener('change', isStep2Valid);
+    privacyCheckbox.addEventListener('change', isStep2Valid);
+    
+    step2Back.addEventListener('click', function() {
+        goToStep(1);
+    });
+    
+    step2Continue.addEventListener('click', function() {
+        if (isStep2Valid()) {
+            goToStep(3);
+        } else {
+            if (window.recordMistake) {
+                window.recordMistake(
+                    'required_agreements_missing',
+                    'User attempted to continue without agreeing to required terms',
+                    'Please agree to the required terms to continue.'
+                );
+            }
+        }
+    });
+    
+    // Event listeners for Step 3
+    step3Back.addEventListener('click', function() {
+        goToStep(2);
+    });
+    
+    step3Complete.addEventListener('click', function() {
+        if (isProcessingComplete && !isTaskComplete) {
+            completeTask();
+        } else if (!isProcessingComplete) {
+            if (window.recordMistake) {
+                window.recordMistake(
+                    'premature_completion',
+                    'User attempted to complete registration while processing',
+                    'Please wait until processing is complete before clicking Complete.'
+                );
+            }
+        }
+    });
+    
+    // Task completion
+    function completeTask() {
+        isTaskComplete = true;
+        
+        // Update UI
+        step3Complete.classList.remove('btn-pulse');
+        step3Complete.textContent = 'Account Created';
+        
+        step3Indicator.classList.remove('active');
+        step3Indicator.classList.add('completed');
+        
+        // Complete the task
+        if (window.completeTask) {
+            window.completeTask(true);
+        }
+    }
+    
+    // Initialize - start at Step 1
+    goToStep(1);
+});
+</script> 

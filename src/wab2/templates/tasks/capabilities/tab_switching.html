@@ -1,0 +1,661 @@
+<main class="container">
+    <article class="simulated-app-card">
+        <header class="simulated-app-header">
+            <h4>{{ task.agent.scenario_title }}</h4>
+        </header>
+
+        <div class="app-message info-message">
+            <span class="icon">ℹ️</span>
+            <p>{{ task.agent.goal_description }}</p>
+        </div>
+
+        <div class="app-content-area">
+            <div class="dashboard-container">
+                <nav class="tab-navigation" role="tablist" aria-label="Dashboard Sections">
+                    <div id="overview-tab" class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-panel" tabindex="0" data-tab="overview">Overview</div>
+                    <div id="activity-tab" class="tab-button" role="tab" aria-selected="false" aria-controls="activity-panel" tabindex="0" data-tab="activity">Activity</div>
+                    <div id="settings-tab" class="tab-button" role="tab" aria-selected="false" aria-controls="settings-panel" tabindex="0" data-tab="settings">Settings</div>
+                    <div id="reports-tab" class="tab-button" role="tab" aria-selected="false" aria-controls="reports-panel" tabindex="0" data-tab="reports">Reports</div>
+                </nav>
+                
+                <div class="tab-content">
+                    <div id="overview-panel" class="tab-panel active" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
+                        <div class="panel-header">
+                            <h3>Dashboard Overview</h3>
+                        </div>
+                        <div class="panel-content">
+                            <div class="metric-card">
+                                <h4>Total Users</h4>
+                                <p class="metric">1,458</p>
+                                <p class="change positive">+12% from last month</p>
+                            </div>
+                            <div class="metric-card">
+                                <h4>Active Sessions</h4>
+                                <p class="metric">243</p>
+                                <p class="change positive">+5% from last week</p>
+                            </div>
+                            <div class="metric-card">
+                                <h4>Conversion Rate</h4>
+                                <p class="metric">3.2%</p>
+                                <p class="change negative">-0.5% from last month</p>
+                            </div>
+                            <div class="metric-card">
+                                <h4>Avg. Session Duration</h4>
+                                <p class="metric">4m 32s</p>
+                                <p class="change positive">+30s from last week</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="activity-panel" class="tab-panel" role="tabpanel" aria-labelledby="activity-tab" tabindex="0">
+                        <div class="panel-header">
+                            <h3>Recent Activity</h3>
+                        </div>
+                        <div class="panel-content">
+                            <div class="activity-feed">
+                                <div class="activity-item">
+                                    <div class="activity-icon">📈</div>
+                                    <div class="activity-details">
+                                        <p class="activity-title">Monthly Report Generated</p>
+                                        <p class="activity-time">Today, 09:45 AM</p>
+                                        <p class="activity-description">The July 2023 analytics report was generated and is ready for review.</p>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">👤</div>
+                                    <div class="activity-details">
+                                        <p class="activity-title">New User Registered</p>
+                                        <p class="activity-time">Yesterday, 03:12 PM</p>
+                                        <p class="activity-description">Sarah Johnson created a new account.</p>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">🔔</div>
+                                    <div class="activity-details">
+                                        <p class="activity-title">System Notification</p>
+                                        <p class="activity-time">Yesterday, 11:30 AM</p>
+                                        <p class="activity-description">Scheduled maintenance completed successfully.</p>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">💬</div>
+                                    <div class="activity-details">
+                                        <p class="activity-title">New Message</p>
+                                        <p class="activity-time">Jul 30, 2023, 02:45 PM</p>
+                                        <p class="activity-description">You received a new message from the support team.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="settings-panel" class="tab-panel" role="tabpanel" aria-labelledby="settings-tab" tabindex="0">
+                        <div class="panel-header">
+                            <h3>Dashboard Settings</h3>
+                        </div>
+                        <div class="panel-content">
+                            <div class="settings-group">
+                                <h4>General</h4>
+                                <div class="setting-item">
+                                    <label>Dashboard Theme</label>
+                                    <select>
+                                        <option>Light</option>
+                                        <option>Dark</option>
+                                        <option>Auto</option>
+                                    </select>
+                                </div>
+                                <div class="setting-item">
+                                    <label>Time Zone</label>
+                                    <select>
+                                        <option>UTC (Coordinated Universal Time)</option>
+                                        <option>EST (Eastern Standard Time)</option>
+                                        <option>PST (Pacific Standard Time)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="settings-group">
+                                <h4>Notifications</h4>
+                                <div class="setting-item">
+                                    <label>Email Notifications</label>
+                                    <label class="switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-item">
+                                    <label>Push Notifications</label>
+                                    <label class="switch">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="reports-panel" class="tab-panel" role="tabpanel" aria-labelledby="reports-tab" tabindex="0">
+                        <div class="panel-header">
+                            <h3>Available Reports</h3>
+                        </div>
+                        <div class="panel-content">
+                            <div class="reports-list">
+                                <div class="report-item">
+                                    <div class="report-icon">📊</div>
+                                    <div class="report-details">
+                                        <p class="report-title">Monthly Analytics</p>
+                                        <p class="report-description">Complete overview of metrics for the past month.</p>
+                                        <button class="report-button">Generate Report</button>
+                                    </div>
+                                </div>
+                                <div class="report-item">
+                                    <div class="report-icon">📈</div>
+                                    <div class="report-details">
+                                        <p class="report-title">User Growth</p>
+                                        <p class="report-description">Detailed analysis of user acquisition and retention.</p>
+                                        <button class="report-button">Generate Report</button>
+                                    </div>
+                                </div>
+                                <div class="report-item">
+                                    <div class="report-icon">📉</div>
+                                    <div class="report-details">
+                                        <p class="report-title">Performance Metrics</p>
+                                        <p class="report-description">System and application performance statistics.</p>
+                                        <button class="report-button">Generate Report</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="simulated-app-footer">
+            <small>Task ID: {{ task.id }}</small>
+        </footer>
+    </article>
+</main>
+
+<style>
+    /* Override base template constraints */
+    .container {
+        max-width: 1400px !important;
+        width: 95% !important;
+    }
+    
+    .simulated-app-card {
+        max-width: none !important;
+        width: 100% !important;
+    }
+    
+    .app-content-area {
+        padding: 1rem !important;
+    }
+    
+    /* Dashboard container */
+    .dashboard-container {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        width: 100%;
+    }
+    
+    /* Tab navigation */
+    .tab-navigation {
+        display: flex;
+        background-color: #fff;
+        border-bottom: 1px solid #e9ecef;
+        padding: 0 20px;
+        justify-content: center;
+    }
+    
+    .tab-button {
+        padding: 15px 30px;
+        background: none;
+        border: none;
+        border-bottom: 3px solid transparent;
+        color: #6c757d;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin: 0 10px;
+    }
+    
+    .tab-button:hover {
+        color: #ff6b6b;
+    }
+    
+    .tab-button.active {
+        color: #ff6b6b;
+        border-bottom-color: #ff6b6b;
+    }
+    
+    /* Tab content */
+    .tab-content {
+        position: relative;
+        background-color: #fff;
+        min-height: 400px;
+    }
+    
+    .tab-panel {
+        display: none;
+        padding: 30px;
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+    
+    .tab-panel.active {
+        display: block;
+    }
+    
+    /* Panel header */
+    .panel-header {
+        margin-bottom: 20px;
+        width: 100%;
+    }
+    
+    .panel-header h3 {
+        margin: 0;
+        color: #343a40;
+        font-size: 18px;
+    }
+    
+    /* Overview panel */
+    .panel-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        width: 100%;
+    }
+    
+    .metric-card {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .metric-card h4 {
+        margin: 0 0 10px 0;
+        color: #6c757d;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    
+    .metric {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 0 5px 0;
+        color: #343a40;
+    }
+    
+    .change {
+        font-size: 12px;
+        margin: 0;
+    }
+    
+    .positive {
+        color: #28a745;
+    }
+    
+    .negative {
+        color: #dc3545;
+    }
+    
+    /* Activity panel */
+    #activity-panel .panel-content {
+        display: block;
+        width: 100%;
+    }
+    
+    .activity-feed {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+        gap: 20px;
+        width: 100%;
+    }
+    
+    .activity-item {
+        display: flex;
+        align-items: flex-start;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    
+    .activity-icon {
+        font-size: 24px;
+        margin-right: 15px;
+    }
+    
+    .activity-details {
+        flex: 1;
+    }
+    
+    .activity-title {
+        margin: 0 0 5px 0;
+        font-weight: 600;
+        color: #343a40;
+    }
+    
+    .activity-time {
+        margin: 0 0 5px 0;
+        color: #6c757d;
+        font-size: 12px;
+    }
+    
+    .activity-description {
+        margin: 0;
+        color: #495057;
+    }
+    
+    /* Settings panel */
+    #settings-panel .panel-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 20px;
+    }
+    
+    .settings-group {
+        margin-bottom: 25px;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+    }
+    
+    .settings-group h4 {
+        margin: 0 0 15px 0;
+        color: #343a40;
+        font-size: 16px;
+    }
+    
+    .setting-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .setting-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .setting-item label {
+        color: #495057;
+        font-weight: 500;
+    }
+    
+    .setting-item select {
+        padding: 8px 12px;
+        border-radius: 4px;
+        border: 1px solid #ced4da;
+        background-color: #fff;
+        width: 180px;
+    }
+    
+    /* Switch toggle */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+    }
+    
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+    
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+        background-color: #ff6b6b;
+    }
+    
+    input:focus + .slider {
+        box-shadow: 0 0 1px #ff6b6b;
+    }
+    
+    input:checked + .slider:before {
+        transform: translateX(26px);
+    }
+    
+    /* Reports panel */
+    #reports-panel .panel-content {
+        display: block;
+        width: 100%;
+    }
+    
+    .reports-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+        gap: 20px;
+    }
+    
+    .report-item {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    
+    .report-icon {
+        font-size: 24px;
+        margin-right: 15px;
+    }
+    
+    .report-details {
+        flex: 1;
+    }
+    
+    .report-title {
+        margin: 0 0 5px 0;
+        font-weight: 600;
+        color: #343a40;
+    }
+    
+    .report-description {
+        margin: 0 0 10px 0;
+        color: #6c757d;
+    }
+    
+    .report-button {
+        padding: 8px 12px;
+        border: none;
+        background-color: #ff6b6b;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background-color 0.2s;
+    }
+    
+    .report-button:hover {
+        background-color: #fa5252;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .tab-navigation {
+            flex-wrap: wrap;
+        }
+        
+        .panel-content {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tabButtons = document.querySelectorAll('[role="tab"]');
+    const tabPanels = document.querySelectorAll('[role="tabpanel"]');
+    
+    // Function to activate a tab
+    function activateTab(tabId) {
+        // Hide all panels and update ARIA states
+        tabPanels.forEach(panel => {
+            panel.classList.remove('active');
+            panel.setAttribute('aria-hidden', 'true');
+        });
+        
+        // Show selected panel and update ARIA state
+        const activePanel = document.getElementById(tabId + '-panel');
+        activePanel.classList.add('active');
+        activePanel.setAttribute('aria-hidden', 'false');
+        
+        // Update active state on buttons and ARIA attributes
+        tabButtons.forEach(button => {
+            if (button.dataset.tab === tabId) {
+                button.classList.add('active');
+                button.setAttribute('aria-selected', 'true');
+                button.setAttribute('tabindex', '0');
+            } else {
+                button.classList.remove('active');
+                button.setAttribute('aria-selected', 'false');
+                button.setAttribute('tabindex', '-1'); // Only the active tab is in the tab sequence
+            }
+        });
+    }
+    
+    // Function to handle keyboard navigation for tabs
+    function handleTabKeyboard(event) {
+        // Skip if not a tab element
+        if (event.target.getAttribute('role') !== 'tab') return;
+        
+        const tabs = Array.from(tabButtons);
+        const currentIndex = tabs.indexOf(event.target);
+        
+        // Handle arrow keys for tab navigation
+        if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+            const nextIndex = (currentIndex + 1) % tabs.length;
+            tabs[nextIndex].focus();
+            event.preventDefault();
+        } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+            const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+            tabs[prevIndex].focus();
+            event.preventDefault();
+        } else if (event.key === 'Home') {
+            tabs[0].focus();
+            event.preventDefault();
+        } else if (event.key === 'End') {
+            tabs[tabs.length - 1].focus();
+            event.preventDefault();
+        }
+    }
+    
+    // Add keyboard event listener for tab navigation
+    document.querySelector('.tab-navigation').addEventListener('keydown', handleTabKeyboard);
+    
+    // Add click and keydown handlers to tab buttons
+    tabButtons.forEach(button => {
+        // Click handler
+        button.addEventListener('click', function() {
+            const tabId = this.dataset.tab;
+            activateTab(tabId);
+            
+            // Check if we've completed the task (clicked Activity tab)
+            if (tabId === 'activity') {
+                // Send success to server
+                setTimeout(() => {
+                    fetch('/api/complete_task', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            task_id: '{{ task.id }}'
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Show success message
+                            const successMessage = document.createElement('div');
+                            successMessage.className = 'success-message';
+                            successMessage.innerHTML = '<div class="success-content">Activity panel loaded successfully! Task complete.</div>';
+                            document.querySelector('.app-content-area').appendChild(successMessage);
+                            
+                            // Redirect after delay
+                            setTimeout(() => {
+                                window.location.href = '/generic_task_success?task_id={{ task.id }}&title={{ task.agent.scenario_title }}';
+                            }, 1500);
+                        }
+                    });
+                }, 500);
+            }
+        });
+        
+        // Keyboard handler for Enter/Space activation
+        button.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                this.click();
+            }
+        });
+    });
+    
+    // Set initial ARIA states
+    tabPanels.forEach(panel => {
+        if (!panel.classList.contains('active')) {
+            panel.setAttribute('aria-hidden', 'true');
+        } else {
+            panel.setAttribute('aria-hidden', 'false');
+        }
+    });
+    
+    // Add some additional styles for success message
+    const style = document.createElement('style');
+    style.textContent = `
+        .success-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #d4edda;
+            color: #155724;
+            padding: 12px 24px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: fadeInOut 2s ease-in-out;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, -20px); }
+            15% { opacity: 1; transform: translate(-50%, 0); }
+            85% { opacity: 1; transform: translate(-50%, 0); }
+            100% { opacity: 0; transform: translate(-50%, -20px); }
+        }
+    `;
+    document.head.appendChild(style);
+});
+</script> 

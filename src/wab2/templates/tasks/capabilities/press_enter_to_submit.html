@@ -1,0 +1,167 @@
+            <div class="form-container">
+                <form id="name-form" class="input-form">
+                    <div class="form-header">
+                        <h3>Quick Registration</h3>
+                        <p>Enter your name and press Enter to continue</p>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="name-input">Your Name:</label>
+                        <input 
+                            type="text" 
+                            id="name-input" 
+                            placeholder="Type your name here" 
+                            autocomplete="off"
+                            required
+                        >
+                    </div>
+                    
+                    <div id="feedback-message" class="feedback-message">
+                        <span>Type your name and press the Enter key to submit</span>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+<style>
+    .form-container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+    
+    .input-form {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .form-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-header h3 {
+        margin-bottom: 0.5rem;
+        color: #212529;
+    }
+    
+    .form-header p {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    
+    .input-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .input-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #495057;
+        font-weight: 500;
+    }
+    
+    .input-group input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        border: 2px solid #ced4da;
+        border-radius: 4px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    .input-group input:focus {
+        border-color: #4a7aff;
+        box-shadow: 0 0 0 3px rgba(74, 122, 255, 0.25);
+        outline: none;
+    }
+    
+    .input-group input.error {
+        border-color: #dc3545;
+    }
+    
+    .input-group input.success {
+        border-color: #28a745;
+    }
+    
+    .feedback-message {
+        text-align: center;
+        min-height: 24px;
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+    }
+    
+    .feedback-message.success {
+        color: #28a745;
+        font-weight: 500;
+    }
+    
+    .feedback-message.error {
+        color: #dc3545;
+        font-weight: 500;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const nameInput = document.getElementById('name-input');
+    const nameForm = document.getElementById('name-form');
+    const feedbackMessage = document.getElementById('feedback-message');
+    
+    // Track form state
+    let hasTypedName = false;
+    
+    // Input/typing event listener
+    nameInput.addEventListener('input', function(event) {
+        const nameValue = nameInput.value.trim();
+        
+        if (nameValue.length > 0) {
+            hasTypedName = true;
+        } else {
+            hasTypedName = false;
+        }
+    });
+    
+    // Add keypress event listener for Enter key
+    nameInput.addEventListener('keypress', function(event) {
+        // Check if Enter key was pressed
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent default form submission
+            
+            const nameValue = nameInput.value.trim();
+            
+            // Check if the correct name was entered (John)
+            if (nameValue === "John") {
+                window.completeTask(true);
+            } else if (nameValue.length > 0) {
+                // Record mistake for wrong name
+                window.recordMistake(
+                    'incorrect_name',
+                    `User entered "${nameValue}" instead of "John"`,
+                    'The name you entered is incorrect.'
+                );
+            } else {
+                // Record mistake for empty submission
+                window.recordMistake(
+                    'empty_submission',
+                    'User pressed Enter without entering a name',
+                    'Please type a name before pressing Enter.'
+                );
+            }
+        }
+    });
+    
+    // Form submission (as a fallback)
+    nameForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        // This shouldn't be triggered directly, as we're handling the Enter key press separately
+    });
+    
+    // Focus the input field when the page loads
+    nameInput.focus();
+});
+</script> 

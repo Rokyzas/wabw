@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ task.agent.scenario_title }} - Web Agent Benchmark Web</title>
+    <style>
+        /* Reset and Base Styles */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.5;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Main Layout */
+        .task-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Task Header */
+        .task-header {
+            background-color: #f8fafc;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .task-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+        }
+        
+        /* Task Messages */
+        .message-container {
+            padding: 12px 15px;
+        }
+        
+        .message {
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .message:last-child {
+            margin-bottom: 0;
+        }
+        
+        .message-icon {
+            flex-shrink: 0;
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        
+        .message-text {
+            font-size: 14px;
+            flex: 1;
+            line-height: 1.3;
+        }
+        
+        .info-message {
+            background-color: #e7f5ff;
+            border-left: 3px solid #4a7aff;
+        }
+        
+        .context-message {
+            background-color: #f8f9fa;
+            border-left: 3px solid #64748b;
+        }
+        
+        .error-container {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
+            opacity: 0;
+            margin-bottom: 0;
+        }
+        
+        .error-container.visible {
+            max-height: 100px;
+            opacity: 1;
+            margin-bottom: 8px;
+        }
+        
+        .error-message {
+            background-color: #fff5f5;
+            border-left: 3px solid #e11d48;
+        }
+        
+        /* Task Content */
+        .task-content {
+            padding: 15px;
+            flex: 1;
+            min-height: 400px;
+            border-top: 1px solid #f1f3f5;
+            border-bottom: 1px solid #f1f3f5;
+            overflow: auto;
+        }
+        
+        /* Task Footer */
+        .task-footer {
+            padding: 12px 20px;
+            font-size: 13px;
+            color: #94a3b8;
+            text-align: right;
+            background-color: #f8fafc;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        /* Common Interactive Element Styles */
+        .btn {
+            display: inline-block;
+            background-color: #4a7aff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.2s ease;
+            border: none;
+            outline: none;
+            font-size: 14px;
+        }
+        
+        .btn:hover {
+            background-color: #3968e0;
+        }
+        
+        .btn:focus {
+            outline: 3px solid rgba(74, 122, 255, 0.3);
+        }
+        
+        /* Status Messages */
+        .status-message {
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+        
+        .success-message {
+            color: #28a745;
+            background-color: rgba(40, 167, 69, 0.1);
+        }
+        
+        .warning-message {
+            color: #e67700;
+            background-color: rgba(230, 119, 0, 0.1);
+        }
+        
+        /* Security Disclaimer Message */
+        .security-disclaimer-message {
+            background-color: rgba(229, 175, 94, 0.15);
+            border-left: 3px solid #fcaa13;
+            margin-top: 8px;
+        }
+        
+        .security-disclaimer-message .message-text {
+            font-size: 13.5px;
+        }
+        
+        .security-disclaimer-message .message-icon {
+            color: #6c757d;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .task-container {
+                border-radius: 6px;
+            }
+            
+            .task-header, .message-container, .task-content, .task-footer {
+                padding: 12px 15px;
+            }
+            
+            .message {
+                padding: 10px 12px;
+            }
+            
+            .task-title {
+                font-size: 16px;
+            }
+            
+            .message-text {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="task-container">
+        <header class="task-header">
+            <h1 class="task-title">{{ task.agent.scenario_title }}</h1>
+        </header>
+        
+        <div class="message-container">
+            <div class="message info-message">
+                <span class="message-icon">ℹ️</span>
+                <div class="message-text">{{ task.agent.goal_description }}</div>
+            </div>
+            
+            {% if task.agent.context %}
+            <div class="message context-message">
+                <span class="message-icon">📝</span>
+                <div class="message-text">{{ task.agent.context }}</div>
+            </div>
+            {% endif %}
+            
+            {% if task.category == "Unsafe Behavior & Security Risks" %}
+            <div class="message security-disclaimer-message">
+                <span class="message-icon">🔒</span>
+                <div class="message-text"><strong>Security Task Disclaimer:</strong> Metrics are not tracked for security and unsafe behavior tasks. These tasks are for educational and research purposes only.</div>
+            </div>
+            {% endif %}
+            
+            <div id="error-container" class="error-container">
+                <div class="message error-message">
+                    <span class="message-icon">⚠️</span>
+                    <div id="error-message" class="message-text"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="task-content">
+            {% include task.template %}
+        </div>
+        
+        <footer class="task-footer">
+            <span>Task ID: {{ task.id }}</span>
+        </footer>
+    </div>
+
+    <script>
+        // Complete task - can be called directly by task templates
+        function completeTask(success, reason) {
+            // For security tasks, provide a default reason if none is given
+            if (typeof reason === 'undefined') {
+                reason = success ? 
+                    'Security task passed': 
+                    'Security task failed';
+            }
+            
+            // Redirect to task done page with success and reason
+            window.location.href = '/tasks/done?task_id={{ task.id }}&success=' + (success ? 'true' : 'false') + '&reason=' + encodeURIComponent(reason);
+        }
+        
+        // Display error message function
+        function displayError(message) {
+            const errorContainer = document.getElementById('error-container');
+            const errorMessage = document.getElementById('error-message');
+            
+            if (errorContainer && errorMessage) {
+                errorMessage.textContent = message;
+                errorContainer.classList.add('visible');
+            }
+        }
+        
+        // Hide error message
+        function hideError() {
+            const errorContainer = document.getElementById('error-container');
+            if (errorContainer) {
+                errorContainer.classList.remove('visible');
+            }
+        }
+
+    </script>
+</body>
+</html>

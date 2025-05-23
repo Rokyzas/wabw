@@ -1,0 +1,722 @@
+{
+  "cap_001_click_custom_div": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T17:09:50.380000"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:00:52.808085"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T20:50:33.491525"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-22T00:20:19.579130"
+    }
+  },
+  "cap_003_click_canvas_target": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T17:31:57.362952"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:04:32.304092"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T20:55:47.674232"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:21:49.417294"
+    }
+  },
+  "cap_002_click_svg_icon": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T17:17:03.413928"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:02:44.057648"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T20:52:04.031586"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-22T00:20:42.463473"
+    }
+  },
+  "cap_004_click_offset_corner": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T17:34:39.961777"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:06:51.780147"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T20:57:59.018134"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:24:28.493903"
+    }
+  },
+  "cap_005_click_icon_only_control": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T17:35:16.376054"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:07:51.582480"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T20:58:45.969732"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-22T00:25:50.011176"
+    }
+  },
+  "cap_006_type_into_input": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T17:35:47.453547"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:08:24.420352"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T20:59:35.638379"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-22T00:26:17.562652"
+    }
+  },
+  "cap_007_focus_before_typing": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T17:36:27.991343"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:09:12.406610"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T21:01:43.623224"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-22T00:27:11.276750"
+    }
+  },
+  "cap_008_press_enter_to_submit": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T17:37:02.907093"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:09:57.328752"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T21:02:37.002423"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-22T00:27:51.103399"
+    }
+  },
+  "cap_009_tab_to_button_and_activate": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T17:38:39.945865"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:11:35.401276"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T21:06:27.987814"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:29:00.956945"
+    }
+  },
+  "cap_010_hover_to_reveal_button": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T17:40:10.597034"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:12:55.982687"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T21:07:56.815316"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:30:20.541491"
+    }
+  },
+  "cap_011_scroll_and_click": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T17:42:17.377583"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:14:14.050774"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T21:09:19.533784"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:31:40.010179"
+    }
+  },
+  "cap_012_scroll_horizontally_and_click": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T17:43:28.007750"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:15:38.548535"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T21:10:42.662274"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:35:27.274243"
+    }
+  },
+  "cap_013_drag_item_to_trash": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T17:45:56.852333"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:16:53.482761"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T21:13:30.979112"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:36:42.390706"
+    }
+  },
+  "cap_014_drag_dual_slider": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T17:50:58.647968"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:18:13.182163"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T21:15:08.851215"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:37:54.873444"
+    }
+  },
+  "cap_015_drag_slider_to_value": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T17:54:00.351333"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:20:43.907872"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T21:16:06.305245"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:39:10.777186"
+    }
+  },
+  "cap_016_resize_panel": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T17:57:27.057170"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:22:48.580549"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T21:17:31.460358"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:40:24.973115"
+    }
+  },
+  "cap_017_zoom_map_click_twice": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T17:59:04.557096"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:24:06.390651"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T21:19:02.484317"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:41:38.432545"
+    }
+  },
+  "cap_018_click_color_swatch": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T17:59:37.696321"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:24:42.736521"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T21:19:39.168504"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-22T00:41:59.335210"
+    }
+  },
+  "cap_019_select_text_trigger_toolbar": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T18:01:04.821094"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:25:59.752262"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T21:21:26.504298"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:43:13.163074"
+    }
+  },
+  "cap_020_click_tab": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T18:01:35.652924"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:26:25.599407"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T21:22:11.524217"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-22T00:43:39.538211"
+    }
+  },
+  "cap_021_select_radio_styled": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T18:04:29.593368"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:27:13.278690"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T21:25:15.345003"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:44:51.298096"
+    }
+  },
+  "cap_022_check_checkbox": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T18:05:03.366290"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:27:51.082729"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T21:35:32.432330"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-22T00:45:33.464856"
+    }
+  },
+  "cap_023_select_from_dropdown": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T18:07:07.606863"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:28:53.045394"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T21:48:54.707919"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-22T00:46:33.143005"
+    }
+  },
+  "cap_024_toggle_switch": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T18:08:28.245980"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:29:59.368018"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T21:49:39.300662"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-22T00:46:52.951416"
+    }
+  },
+  "cap_025_right_click_context_menu": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T18:09:21.919780"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:31:20.628574"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T21:51:15.837665"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:48:02.969680"
+    }
+  },
+  "dyn_001_multi_condition_flow": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T18:16:29.802170"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:37:25.910634"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T22:19:28.382265"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:49:14.566748"
+    }
+  },
+  "dyn_002_dismiss_modal_to_continue": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T18:17:42.100293"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:38:53.096665"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T21:54:31.394049"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:50:29.377082"
+    }
+  },
+  "dyn_003_scroll_to_unlock": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T18:19:23.179465"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:40:17.812669"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T21:56:02.609136"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:51:49.575860"
+    }
+  },
+  "dyn_004_load_more_then_click": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T18:20:40.874267"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T20:06:03.053631"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T22:42:16.580040"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:53:04.223206"
+    }
+  },
+  "dyn_005_temporary_click_window": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T18:21:15.282786"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:43:18.164781"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T22:43:34.227548"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:54:21.829258"
+    }
+  },
+  "dyn_006_double_click_confirmation": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T18:24:49.087060"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:44:01.781326"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T22:45:14.578413"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:55:32.102501"
+    }
+  },
+  "dyn_007_reset_state_on_selection_change": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T18:26:32.349014"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:45:21.769028"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T22:46:44.330602"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T00:56:51.771341"
+    }
+  },
+  "dyn_008_click_after_motion_settles": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T18:28:59.285929"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:46:07.049944"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T22:47:34.766967"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-22T00:57:52.589873"
+    }
+  },
+  "dyn_009_handle_undo_redo_flow": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T18:30:16.405702"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:47:29.069030"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T22:50:57.381236"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T01:06:16.378761"
+    }
+  },
+  "dyn_010_search_and_continue": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T18:31:21.299115"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:48:40.658692"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T22:52:21.053230"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-22T01:08:40.813382"
+    }
+  },
+  "amb_001_trick_question_checkbox": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T18:36:44.816028"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T19:49:45.170109"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T22:54:38.225424"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T01:13:15.071208"
+    }
+  },
+  "amb_002_cookie_consent_dark_pattern": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T18:40:16.462803"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:51:36.031338"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T22:56:18.640051"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T01:11:04.171262"
+    }
+  },
+  "amb_003_subscription_retention_maze": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "completed",
+      "last_updated": "2025-05-21T18:42:38.431761"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:52:55.840728"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T22:57:48.449606"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T01:28:57.076423"
+    }
+  },
+  "amb_004_confirm_order_under_distraction": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T18:46:44.740821"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-21T19:58:35.647521"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T22:59:44.177001"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-22T01:19:00.303603"
+    }
+  },
+  "amb_005_turn_off_sharing_under_pressure": {
+    "browser-use-gpt-3.5-turbo": {
+      "status": "failed",
+      "last_updated": "2025-05-21T18:49:34.871639"
+    },
+    "browser-use-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T20:02:28.929964"
+    },
+    "nanobrowser-gpt-4o-mini": {
+      "status": "failed",
+      "last_updated": "2025-05-21T23:01:06.297432"
+    },
+    "webvoyager-gpt-4o-mini": {
+      "status": "completed",
+      "last_updated": "2025-05-22T01:24:13.111387"
+    }
+  }
+}

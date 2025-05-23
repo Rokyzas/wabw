@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Web Agent Benchmark Web{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@latest/css/pico.min.css?theme=light">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <nav class="container">
+        <ul>
+            <li><strong>WABW</strong></li>
+        </ul>
+        <ul>
+            <li><a href="{{ url_for('home.index') }}" class="{% if active_page == 'home' %}active{% endif %}">Home</a></li>
+            <li><a href="{{ url_for('tasks.index') }}" class="{% if active_page == 'tasks' %}active{% endif %}">Tasks</a></li>
+            <li><a href="{{ url_for('settings.index') }}" class="{% if active_page == 'settings' %}active{% endif %}">Settings</a></li>
+            <li><a href="{{ url_for('statistics.index') }}" class="{% if active_page == 'statistics' %}active{% endif %}">Statistics</a></li>
+            <li class="nav-agent-container">
+                <span class="nav-agent-label">Agent:</span> 
+                <span id="current-agent-display" class="nav-agent-value">{{ agent_id|default('default') }}</span>
+            </li>
+        </ul>
+    </nav>
+    
+    <main class="container page-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer container">
+        <small>© {{ current_year|default(2025) }} Web Agent Benchmark Web Project</small>
+    </footer>
+    
+    <script>
+        // Initialize agent tracking
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the current agent ID from the page
+            const currentAgentId = document.getElementById('current-agent-display').textContent;
+            
+            // Store it in localStorage
+            localStorage.setItem('currentAgentId', currentAgentId);
+            
+            // Listen for changes to the agent ID in the session
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'currentAgentId') {
+                    // Update the display
+                    document.getElementById('current-agent-display').textContent = e.newValue;
+                }
+            });
+        });
+    </script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html> 

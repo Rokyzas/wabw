@@ -1,0 +1,393 @@
+<main>
+    <div>
+        <div>
+            <div>
+                <h3>Action Verification</h3>
+                <p>Time-sensitive confirmation required</p>
+            </div>
+            
+            <div>
+                <div>
+                    <div id="timer-label">Preparing verification...</div>
+                    <div id="timer-value">5</div>
+                    <div>
+                        <div id="timer-progress-bar"></div>
+                    </div>
+                </div>
+                
+                <div id="verification-message">
+                    <p>Please wait while we prepare the verification code.</p>
+                </div>
+                
+                <div id="verification-code">
+                    <span class="code-digit">•</span>
+                    <span class="code-digit">•</span>
+                    <span class="code-digit">•</span>
+                    <span class="code-digit">•</span>
+                    <span class="code-digit">•</span>
+                    <span class="code-digit">•</span>
+                </div>
+                
+                <div id="code-input-container">
+                    <input type="text" id="code-input" placeholder="Enter verification code" maxlength="6">
+                </div>
+                
+                <div>
+                    <button id="confirm-button">Confirm Verification</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<style>
+    /* Timer Display */
+    #timer-value {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #333;
+        text-align: center;
+        margin: 0.5rem 0;
+        transition: color 0.3s ease;
+    }
+    
+    #timer-label {
+        font-size: 1rem;
+        color: #666;
+        text-align: center;
+    }
+    
+    #timer-progress-bar {
+        height: 8px;
+        width: 100%;
+        background-color: #4285f4;
+        border-radius: 4px;
+        transition: width 1s linear;
+    }
+    
+    /* Verification Code */
+    #verification-code {
+        display: flex;
+        gap: 0.75rem;
+        margin: 1rem 0;
+        justify-content: center;
+    }
+    
+    .code-digit {
+        width: 2.5rem;
+        height: 3rem;
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .code-digit.revealed {
+        background-color: #e8f0fe;
+        border-color: #4285f4;
+    }
+    
+    /* Code Input */
+    #code-input-container {
+        margin: 1rem 0;
+        text-align: center;
+    }
+    
+    #code-input {
+        padding: 0.75rem 1rem;
+        font-size: 1.2rem;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+        width: 180px;
+        text-align: center;
+        letter-spacing: 2px;
+        font-family: monospace;
+    }
+    
+    #code-input:focus {
+        border-color: #4285f4;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.2);
+    }
+    
+    /* Button Styling */
+    #confirm-button {
+        background-color: #4285f4;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        min-width: 200px;
+    }
+    
+    #confirm-button.active {
+        box-shadow: 0 0 10px rgba(66, 133, 244, 0.4);
+    }
+    
+    /* Animation for code digits */
+    @keyframes reveal-digit {
+        0% { transform: scale(0.8); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .code-digit.revealed {
+        animation: reveal-digit 0.3s forwards;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const timerLabel = document.getElementById('timer-label');
+    const timerValue = document.getElementById('timer-value');
+    const timerProgressBar = document.getElementById('timer-progress-bar');
+    const verificationMessage = document.getElementById('verification-message');
+    const verificationCode = document.getElementById('verification-code');
+    const codeInput = document.getElementById('code-input');
+    const confirmButton = document.getElementById('confirm-button');
+    const codeDigits = document.querySelectorAll('.code-digit');
+    
+    // State
+    let currentState = 'preparing'; // preparing, active, expired
+    let currentTimer = 5; // starting countdown
+    let intervalId = null;
+    let isTaskComplete = false;
+    let currentSecurityCode = ''; // Will store the current code as a string
+    
+    // Define fallback functions if they don't exist in the global scope
+    if (typeof window.completeTask !== 'function') {
+        window.completeTask = function(success) {
+            console.log('Task completed:', success);
+        };
+    }
+    
+    if (typeof window.recordMistake !== 'function') {
+        window.recordMistake = function(code, details, message) {
+            console.log('Mistake recorded:', code, details, message);
+        };
+    }
+    
+    // Generate a random verification code
+    function generateVerificationCode() {
+        const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Excluding similar-looking characters
+        let code = [];
+        
+        for (let i = 0; i < 6; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            code.push(characters[randomIndex]);
+        }
+        
+        return code;
+    }
+    
+    // Update progress bar
+    function updateProgressBar(percentage) {
+        timerProgressBar.style.width = `${percentage}%`;
+    }
+    
+    // Show verification code
+    function revealVerificationCode(code) {
+        // Store the current code
+        currentSecurityCode = code.join('');
+        
+        // Reset code display for new reveal
+        resetCodeDisplay();
+        
+        // Reveal each digit with a delay
+        codeDigits.forEach((digit, index) => {
+            setTimeout(() => {
+                digit.textContent = code[index];
+                digit.classList.add('revealed');
+            }, index * 200); // Stagger the reveal
+        });
+    }
+    
+    // Reset code display
+    function resetCodeDisplay() {
+        codeDigits.forEach(digit => {
+            digit.textContent = '•';
+            digit.classList.remove('revealed');
+        });
+    }
+    
+    // Transition to active state
+    function activateVerification() {
+        currentState = 'active';
+        currentTimer = 20; // 20 seconds to verify (increased time for typing)
+        
+        // Generate a new code
+        const newCode = generateVerificationCode();
+        
+        // Update UI
+        timerLabel.textContent = 'Time remaining to verify:';
+        timerValue.textContent = currentTimer;
+        timerValue.style.color = '#4285f4';
+        
+        // Reveal the verification code
+        revealVerificationCode(newCode);
+        
+        // Update verification message
+        verificationMessage.innerHTML = `
+            <p>Your verification code is ready. Please enter the code and click "Confirm Verification".</p>
+        `;
+        
+        // Highlight the confirm button
+        confirmButton.classList.add('active');
+        
+        // Reset the progress bar for the new countdown
+        updateProgressBar(100);
+    }
+    
+    // Transition to expired state - immediately generate a new code
+    function expireVerification() {
+        currentState = 'preparing';
+        
+        // Update UI
+        timerLabel.textContent = 'Generating new code...';
+        timerValue.textContent = '5';
+        timerValue.style.color = '#333';
+        currentTimer = 5;
+        
+        // Remove active highlight from button
+        confirmButton.classList.remove('active');
+        
+        // Update verification message
+        verificationMessage.innerHTML = `
+            <p>The verification code has expired. Generating a new one...</p>
+        `;
+        
+        // Record mistake if there was an attempt
+        if (currentState === 'active') {
+            window.recordMistake(
+                'verification_expired',
+                'User did not confirm within the time window',
+                'Verification time expired. A new code is being generated.'
+            );
+        }
+        
+        // Start new timer immediately
+        startPreparationTimer();
+    }
+    
+    // Validate the entered code
+    function validateCode() {
+        const enteredCode = codeInput.value.toUpperCase();
+        
+        if (!enteredCode) {
+            window.recordMistake(
+                'empty_code',
+                'User attempted to confirm without entering a code',
+                'Please enter the verification code before confirming.'
+            );
+            return false;
+        }
+        
+        if (enteredCode !== currentSecurityCode) {
+            window.recordMistake(
+                'incorrect_code',
+                `User entered incorrect code: ${enteredCode}, expected: ${currentSecurityCode}`,
+                'The code you entered does not match. Please check and try again.'
+            );
+            return false;
+        }
+        
+        return true;
+    }
+    
+    // Handle confirm button click
+    confirmButton.addEventListener('click', function(event) {
+        event.stopPropagation();
+        
+        if (currentState === 'preparing') {
+            // User tried to click before code was ready
+            window.recordMistake(
+                'premature_confirmation',
+                'User tried to confirm before the verification code was ready',
+                'Please wait for the verification code to be ready.'
+            );
+        } else if (currentState === 'active' && !isTaskComplete) {
+            // Validate the input
+            if (validateCode()) {
+                // Complete task successfully
+                completeTask(true);
+            }
+        }
+    });
+    
+    // Start the preparation timer
+    function startPreparationTimer() {
+        // Clear any existing interval
+        if (intervalId) {
+            clearInterval(intervalId);
+        }
+        
+        intervalId = setInterval(() => {
+            currentTimer--;
+            timerValue.textContent = currentTimer;
+            
+            // Update progress bar
+            const percentage = (currentTimer / 5) * 100;
+            updateProgressBar(percentage);
+            
+            if (currentTimer <= 0) {
+                clearInterval(intervalId);
+                activateVerification();
+                startVerificationTimer();
+            }
+        }, 1000);
+    }
+    
+    // Start the verification timer
+    function startVerificationTimer() {
+        intervalId = setInterval(() => {
+            currentTimer--;
+            timerValue.textContent = currentTimer;
+            
+            // Update progress bar
+            const percentage = (currentTimer / 20) * 100;
+            updateProgressBar(percentage);
+            
+            // Add critical styling for last 5 seconds
+            if (currentTimer <= 5) {
+                timerValue.style.color = '#d93025';
+            }
+            
+            if (currentTimer <= 0) {
+                clearInterval(intervalId);
+                expireVerification();
+            }
+        }, 1000);
+    }
+    
+    // Task completion function
+    function completeTask(success) {
+        isTaskComplete = true;
+        
+        // Clear any existing timers
+        clearInterval(intervalId);
+        
+        if (success) {
+            // Update UI for success
+            confirmButton.textContent = 'Verification Confirmed';
+            
+            // Complete the task
+            window.completeTask(true);
+        }
+    }
+    
+    // Initialize
+    startPreparationTimer();
+    
+    // Add input validation to automatically uppercase and remove invalid characters
+    codeInput.addEventListener('input', function() {
+        this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    });
+});
+</script> 

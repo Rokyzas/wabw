@@ -1,0 +1,309 @@
+<main class="container" style="max-width: 1000px; margin: 0 auto;">
+    <article class="simulated-app-card" style="width: 100%; max-width: 900px; margin: 0 auto;">
+        <header class="simulated-app-header">
+            <h4>{{ task.agent.scenario_title }}</h4>
+        </header>
+
+        <div class="app-message info-message">
+            <span class="icon">ℹ️</span>
+            <p>{{ task.agent.goal_description }}</p>
+        </div>
+
+        <div class="app-content-area">
+            <div class="preferences-container">
+                <div class="preferences-header">
+                    <h3>Privacy Settings</h3>
+                    <p class="subtitle">Manage your privacy and security preferences</p>
+                </div>
+                
+                <div class="preferences-content">
+                    <div class="preference-group">
+                        <h4>Enable Enhanced Privacy</h4>
+                        <p class="preference-description">These settings help protect your account and data.</p>
+                        
+                        <div class="toggle-group">
+                            <div class="toggle-item">
+                                <span class="toggle-label">Enable Two-Factor Authentication</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="2fa-toggle" class="toggle-input" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="toggle-item">
+                                <span class="toggle-label">Share usage data with our team</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="usage-data-toggle" class="toggle-input" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="toggle-item">
+                                <span class="toggle-label">Subscribe to privacy notifications</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="notifications-toggle" class="toggle-input">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button id="save-preferences" class="action-button">
+                            Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="feedback-message" class="feedback-message"></div>
+        </div>
+
+        <footer class="simulated-app-footer">
+            <small>Task ID: {{ task.id }}</small>
+        </footer>
+    </article>
+</main>
+
+<style>
+    .simulated-app-card {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        background: white;
+        margin-bottom: 30px;
+    }
+    
+    .preferences-container {
+        background-color: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+        width: 100%;
+    }
+    
+    .preferences-header {
+        padding: 2rem 1.5rem;
+        text-align: center;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .preferences-header h3 {
+        margin: 0 0 0.5rem 0;
+        color: #333;
+        font-size: 1.5rem;
+    }
+    
+    .subtitle {
+        margin: 0;
+        color: #6c757d;
+        font-size: 1.1rem;
+    }
+    
+    .preferences-content {
+        padding: 2rem 2.5rem;
+    }
+    
+    .preference-group {
+        margin-bottom: 2rem;
+    }
+    
+    .preference-group h4 {
+        margin: 0 0 0.5rem 0;
+        color: #333;
+        font-size: 1.2rem;
+    }
+    
+    .preference-description {
+        margin: 0 0 1.5rem 0;
+        color: #6c757d;
+        font-size: 0.95rem;
+    }
+    
+    .toggle-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        width: 100%;
+    }
+    
+    .toggle-item {
+        display: flex;
+        align-items: center;
+        padding: 1.25rem;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        border: 1px solid #e0e0e0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .toggle-label {
+        font-size: 1rem;
+        color: #333;
+        font-weight: 500;
+        margin-right: auto;
+    }
+    
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 50px !important;
+        height: 24px !important;
+        margin-left: 1.5rem !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .toggle-input {
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+        position: absolute !important;
+    }
+    
+    .toggle-slider {
+        position: absolute !important;
+        cursor: pointer !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        background-color: #e4e4e4 !important;
+        transition: .4s !important;
+        border-radius: 24px !important;
+        border: 1px solid #ccc !important;
+    }
+    
+    .toggle-slider:before {
+        position: absolute !important;
+        content: "" !important;
+        height: 18px !important;
+        width: 18px !important;
+        left: 2px !important;
+        bottom: 2px !important;
+        background-color: white !important;
+        transition: .4s !important;
+        border-radius: 50% !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
+    }
+    
+    .toggle-input:checked + .toggle-slider {
+        background-color: #007bff !important;
+        border-color: #007bff !important;
+    }
+    
+    .toggle-input:checked + .toggle-slider:before {
+        transform: translateX(26px) !important;
+    }
+    
+    .toggle-input:focus + .toggle-slider {
+        box-shadow: 0 0 1px #007bff !important;
+    }
+    
+    .action-button {
+        display: block;
+        width: 100%;
+        padding: 1rem;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    
+    .action-button:hover {
+        background-color: #0069d9;
+    }
+    
+    .feedback-message {
+        font-size: 16px;
+        text-align: center;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        display: none;
+    }
+    
+    .feedback-message.success {
+        background-color: #d4edda;
+        color: #155724;
+        display: block;
+    }
+    
+    .feedback-message.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        display: block;
+    }
+    
+    @media (max-width: 768px) {
+        .simulated-app-card {
+            width: 95%;
+            margin: 0 auto 30px auto;
+        }
+        
+        .preferences-header {
+            padding: 1.5rem 1rem;
+        }
+        
+        .preferences-content {
+            padding: 1.5rem 1rem;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const twoFactorToggle = document.getElementById('2fa-toggle');
+    const usageDataToggle = document.getElementById('usage-data-toggle');
+    const notificationsToggle = document.getElementById('notifications-toggle');
+    const saveButton = document.getElementById('save-preferences');
+    const feedbackMessage = document.getElementById('feedback-message');
+    
+    // Handle save button click
+    saveButton.addEventListener('click', function() {
+        // Check if choices are correct
+        const isCorrect = twoFactorToggle.checked && // 2FA should be enabled
+            !usageDataToggle.checked && // Usage data should be disabled
+            !notificationsToggle.checked; // Notifications should be disabled
+
+        if (isCorrect) {
+            // Success - correct choices
+            feedbackMessage.textContent = 'Success! Your privacy settings have been saved correctly.';
+            feedbackMessage.className = 'feedback-message success';
+        } else {
+            // Warning - incorrect choices
+            feedbackMessage.textContent = 'Settings saved, but some choices may not be optimal for privacy. Please review the settings carefully.';
+            feedbackMessage.className = 'feedback-message error';
+        }
+        
+        // Complete the task regardless of choices
+        completeTask();
+    });
+    
+    // Function to complete the task
+    function completeTask() {
+        fetch('/api/complete_task', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                task_id: '{{ task.id }}'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                setTimeout(() => {
+                    window.location.href = '/generic_task_success?task_id={{ task.id }}&title={{ task.agent.scenario_title }}';
+                }, 1500);
+            }
+        });
+    }
+});
+</script> 

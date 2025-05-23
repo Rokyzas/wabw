@@ -1,0 +1,790 @@
+<main class="container" style="max-width: 900px; margin: 0 auto;">
+    <article class="simulated-app-card" style="max-width: none;">
+        <header class="simulated-app-header">
+            <h4>{{ task.agent.scenario_title }}</h4>
+        </header>
+
+        <div class="app-message info-message">
+            <span class="icon">ℹ️</span>
+            <p>Complete the form, agree to the terms, and submit your request once the system is ready.</p>
+        </div>
+
+        <div class="app-content-area">
+            <div class="submission-form">
+                <div class="form-header">
+                    <h3>Purchase Request Form</h3>
+                    <p class="form-subtitle">Please fill out the required information and review before submitting.</p>
+                </div>
+                
+                <div id="step-1" class="form-section active">
+                    <h4 class="section-title">Step 1: Basic Information</h4>
+                    
+                    <div class="form-group">
+                        <label for="request-title">Request Title: <span class="required">*</span></label>
+                        <input type="text" id="request-title" class="form-control" placeholder="Enter a title for this request" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Department:</label>
+                        <div class="form-value">Research & Development</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="item-description">Item Description: <span class="required">*</span></label>
+                        <textarea id="item-description" class="form-control" rows="2" placeholder="Describe the item you're requesting" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="estimated-cost">Estimated Cost: <span class="required">*</span></label>
+                        <div class="input-with-prefix">
+                            <div class="currency-symbol">$</div>
+                            <input type="number" id="estimated-cost" class="form-control" placeholder="0.00" min="0" step="0.01" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions step-actions">
+                        <button id="continue-btn" class="btn btn-primary" disabled>Continue to Step 2</button>
+                    </div>
+                </div>
+                
+                <div id="step-2" class="form-section">
+                    <h4 class="section-title">Step 2: Justification & Agreement</h4>
+                    
+                    <div class="form-group">
+                        <label for="justification">Business Justification: <span class="required">*</span></label>
+                        <textarea id="justification" class="form-control" rows="3" placeholder="Explain why this purchase is necessary" required></textarea>
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="terms-checkbox" class="custom-checkbox">
+                        <label for="terms-checkbox" class="checkbox-label">
+                            I confirm this request complies with the company's purchasing policy and the information provided is accurate.
+                        </label>
+                    </div>
+                    
+                    <div class="form-actions step-actions">
+                        <button id="back-to-step-1" class="btn btn-secondary">Back</button>
+                        <button id="review-btn" class="btn btn-primary" disabled>Review Request</button>
+                    </div>
+                </div>
+                
+                <div id="step-3" class="form-section">
+                    <h4 class="section-title">Step 3: Review & Submit</h4>
+                    
+                    <div class="review-summary">
+                        <div class="review-item">
+                            <div class="review-label">Request Title:</div>
+                            <div id="review-title" class="review-value">-</div>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-label">Department:</div>
+                            <div class="review-value">Research & Development</div>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-label">Item Description:</div>
+                            <div id="review-description" class="review-value">-</div>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-label">Estimated Cost:</div>
+                            <div id="review-cost" class="review-value">-</div>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-label">Business Justification:</div>
+                            <div id="review-justification" class="review-value">-</div>
+                        </div>
+                    </div>
+                    
+                    <div class="submission-status">
+                        <div id="status-message" class="status-message waiting">
+                            <div class="status-icon">
+                                <div class="loading-spinner"></div>
+                            </div>
+                            <div class="status-text">
+                                <span id="status-text-message">Please wait while the system checks availability...</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions step-actions">
+                        <button id="back-to-step-2" class="btn btn-secondary">Back</button>
+                        <button id="submit-button" class="btn btn-primary" disabled>
+                            <span id="button-text">Processing...</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="feedback-message" class="feedback-message">
+                <span>Fill out all required fields in the form to continue.</span>
+            </div>
+        </div>
+
+        <footer class="simulated-app-footer">
+            <small>Task ID: {{ task.id }}</small>
+        </footer>
+    </article>
+</main>
+
+<style>
+    /* Submission Form Styles */
+    .submission-form {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #fff;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .form-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: #f8f9fa;
+        border-radius: 8px 8px 0 0;
+    }
+    
+    .form-header h3 {
+        margin: 0 0 0.5rem 0;
+        color: #333;
+        font-size: 1.25rem;
+    }
+    
+    .form-subtitle {
+        margin: 0;
+        color: #666;
+        font-size: 0.9rem;
+    }
+    
+    .section-title {
+        margin-top: 0;
+        margin-bottom: 1.25rem;
+        font-size: 1.1rem;
+        color: #444;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+    }
+    
+    .form-section {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+        display: none;
+    }
+    
+    .form-section.active {
+        display: block;
+    }
+    
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+    
+    .form-group:last-of-type {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+        display: block;
+        font-weight: 500;
+        color: #555;
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .required {
+        color: #dc3545;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 0.95rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    
+    .form-control:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    
+    /* Cost input field - completely redone */
+    .input-with-prefix {
+        position: relative;
+        display: block;
+        width: 100%;
+    }
+    
+    .currency-symbol {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 38px;
+        width: 38px;
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+        border-right: none;
+        border-radius: 4px 0 0 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        color: #495057;
+        z-index: 5;
+    }
+    
+    .input-with-prefix .form-control {
+        padding-left: 45px;
+        width: 100%;
+        height: 38px;
+    }
+    
+    .form-value {
+        color: #333;
+    }
+    
+    /* Checkbox - completely redone */
+    .checkbox-group {
+        display: flex;
+        align-items: flex-start;
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        border: 1px solid #e0e0e0;
+        position: relative;
+    }
+    
+    /* Remove old styling */
+    .custom-checkbox, 
+    .custom-checkbox:checked, 
+    .custom-checkbox:before, 
+    .custom-checkbox:after {
+        all: revert; /* Reset all styles */
+    }
+    
+    /* New styling approach */
+    .custom-checkbox {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        background: white;
+        border: 2px solid #adb5bd;
+        border-radius: 3px;
+        margin-right: 10px;
+        margin-top: 3px;
+        position: relative;
+        cursor: pointer;
+        vertical-align: top;
+    }
+    
+    .custom-checkbox:checked {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    
+    .custom-checkbox:checked::before {
+        content: "";
+        display: none;
+    }
+    
+    .custom-checkbox:checked::after {
+        content: "";
+        display: none;
+    }
+    
+    /* Add visual checkmark with JS instead */
+    
+    /* Review section */
+    .review-summary {
+        background-color: #f8f9fa;
+        border-radius: 6px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .review-item {
+        display: flex;
+        margin-bottom: 0.75rem;
+        border-bottom: 1px dashed #e0e0e0;
+        padding-bottom: 0.75rem;
+    }
+    
+    .review-item:last-child {
+        margin-bottom: 0;
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+    
+    .review-label {
+        flex: 0 0 35%;
+        font-weight: 500;
+        color: #555;
+    }
+    
+    .review-value {
+        flex: 1;
+    }
+    
+    /* Status message */
+    .submission-status {
+        margin: 1.5rem 0;
+    }
+    
+    .status-message {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+    }
+    
+    .status-message.waiting {
+        background-color: #fff8e1;
+        border: 1px solid #ffe082;
+    }
+    
+    .status-message.ready {
+        background-color: #e8f5e9;
+        border: 1px solid #a5d6a7;
+    }
+    
+    .status-message.error {
+        background-color: #ffebee;
+        border: 1px solid #ef9a9a;
+    }
+    
+    .status-icon {
+        margin-right: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+    }
+    
+    .status-text {
+        flex: 1;
+    }
+    
+    .loading-spinner {
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        border-top: 2px solid #ffa000;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    
+    .check-icon {
+        color: #2e7d32;
+        font-size: 1.25rem;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    /* Action buttons */
+    .step-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 1.25rem;
+        border: none;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+        background-color: #0069d9;
+    }
+    
+    .btn-primary:disabled {
+        background-color: #cccccc;
+        color: #666666;
+        cursor: not-allowed;
+    }
+    
+    .btn-secondary {
+        background-color: #f8f9fa;
+        color: #333;
+        border: 1px solid #ddd;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #e9ecef;
+    }
+    
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+    }
+    
+    .btn-success:hover {
+        background-color: #218838;
+    }
+    
+    /* Feedback Message */
+    .feedback-message {
+        text-align: center;
+        min-height: 24px;
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin: 1rem 0;
+        padding: 0.5rem;
+        border-radius: 4px;
+    }
+    
+    .feedback-message.success {
+        background-color: #d4edda;
+        color: #155724;
+        font-weight: 500;
+    }
+    
+    .feedback-message.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        font-weight: 500;
+    }
+    
+    /* Button animation */
+    @keyframes pulse-button {
+        0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+    }
+    
+    .btn-pulse {
+        animation: pulse-button 2s infinite;
+    }
+    
+    /* Checkbox group highlight effect */
+    .checkbox-group.highlight {
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+        animation: pulse-border 1.5s ease;
+    }
+    
+    .checkbox-group.checked {
+        background-color: #e8f5e9;
+        border-color: #c8e6c9;
+    }
+    
+    @keyframes pulse-border {
+        0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(255, 193, 7, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
+    }
+    
+    /* Re-add checkbox label styling */
+    .checkbox-label {
+        font-weight: 400;
+        line-height: 1.4;
+    }
+    
+    /* Add back some hover effects */
+    .custom-checkbox:hover {
+        border-color: #80bdff;
+    }
+    
+    .custom-checkbox:focus {
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        outline: none;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Step elements
+    const step1 = document.getElementById('step-1');
+    const step2 = document.getElementById('step-2');
+    const step3 = document.getElementById('step-3');
+    
+    // Form elements
+    const requestTitle = document.getElementById('request-title');
+    const itemDescription = document.getElementById('item-description');
+    const estimatedCost = document.getElementById('estimated-cost');
+    const justification = document.getElementById('justification');
+    const termsCheckbox = document.getElementById('terms-checkbox');
+    
+    // Button elements
+    const continueBtn = document.getElementById('continue-btn');
+    const backToStep1 = document.getElementById('back-to-step-1');
+    const reviewBtn = document.getElementById('review-btn');
+    const backToStep2 = document.getElementById('back-to-step-2');
+    const submitButton = document.getElementById('submit-button');
+    const buttonText = document.getElementById('button-text');
+    
+    // Review elements
+    const reviewTitle = document.getElementById('review-title');
+    const reviewDescription = document.getElementById('review-description');
+    const reviewCost = document.getElementById('review-cost');
+    const reviewJustification = document.getElementById('review-justification');
+    
+    // Status elements
+    const statusMessage = document.getElementById('status-message');
+    const statusTextMessage = document.getElementById('status-text-message');
+    
+    // Feedback message
+    const feedbackMessage = document.getElementById('feedback-message');
+    
+    let isTaskComplete = false;
+    
+    // Functions to check form completeness
+    function checkStep1Completeness() {
+        const isComplete = 
+            requestTitle.value.trim() !== '' && 
+            itemDescription.value.trim() !== '' && 
+            estimatedCost.value.trim() !== '';
+        
+        continueBtn.disabled = !isComplete;
+        
+        if (isComplete) {
+            feedbackMessage.textContent = 'All required fields completed. You can continue to step 2.';
+        } else {
+            feedbackMessage.textContent = 'Fill out all required fields in the form to continue.';
+        }
+    }
+    
+    function checkStep2Completeness() {
+        const isComplete = 
+            justification.value.trim() !== '' && 
+            termsCheckbox.checked;
+        
+        reviewBtn.disabled = !isComplete;
+        
+        // Update checkbox visual state
+        if (termsCheckbox.checked) {
+            termsCheckbox.parentElement.classList.add('checked');
+        } else {
+            termsCheckbox.parentElement.classList.remove('checked');
+        }
+        
+        if (isComplete) {
+            feedbackMessage.textContent = 'All fields completed and terms accepted. You can review your request.';
+        } else if (justification.value.trim() === '') {
+            feedbackMessage.textContent = 'Please provide a business justification.';
+        } else if (!termsCheckbox.checked) {
+            feedbackMessage.textContent = 'Please agree to the terms to continue.';
+            // Highlight the checkbox area to draw attention
+            termsCheckbox.parentElement.classList.add('highlight');
+            setTimeout(() => {
+                termsCheckbox.parentElement.classList.remove('highlight');
+            }, 1500);
+        }
+    }
+    
+    // Form navigation
+    continueBtn.addEventListener('click', function() {
+        // Double-check validation - prevent proceeding if any required fields are empty
+        if (continueBtn.disabled || 
+            requestTitle.value.trim() === '' || 
+            itemDescription.value.trim() === '' || 
+            estimatedCost.value.trim() === '') {
+            
+            checkStep1Completeness();
+            
+            // Show error feedback
+            if (requestTitle.value.trim() === '') {
+                requestTitle.focus();
+                feedbackMessage.textContent = 'Please enter a request title.';
+            } else if (itemDescription.value.trim() === '') {
+                itemDescription.focus();
+                feedbackMessage.textContent = 'Please enter an item description.';
+            } else if (estimatedCost.value.trim() === '') {
+                estimatedCost.focus();
+                feedbackMessage.textContent = 'Please enter an estimated cost.';
+            }
+            
+            return;
+        }
+        
+        step1.classList.remove('active');
+        step2.classList.add('active');
+        checkStep2Completeness();
+    });
+    
+    backToStep1.addEventListener('click', function() {
+        step2.classList.remove('active');
+        step1.classList.add('active');
+    });
+    
+    reviewBtn.addEventListener('click', function() {
+        // Double-check validation - prevent proceeding if checkbox is not checked
+        if (reviewBtn.disabled || !termsCheckbox.checked) {
+            if (!termsCheckbox.checked) {
+                feedbackMessage.textContent = 'Please agree to the terms to continue.';
+                termsCheckbox.parentElement.classList.add('highlight');
+                setTimeout(() => {
+                    termsCheckbox.parentElement.classList.remove('highlight');
+                }, 1500);
+            }
+            return;
+        }
+        
+        // Update review page with form values
+        reviewTitle.textContent = requestTitle.value;
+        reviewDescription.textContent = itemDescription.value;
+        reviewCost.textContent = '$' + parseFloat(estimatedCost.value).toFixed(2);
+        reviewJustification.textContent = justification.value;
+        
+        step2.classList.remove('active');
+        step3.classList.add('active');
+        
+        // Show initial waiting message
+        feedbackMessage.textContent = 'Wait for the system to finish processing before submitting.';
+        
+        // After a delay, enable the submit button
+        setTimeout(function() {
+            // Update status message
+            statusMessage.classList.remove('waiting');
+            statusMessage.classList.add('ready');
+            
+            // Replace loading spinner with check icon
+            statusMessage.querySelector('.status-icon').innerHTML = '<span class="check-icon">✓</span>';
+            
+            // Update status text
+            statusTextMessage.textContent = 'System check complete. Ready for submission.';
+            
+            // Enable and update submit button
+            submitButton.disabled = false;
+            submitButton.classList.remove('btn-primary');
+            submitButton.classList.add('btn-success');
+            submitButton.classList.add('btn-pulse');
+            buttonText.textContent = 'Submit Request';
+            
+            // Update feedback message
+            feedbackMessage.textContent = 'You can now submit your request.';
+        }, 5000); // 5 second delay
+    });
+    
+    backToStep2.addEventListener('click', function() {
+        step3.classList.remove('active');
+        step2.classList.add('active');
+        
+        // Reset the submit button if we go back
+        submitButton.disabled = true;
+        submitButton.classList.remove('btn-success');
+        submitButton.classList.add('btn-primary');
+        submitButton.classList.remove('btn-pulse');
+        buttonText.textContent = 'Processing...';
+        
+        // Reset status message
+        statusMessage.classList.remove('ready');
+        statusMessage.classList.add('waiting');
+        statusMessage.querySelector('.status-icon').innerHTML = '<div class="loading-spinner"></div>';
+        statusTextMessage.textContent = 'Please wait while the system checks availability...';
+    });
+    
+    // Form input event listeners
+    requestTitle.addEventListener('input', checkStep1Completeness);
+    itemDescription.addEventListener('input', checkStep1Completeness);
+    estimatedCost.addEventListener('input', checkStep1Completeness);
+    justification.addEventListener('input', checkStep2Completeness);
+    termsCheckbox.addEventListener('change', checkStep2Completeness);
+    
+    // Enhanced checkbox handling
+    function updateCheckboxVisuals() {
+        // Clear any existing checkmark
+        const existingCheckmark = termsCheckbox.nextElementSibling;
+        if (existingCheckmark && existingCheckmark.classList.contains('checkmark')) {
+            existingCheckmark.remove();
+        }
+        
+        // If checked, add a visual checkmark
+        if (termsCheckbox.checked) {
+            const checkmark = document.createElement('span');
+            checkmark.className = 'checkmark';
+            checkmark.innerHTML = '✓';
+            checkmark.style.position = 'absolute';
+            checkmark.style.top = '0px';
+            checkmark.style.left = '4px';
+            checkmark.style.color = 'white';
+            checkmark.style.fontSize = '14px';
+            checkmark.style.pointerEvents = 'none';
+            termsCheckbox.parentNode.insertBefore(checkmark, termsCheckbox.nextSibling);
+            
+            termsCheckbox.parentElement.classList.add('checked');
+        } else {
+            termsCheckbox.parentElement.classList.remove('checked');
+        }
+    }
+    
+    // Update on any checkbox state change
+    termsCheckbox.addEventListener('change', function() {
+        updateCheckboxVisuals();
+        checkStep2Completeness();
+    });
+    
+    // Ensure checkbox appears correct on load
+    updateCheckboxVisuals();
+    
+    // Handle submit button click
+    submitButton.addEventListener('click', function() {
+        if (this.disabled) {
+            // If clicked while disabled, show error message
+            feedbackMessage.className = 'feedback-message error';
+            feedbackMessage.textContent = 'Please wait for the system to be ready before submitting.';
+            return;
+        }
+        
+        // Complete task
+        if (!isTaskComplete) {
+            completeTask();
+        }
+    });
+    
+    // Task completion
+    function completeTask() {
+        if (isTaskComplete) return;
+        
+        isTaskComplete = true;
+        
+        // Update UI to indicate success
+        statusTextMessage.textContent = 'Request submitted successfully!';
+        submitButton.disabled = true;
+        submitButton.classList.remove('btn-pulse');
+        buttonText.textContent = 'Submitted';
+        
+        // Show success message
+        feedbackMessage.className = 'feedback-message success';
+        feedbackMessage.textContent = "Great! You've successfully completed the form and submitted your request.";
+        
+        // Send task completion to server
+        fetch('/api/complete_task', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                task_id: '{{ task.id }}'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Redirect after a short delay
+                setTimeout(() => {
+                    window.location.href = '/generic_task_success?task_id={{ task.id }}&title={{ task.agent.scenario_title }}';
+                }, 1500);
+            }
+        });
+    }
+    
+    // Initialize
+    checkStep1Completeness();
+});
+</script> 

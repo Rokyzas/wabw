@@ -1,0 +1,257 @@
+<div class="app-content-area">
+    <div class="form-container">
+        <div class="form-header">
+            <h3>Shipping Information</h3>
+            <p>Please select your country to continue with the shipping process.</p>
+        </div>
+        
+        <form id="shipping-form">
+            <div class="form-group">
+                <label for="country-select" class="form-label">Country:</label>
+                <div class="select-wrapper">
+                    <select id="country-select" name="country" class="form-control">
+                        <option value="" selected disabled>-- Select a country --</option>
+                        <option value="australia">Australia</option>
+                        <option value="brazil">Brazil</option>
+                        <option value="canada">Canada</option>
+                        <option value="china">China</option>
+                        <option value="france">France</option>
+                        <option value="germany">Germany</option>
+                        <option value="india">India</option>
+                        <option value="italy">Italy</option>
+                        <option value="japan">Japan</option>
+                        <option value="mexico">Mexico</option>
+                        <option value="netherlands">Netherlands</option>
+                        <option value="spain">Spain</option>
+                        <option value="sweden">Sweden</option>
+                        <option value="uk">United Kingdom</option>
+                        <option value="usa">United States</option>
+                    </select>
+                    <div class="select-arrow"></div>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" id="continue-btn" class="btn btn-primary" disabled>Continue to Address</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    #shipping-form {
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 1.5rem;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-weight: 500;
+        color: #333;
+    }
+    
+    .select-wrapper {
+        position: relative;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #fff;
+        color: #333;
+        appearance: none;
+        cursor: pointer;
+    }
+    
+    .form-control:hover {
+        border-color: #aaa;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #2196F3;
+        box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+    }
+    
+    .select-arrow {
+        position: absolute;
+        top: 50%;
+        right: 1rem;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 6px solid #666;
+        pointer-events: none;
+    }
+    
+    /* Option highlight for Germany */
+    option[value="germany"] {
+        background-color: #e3f2fd;
+        color: #2196F3;
+        font-weight: 500;
+    }
+    
+    /* Form Actions */
+    .form-actions {
+        margin-top: 1.5rem;
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    .btn {
+        padding: 0.5rem 1.25rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    
+    .btn-primary {
+        background-color: #2196F3;
+        color: white;
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+        background-color: #1976D2;
+    }
+    
+    .btn-primary:disabled {
+        background-color: #e0e0e0;
+        color: #9e9e9e;
+        cursor: not-allowed;
+    }
+    
+    /* Dropdown highlight animation */
+    @keyframes dropdown-pulse {
+        0% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7); }
+        70% { box-shadow: 0 0 0 5px rgba(33, 150, 243, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0); }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Define fallback functions if they don't exist in the global scope
+    if (typeof window.completeTask !== 'function') {
+        console.warn('window.completeTask was not found, using fallback implementation');
+        window.completeTask = function(success) {
+            console.log('Task completed:', success);
+            alert('Task completed! (fallback implementation)');
+        };
+    }
+    
+    if (typeof window.recordMistake !== 'function') {
+        console.warn('window.recordMistake was not found, using fallback implementation');
+        window.recordMistake = function(code, details, message) {
+            console.log('Mistake recorded:', code, details, message);
+            alert('Mistake: ' + message);
+        };
+    }
+
+    // Elements
+    const countrySelect = document.getElementById('country-select');
+    const continueButton = document.getElementById('continue-btn');
+    
+    let isTaskComplete = false;
+    
+    // Add change event to select dropdown
+    countrySelect.addEventListener('change', function() {
+        const selectedValue = this.value;
+        
+        // Enable the continue button
+        continueButton.disabled = false;
+        
+        // Handle Germany selection
+        if (selectedValue === 'germany' && !isTaskComplete) {
+            // Highlight the dropdown to indicate correct selection
+            this.style.borderColor = '#28a745';
+            this.style.boxShadow = '0 0 0 3px rgba(40, 167, 69, 0.2)';
+            
+            completeTask();
+        } else if (!isTaskComplete) {
+            // Record mistake if not selecting Germany
+            window.recordMistake(
+                'wrong_country_selected',
+                `User selected ${this.options[this.selectedIndex].text} instead of Germany`,
+                `That's not Germany. Please select Germany from the list.`
+            );
+        }
+    });
+    
+    // Continue button click handler
+    continueButton.addEventListener('click', function() {
+        if (!isTaskComplete) {
+            if (countrySelect.value === 'germany') {
+                completeTask();
+            } else {
+                window.recordMistake(
+                    'continue_without_germany',
+                    'User tried to continue without selecting Germany',
+                    'Please select Germany before continuing.'
+                );
+            }
+        }
+    });
+    
+    // Task completion
+    function completeTask() {
+        if (isTaskComplete) return;
+        
+        console.log('Completing task...');
+        isTaskComplete = true;
+        
+        // Visual indication of successful completion
+        continueButton.style.backgroundColor = '#28a745';
+        
+        // Use the standardized task completion with a slight delay
+        setTimeout(function() {
+            window.completeTask(true);
+        }, 300);
+    }
+    
+    // Add a subtle hint after a delay if user hasn't completed the task
+    setTimeout(() => {
+        if (!isTaskComplete) {
+            countrySelect.style.animation = "dropdown-pulse 2s infinite";
+            
+            // Check if Germany is in viewport when dropdown opens, if not, scroll to it
+            countrySelect.addEventListener('focus', function oneTimeScroll() {
+                if (!isTaskComplete) {
+                    // Find Germany option and highlight it temporarily
+                    const germanyOption = Array.from(this.options).find(opt => opt.value === 'germany');
+                    if (germanyOption) {
+                        germanyOption.style.backgroundColor = '#e3f2fd';
+                        setTimeout(() => {
+                            if (!isTaskComplete) {
+                                germanyOption.style.backgroundColor = '';
+                            }
+                        }, 1000);
+                    }
+                }
+                this.removeEventListener('focus', oneTimeScroll);
+            });
+            
+            setTimeout(() => {
+                if (!isTaskComplete) {
+                    countrySelect.style.animation = "";
+                }
+            }, 3000);
+        }
+    }, 5000);
+});
+</script> 

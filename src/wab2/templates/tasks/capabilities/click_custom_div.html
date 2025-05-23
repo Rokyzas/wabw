@@ -1,0 +1,109 @@
+<div class="task-wrapper">
+    <div class="button-container">
+        <div role="button" 
+             id="custom-button" 
+             tabindex="0" 
+             aria-label="Continue" 
+             class="custom-button"
+             onclick="handleButtonClick()">
+            Continue
+        </div>
+    </div>
+
+    <div id="result-container" class="result-container"></div>
+</div>
+
+<style>
+    .task-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        min-height: 300px;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+        width: 100%;
+    }
+    
+    .custom-button {
+        background-color: #4a7aff;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        font-weight: bold;
+        text-align: center;
+        transition: all 0.2s ease;
+        user-select: none;
+        min-width: 150px;
+    }
+    
+    .custom-button:hover {
+        background-color: #3968e0;
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .custom-button:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .custom-button:focus {
+        outline: 3px solid rgba(74, 122, 255, 0.3);
+    }
+    
+    .result-container {
+        text-align: center;
+        margin-top: 20px;
+        min-height: 50px;
+        width: 100%;
+    }
+    
+    .success-message {
+        color: #28a745;
+        font-weight: bold;
+        font-size: 1.2rem;
+        animation: fadeIn 0.5s ease;
+    }
+    
+    .warning-message {
+        color: #e67700;
+        font-weight: bold;
+        font-size: 1.2rem;
+        animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // For keyboard accessibility
+        const customButton = document.getElementById('custom-button');
+        
+        customButton.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                handleButtonClick();
+            }
+        });
+        
+        // No mistake tracking for clicks outside the button
+    });
+    
+    function handleButtonClick() {
+        // Use the global completeTask function from the wrapper without displaying a success message
+        window.completeTask(true);
+    }
+</script> 

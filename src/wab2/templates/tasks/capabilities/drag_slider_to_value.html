@@ -1,0 +1,473 @@
+            <div class="thermostat-container">
+                <div class="temperature-display">
+                    <span id="current-temp">18</span><span class="unit">°C</span>
+                </div>
+                
+                <div class="slider-container">
+                    <span class="temp-label min-temp">16°C</span>
+                    <div class="temperature-slider">
+                        <div class="target-indicator">
+                            <div class="target-line" style="left: 50%"></div>
+                            <div class="target-label">Target: 22°C</div>
+                        </div>
+                        <div class="slider-track"></div>
+                        <div class="slider-fill"></div>
+                        <div class="slider-handle" id="temp-handle" role="slider" aria-valuemin="16" aria-valuemax="28" aria-valuenow="18"></div>
+                        <div class="temperature-markers">
+                            <div class="marker" style="left: 0%; margin-left: 0;"><span>16</span></div>
+                            <div class="marker" style="left: 16.67%"><span>18</span></div>
+                            <div class="marker" style="left: 33.33%"><span>20</span></div>
+                            <div class="marker" style="left: 50%"><span>22</span></div>
+                            <div class="marker" style="left: 66.67%"><span>24</span></div>
+                            <div class="marker" style="left: 83.33%"><span>26</span></div>
+                            <div class="marker" style="left: 100%; margin-left: -1px;"><span>28</span></div>
+                        </div>
+                    </div>
+                    <span class="temp-label max-temp">28°C</span>
+                </div>
+                
+                <div id="feedback-message" class="feedback-message">
+                    <span>Adjust the slider to set the temperature to 22°C</span>
+                </div>
+                
+                <div class="thermostat-modes">
+                    <div class="mode-button active">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 9a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"></path>
+                            <path d="M12 3v2"></path>
+                            <path d="M12 19v2"></path>
+                            <path d="M4.2 5.6l1.4 1.4"></path>
+                            <path d="M18.4 5.6l-1.4 1.4"></path>
+                            <path d="M4.2 18.4l1.4-1.4"></path>
+                            <path d="M18.4 18.4l-1.4-1.4"></path>
+                        </svg>
+                        <span>Heat</span>
+                    </div>
+                    <div class="mode-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 16h8M4 8h16M12 4v16"></path>
+                        </svg>
+                        <span>Cool</span>
+                    </div>
+                    <div class="mode-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 9v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9M9 22V12h6v10M2 10.6L12 2l10 8.6"></path>
+                        </svg>
+                        <span>Auto</span>
+                    </div>
+                </div>
+            </div>
+
+<style>
+    .thermostat-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: #f9f9f9;
+        border-radius: 16px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    .temperature-display {
+        text-align: center;
+        font-size: 4rem;
+        font-weight: 300;
+        color: #333;
+        margin-bottom: 2rem;
+    }
+    
+    .unit {
+        font-size: 2.5rem;
+        color: #666;
+        margin-left: 0.25rem;
+    }
+    
+    .slider-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .temp-label {
+        font-size: 0.9rem;
+        color: #666;
+        width: 50px;
+    }
+    
+    .min-temp {
+        text-align: right;
+        margin-right: 0.5rem;
+    }
+    
+    .max-temp {
+        margin-left: 0.5rem;
+    }
+    
+    .temperature-slider {
+        position: relative;
+        height: 60px;
+        flex: 1;
+        margin-top: 30px;
+    }
+    
+    .slider-track {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        height: 6px;
+        background: #e0e0e0;
+        border-radius: 3px;
+    }
+    
+    .slider-fill {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 6px;
+        left: 0;
+        width: 16.67%; /* Starting at 18°C */
+        background: linear-gradient(90deg, #3498db, #2980b9);
+        border-radius: 3px;
+    }
+    
+    .slider-handle {
+        position: absolute;
+        top: 50%;
+        width: 28px;
+        height: 28px;
+        background: white;
+        border: 2px solid #2980b9;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        cursor: grab;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        left: 16.67%; /* Starting at 18°C */
+    }
+    
+    .slider-handle:hover {
+        background: #f0f7ff;
+    }
+    
+    .slider-handle:active {
+        cursor: grabbing;
+        background: #e0eeff;
+    }
+    
+    .temperature-markers {
+        position: absolute;
+        top: 100%;
+        width: 100%;
+        margin-top: 4px;
+    }
+    
+    .marker {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transform: translateX(-50%);
+    }
+    
+    .marker::before {
+        content: "";
+        width: 1px;
+        height: 5px;
+        background-color: #ccc;
+        margin-bottom: 4px;
+    }
+    
+    .marker span {
+        font-size: 0.8rem;
+        color: #888;
+    }
+    
+    .target-indicator {
+        position: absolute;
+        width: 100%;
+        height: 24px;
+        top: -28px;
+        z-index: 1;
+    }
+    
+    .target-line {
+        position: absolute;
+        height: 20px;
+        width: 2px;
+        background-color: #e74c3c;
+        top: 0;
+    }
+    
+    .target-line::before {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: -4px;
+        width: 10px;
+        height: 10px;
+        background-color: #e74c3c;
+        border-radius: 50%;
+    }
+    
+    .target-label {
+        position: absolute;
+        top: -22px;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        color: #e74c3c;
+        font-size: 0.9rem;
+        font-weight: 500;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 0 5px;
+        border-radius: 3px;
+    }
+    
+    .feedback-message {
+        text-align: center;
+        min-height: 24px;
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin: 1rem 0;
+        padding: 0.5rem;
+        border-radius: 4px;
+    }
+    
+    .feedback-message.success {
+        background-color: #d4edda;
+        color: #155724;
+        font-weight: 500;
+    }
+    
+    .feedback-message.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        font-weight: 500;
+    }
+    
+    .thermostat-modes {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 2rem;
+        border-top: 1px solid #eaeaea;
+        padding-top: 1.5rem;
+    }
+    
+    .mode-button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.75rem;
+        border-radius: 8px;
+        cursor: default;
+        opacity: 0.5;
+        transition: all 0.2s;
+    }
+    
+    .mode-button.active {
+        opacity: 1;
+        background-color: #e3f2fd;
+        color: #1976d2;
+    }
+    
+    .mode-button svg {
+        margin-bottom: 0.5rem;
+    }
+    
+    .mode-button span {
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // DOM elements
+    const temperatureSlider = document.querySelector('.temperature-slider');
+    const sliderTrack = temperatureSlider.querySelector('.slider-track');
+    const sliderFill = temperatureSlider.querySelector('.slider-fill');
+    const sliderHandle = document.getElementById('temp-handle');
+    const currentTempDisplay = document.getElementById('current-temp');
+    const feedbackMessage = document.getElementById('feedback-message');
+    
+    // Constants
+    const MIN_TEMP = 16;
+    const MAX_TEMP = 28;
+    const TARGET_TEMP = 22;
+    const STEP = 0.5;
+    const RANGE = MAX_TEMP - MIN_TEMP;
+    
+    // State
+    let currentTemp = 18;
+    let isDragging = false;
+    let isTaskComplete = false;
+    let hasAttempted = false;
+    
+    // Update the slider position based on temperature
+    function updateSliderPosition() {
+        const percentage = ((currentTemp - MIN_TEMP) / RANGE) * 100;
+        sliderHandle.style.left = `${percentage}%`;
+        sliderFill.style.width = `${percentage}%`;
+        sliderHandle.setAttribute('aria-valuenow', currentTemp);
+        currentTempDisplay.textContent = currentTemp;
+    }
+    
+    // Check if task is complete
+    function checkTaskCompletion() {
+        if (isTaskComplete) return;
+        
+        if (currentTemp === TARGET_TEMP) {
+            isTaskComplete = true;
+            
+            // Use standardized task completion
+            window.completeTask(true);
+        } else if (Math.abs(currentTemp - TARGET_TEMP) <= 0.5 && currentTemp !== TARGET_TEMP) {
+            // Only show visual feedback during dragging, don't record mistakes
+            feedbackMessage.textContent = "Almost there! Set the temperature to exactly 22°C.";
+            hasAttempted = true;
+        } else if (hasAttempted) {
+            // Just update the feedback text during dragging
+            feedbackMessage.textContent = "Adjust the slider to set the temperature to 22°C";
+        }
+    }
+    
+    // New function to check for mistakes after drag release
+    function checkMistakesAfterDrag() {
+        if (isTaskComplete) return;
+        
+        if (Math.abs(currentTemp - TARGET_TEMP) <= 0.5 && currentTemp !== TARGET_TEMP) {
+            // Close but not exact - track as a near miss
+            window.recordMistake(
+                'near_miss',
+                `User set temperature to ${currentTemp}°C, close to the target of ${TARGET_TEMP}°C`,
+                'Almost there! Set the temperature to exactly 22°C.'
+            );
+        } else if (currentTemp !== TARGET_TEMP) {
+            // User has moved away from the target
+            window.recordMistake(
+                'incorrect_temp',
+                `User set temperature to ${currentTemp}°C instead of ${TARGET_TEMP}°C`,
+                'Adjust the slider to set the temperature to 22°C'
+            );
+        }
+    }
+    
+    // Event Listeners
+    sliderHandle.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+        sliderHandle.style.cursor = 'grabbing';
+        e.preventDefault();
+        hasAttempted = true;
+    });
+    
+    function onMouseMove(e) {
+        if (!isDragging) return;
+        
+        const rect = sliderTrack.getBoundingClientRect();
+        const trackStart = rect.left;
+        const trackEnd = rect.right;
+        const trackWidth = trackEnd - trackStart;
+        
+        // Calculate position as percentage
+        let position = (e.clientX - trackStart) / trackWidth;
+        position = Math.max(0, Math.min(1, position)); // Clamp between 0 and 1
+        
+        // Convert to temperature
+        let temp = MIN_TEMP + position * RANGE;
+        // Round to nearest STEP
+        temp = Math.round(temp / STEP) * STEP;
+        
+        // Update state
+        currentTemp = temp;
+        updateSliderPosition();
+        checkTaskCompletion();
+    }
+    
+    function onMouseUp() {
+        isDragging = false;
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        sliderHandle.style.cursor = 'grab';
+        
+        // Check for mistakes only after drag is released
+        if (hasAttempted && !isTaskComplete) {
+            checkMistakesAfterDrag();
+        }
+    }
+    
+    // Touch events for mobile
+    sliderHandle.addEventListener('touchstart', function(e) {
+        isDragging = true;
+        document.addEventListener('touchmove', onTouchMove, { passive: false });
+        document.addEventListener('touchend', onTouchEnd);
+        e.preventDefault();
+        hasAttempted = true;
+    });
+    
+    function onTouchMove(e) {
+        if (!isDragging) return;
+        
+        const touch = e.touches[0];
+        const rect = sliderTrack.getBoundingClientRect();
+        const trackStart = rect.left;
+        const trackEnd = rect.right;
+        const trackWidth = trackEnd - trackStart;
+        
+        // Calculate position as percentage
+        let position = (touch.clientX - trackStart) / trackWidth;
+        position = Math.max(0, Math.min(1, position)); // Clamp between 0 and 1
+        
+        // Convert to temperature
+        let temp = MIN_TEMP + position * RANGE;
+        // Round to nearest STEP
+        temp = Math.round(temp / STEP) * STEP;
+        
+        // Update state
+        currentTemp = temp;
+        updateSliderPosition();
+        checkTaskCompletion();
+        e.preventDefault();
+    }
+    
+    function onTouchEnd() {
+        isDragging = false;
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+        
+        // Check for mistakes only after touch drag is released
+        if (hasAttempted && !isTaskComplete) {
+            checkMistakesAfterDrag();
+        }
+    }
+    
+    // Set initial state
+    updateSliderPosition();
+    
+    // Allow clicking directly on the track
+    sliderTrack.addEventListener('click', function(e) {
+        const rect = sliderTrack.getBoundingClientRect();
+        const trackStart = rect.left;
+        const trackEnd = rect.right;
+        const trackWidth = trackEnd - trackStart;
+        
+        let position = (e.clientX - trackStart) / trackWidth;
+        position = Math.max(0, Math.min(1, position));
+        
+        let temp = MIN_TEMP + position * RANGE;
+        temp = Math.round(temp / STEP) * STEP;
+        
+        currentTemp = temp;
+        updateSliderPosition();
+        hasAttempted = true;
+        checkTaskCompletion();
+        
+        // Check for mistakes after click (which is like a release)
+        if (!isTaskComplete) {
+            checkMistakesAfterDrag();
+        }
+    });
+});
+</script>

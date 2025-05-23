@@ -1,0 +1,300 @@
+<div class="tabs-container">
+                <header class="tabs-header">
+                    <h3>Dashboard</h3>
+                    <p>Navigate through available options</p>
+                </header>
+
+                <!-- Horizontal scrollable tab bar -->
+                <div class="tabs-scrollable-container" id="tabs-container">
+                    <div class="tabs-wrapper">
+                        <button class="tab-item active">Home</button>
+                        <button class="tab-item">Reports</button>
+                        <button class="tab-item">Analytics</button>
+                        <button class="tab-item">Users</button>
+                        <button class="tab-item">Profiles</button>
+                        <button class="tab-item">Documents</button>
+                        <button class="tab-item">Projects</button>
+                        <button class="tab-item">Messages</button>
+                        <button class="tab-item">Notifications</button>
+                        <button class="tab-item">Calendar</button>
+                        <button class="tab-item">Integrations</button>
+                        <button class="tab-item">Account</button>
+                        <button class="tab-item" id="settings-tab">Settings</button>
+                    </div>
+                </div>
+
+                <div class="tab-content">
+                    <div class="content-placeholder">
+                        <p>Select the Settings tab to access system configuration</p>
+                    </div>
+                </div>
+
+            </div>
+</div>
+
+<style>
+    .tabs-container {
+        max-width: 650px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+    
+    .tabs-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .tabs-header h3 {
+        margin-bottom: 0.5rem;
+        color: #212529;
+    }
+    
+    .tabs-header p {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    
+    .tabs-scrollable-container {
+        position: relative;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+        border: 1px solid #dee2e6;
+        border-radius: 8px 8px 0 0;
+        background-color: #f8f9fa;
+        scrollbar-width: thin;
+        scrollbar-color: #cbd5e0 #f8f9fa;
+        padding: 0.5rem;
+        margin-bottom: 0;
+        /* Hide scrollbar for Chrome/Safari/Opera */
+        -ms-overflow-style: none;  /* IE and Edge */
+    }
+    
+    /* Customize scrollbar for Webkit browsers */
+    .tabs-scrollable-container::-webkit-scrollbar {
+        height: 6px;
+    }
+    
+    .tabs-scrollable-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    
+    .tabs-scrollable-container::-webkit-scrollbar-thumb {
+        background: #cbd5e0;
+        border-radius: 10px;
+    }
+    
+    .tabs-scrollable-container::-webkit-scrollbar-thumb:hover {
+        background: #a0aec0;
+    }
+    
+    .tabs-wrapper {
+        display: inline-flex;
+        min-width: 100%;
+    }
+    
+    .tab-item {
+        padding: 0.75rem 1.25rem;
+        margin-right: 0.25rem;
+        border: none;
+        background-color: transparent;
+        color: #4a5568;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        border-radius: 4px;
+        white-space: nowrap;
+    }
+    
+    .tab-item:hover {
+        background-color: #edf2f7;
+        color: #2d3748;
+    }
+    
+    .tab-item.active {
+        background-color: #4a7aff;
+        color: white;
+    }
+    
+    #settings-tab {
+        background-color: #38a169;
+        color: white;
+    }
+    
+    #settings-tab:hover {
+        background-color: #2f855a;
+    }
+    
+    .tab-content {
+        padding: 1.5rem;
+        border: 1px solid #dee2e6;
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+        background-color: white;
+    }
+    
+    .content-placeholder {
+        text-align: center;
+        color: #718096;
+        padding: 2rem 0;
+    }
+    
+    .feedback-message {
+        text-align: center;
+        min-height: 24px;
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-top: 1.5rem;
+    }
+    
+    .feedback-message.success {
+        color: #28a745;
+        font-weight: 500;
+    }
+    
+    .feedback-message.error {
+        color: #dc3545;
+        font-weight: 500;
+    }
+    
+    .scroll-right {
+        right: 10px;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tabsContainer = document.getElementById('tabs-container');
+    const settingsTab = document.getElementById('settings-tab');
+    
+    let hasScrolledRight = false;
+    
+    // Check if settings tab is initially visible
+    const isSettingsVisible = isElementHorizontallyVisible(settingsTab, tabsContainer);
+    
+    // Track horizontal scrolling
+    tabsContainer.addEventListener('scroll', function() {
+        // Check if settings tab is now visible
+        if (isElementHorizontallyVisible(settingsTab, tabsContainer) && !hasScrolledRight) {
+            hasScrolledRight = true;
+            
+            // Remove the scroll indicator if it exists
+            const indicator = document.querySelector('.scroll-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+    });
+    
+    // Settings tab click handler
+    settingsTab.addEventListener('click', function() {
+        if (hasScrolledRight) {
+            // Success - complete task using standardized approach
+            window.completeTask(true);
+            
+            // Change all tabs to inactive and make settings active
+            document.querySelectorAll('.tab-item').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            settingsTab.classList.add('active');
+            
+            // Update content
+            document.querySelector('.content-placeholder').innerHTML = `
+                <h4>Settings Panel</h4>
+                <p>System configuration options would appear here.</p>
+            `;
+        } else {
+            // Record mistake using standardized approach
+            window.recordMistake(
+                'no_scroll_first',
+                'User clicked the Settings tab without scrolling to see it first',
+                'Please scroll right to reveal the Settings tab first'
+            );
+        }
+    });
+    
+    // Add click listeners for other tabs
+    document.querySelectorAll('.tab-item:not(#settings-tab)').forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Record mistake for clicking wrong tab
+            window.recordMistake(
+                'wrong_tab',
+                `User clicked ${tab.textContent} tab instead of the Settings tab`,
+                'That\'s not the Settings tab. Please find and click on the Settings tab.'
+            );
+            
+            // Show which tab was clicked
+            document.querySelectorAll('.tab-item').forEach(t => {
+                t.classList.remove('active');
+            });
+            tab.classList.add('active');
+            
+            // Update content based on tab
+            document.querySelector('.content-placeholder').innerHTML = `
+                <p>${tab.textContent} content would appear here. Find the Settings tab instead.</p>
+            `;
+        });
+    });
+    
+    // Force scroll to beginning on page load
+    tabsContainer.scrollLeft = 0;
+    
+    // Helper function to check if element is horizontally visible
+    function isElementHorizontallyVisible(el, container) {
+        const elRect = el.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        
+        return (
+            elRect.left >= containerRect.left &&
+            elRect.right <= containerRect.right
+        );
+    }
+    
+    // Ensure settings tab is initially off-screen by adding more tabs if needed
+    function ensureTabIsOffscreen() {
+        const settingsRect = settingsTab.getBoundingClientRect();
+        const containerRect = tabsContainer.getBoundingClientRect();
+        
+        if (settingsRect.right <= containerRect.right) {
+            // Settings tab is visible, add more tabs to push it off-screen
+            const tabsWrapper = document.querySelector('.tabs-wrapper');
+            
+            // Add extra tabs before the settings tab
+            for (let i = 1; i <= 3; i++) {
+                const newTab = document.createElement('button');
+                newTab.className = 'tab-item';
+                newTab.textContent = `Extra ${i}`;
+                
+                newTab.addEventListener('click', function() {
+                    // Record mistake for clicking wrong tab
+                    window.recordMistake(
+                        'wrong_tab',
+                        `User clicked ${newTab.textContent} tab instead of the Settings tab`,
+                        'That\'s not the Settings tab. Please find and click on the Settings tab.'
+                    );
+                    
+                    // Update active tab
+                    document.querySelectorAll('.tab-item').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    newTab.classList.add('active');
+                    
+                    // Update content
+                    document.querySelector('.content-placeholder').innerHTML = `
+                        <p>${newTab.textContent} content would appear here. Find the Settings tab instead.</p>
+                    `;
+                });
+                
+                tabsWrapper.insertBefore(newTab, settingsTab);
+            }
+            
+            // Check again after adding tabs
+            setTimeout(ensureTabIsOffscreen, 0);
+        }
+    }
+    
+    // Call on load to ensure settings tab is off-screen
+    setTimeout(ensureTabIsOffscreen, 0);
+});
+</script> 

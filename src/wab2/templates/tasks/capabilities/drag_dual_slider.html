@@ -1,0 +1,448 @@
+            <div class="price-filter-container">
+                <h3>Filter Products by Price</h3>
+                
+                <div class="price-filter">
+                    <div class="range-slider" id="price-range-slider">
+                        <div class="slider-track"></div>
+                        <div class="slider-fill"></div>
+                        <div class="slider-handle min-handle" id="min-handle" role="slider" aria-valuemin="0" aria-valuemax="50" aria-valuenow="0"></div>
+                        <div class="slider-handle max-handle" id="max-handle" role="slider" aria-valuemin="0" aria-valuemax="50" aria-valuenow="50"></div>
+                    </div>
+                    
+                    <div class="price-inputs">
+                        <div class="price-input">
+                            <label for="min-price">Min:</label>
+                            <div class="price-value">$<span id="min-price">0</span></div>
+                        </div>
+                        <div class="price-input">
+                            <label for="max-price">Max:</label>
+                            <div class="price-value">$<span id="max-price">50</span></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="price-ticks">
+                    <span>$0</span>
+                    <span>$10</span>
+                    <span>$20</span>
+                    <span>$30</span>
+                    <span>$40</span>
+                    <span>$50</span>
+                </div>
+                
+                <div id="feedback-message" class="feedback-message">
+                    <span>Drag the sliders to set price range from $10 to $30</span>
+                </div>
+                
+                <div class="product-preview">
+                    <h4>Products in Selected Range: <span id="product-count">20</span></h4>
+                    <div class="product-grid" id="product-grid">
+                        <!-- Products will be dynamically shown/hidden based on price range -->
+                    </div>
+                </div>
+            </div>
+
+<style>
+    .price-filter-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 1.5rem;
+    }
+    
+    .price-filter-container h3 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #333;
+    }
+    
+    .price-filter {
+        margin-bottom: 2rem;
+    }
+    
+    .range-slider {
+        position: relative;
+        height: 50px;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    .slider-track {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        height: 6px;
+        background: #e0e0e0;
+        border-radius: 3px;
+    }
+    
+    .slider-fill {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 6px;
+        background: #4a7aff;
+        border-radius: 3px;
+    }
+    
+    .slider-handle {
+        position: absolute;
+        top: 50%;
+        width: 24px;
+        height: 24px;
+        background: white;
+        border: 2px solid #4a7aff;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        cursor: grab;
+    }
+    
+    .slider-handle:hover {
+        background: #f0f5ff;
+    }
+    
+    .slider-handle:active {
+        cursor: grabbing;
+        background: #e0e9ff;
+    }
+    
+    .min-handle {
+        left: 0%;
+    }
+    
+    .max-handle {
+        left: 100%;
+    }
+    
+    .price-inputs {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.5rem;
+    }
+    
+    .price-input {
+        display: flex;
+        align-items: center;
+        background: #f5f5f5;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+    }
+    
+    .price-input label {
+        margin-right: 0.5rem;
+        font-weight: 500;
+        color: #555;
+    }
+    
+    .price-value {
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .price-ticks {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        padding: 0 12px;
+        color: #666;
+        font-size: 0.9rem;
+    }
+    
+    .feedback-message {
+        text-align: center;
+        min-height: 24px;
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin: 1rem 0;
+        padding: 0.5rem;
+        border-radius: 4px;
+    }
+    
+    .feedback-message.success {
+        background-color: #d4edda;
+        color: #155724;
+        font-weight: 500;
+    }
+    
+    .feedback-message.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        font-weight: 500;
+    }
+    
+    .product-preview {
+        margin-top: 2rem;
+        text-align: center;
+    }
+    
+    .product-preview h4 {
+        margin-bottom: 1rem;
+        color: #333;
+    }
+    
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+    
+    .product {
+        height: 40px;
+        background: #f0f0f0;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        color: #333;
+        transition: opacity 0.3s;
+    }
+    
+    .product.hidden {
+        opacity: 0.3;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // DOM elements
+    const rangeSlider = document.getElementById('price-range-slider');
+    const sliderTrack = rangeSlider.querySelector('.slider-track');
+    const sliderFill = rangeSlider.querySelector('.slider-fill');
+    const minHandle = document.getElementById('min-handle');
+    const maxHandle = document.getElementById('max-handle');
+    const minPriceDisplay = document.getElementById('min-price');
+    const maxPriceDisplay = document.getElementById('max-price');
+    const productCount = document.getElementById('product-count');
+    const productGrid = document.getElementById('product-grid');
+    
+    // Constants
+    const MIN_PRICE = 0;
+    const MAX_PRICE = 50;
+    const TARGET_MIN = 10;
+    const TARGET_MAX = 30;
+    const STEP = 1;
+    const TRACK_WIDTH = sliderTrack.offsetWidth;
+    
+    // State
+    let currentMinPrice = MIN_PRICE;
+    let currentMaxPrice = MAX_PRICE;
+    let isDraggingMin = false;
+    let isDraggingMax = false;
+    let isTaskComplete = false;
+    let minHandleMoved = false;
+    let maxHandleMoved = false;
+    
+    // Initialize product grid
+    initProductGrid();
+    updateSliderPosition();
+    
+    // Event Listeners for handles
+    minHandle.addEventListener('mousedown', function(e) {
+        isDraggingMin = true;
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+        minHandle.style.cursor = 'grabbing';
+        e.preventDefault(); // Prevent text selection
+    });
+    
+    maxHandle.addEventListener('mousedown', function(e) {
+        isDraggingMax = true;
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+        maxHandle.style.cursor = 'grabbing';
+        e.preventDefault(); // Prevent text selection
+    });
+    
+    function onMouseMove(e) {
+        if (!isDraggingMin && !isDraggingMax) return;
+        
+        const rect = sliderTrack.getBoundingClientRect();
+        const trackStart = rect.left;
+        const trackEnd = rect.right;
+        const trackWidth = trackEnd - trackStart;
+        
+        // Calculate position as percentage
+        let position = (e.clientX - trackStart) / trackWidth;
+        position = Math.max(0, Math.min(1, position)); // Clamp between 0 and 1
+        
+        // Convert to price
+        const price = Math.round((MIN_PRICE + position * (MAX_PRICE - MIN_PRICE)) / STEP) * STEP;
+        
+        if (isDraggingMin) {
+            // Ensure min doesn't exceed max
+            currentMinPrice = Math.min(price, currentMaxPrice - STEP);
+            minPriceDisplay.textContent = currentMinPrice;
+            minHandle.setAttribute('aria-valuenow', currentMinPrice);
+            minHandleMoved = true;
+        } else if (isDraggingMax) {
+            // Ensure max doesn't go below min
+            currentMaxPrice = Math.max(price, currentMinPrice + STEP);
+            maxPriceDisplay.textContent = currentMaxPrice;
+            maxHandle.setAttribute('aria-valuenow', currentMaxPrice);
+            maxHandleMoved = true;
+        }
+        
+        updateSliderPosition();
+        updateProductVisibility();
+        checkTaskCompletion();
+    }
+    
+    function onMouseUp() {
+        isDraggingMin = false;
+        isDraggingMax = false;
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        minHandle.style.cursor = 'grab';
+        maxHandle.style.cursor = 'grab';
+        
+        // Check if both handles have been moved and range is incorrect
+        if (minHandleMoved && maxHandleMoved) {
+            checkRangeAccuracy();
+        }
+    }
+    
+    function updateSliderPosition() {
+        const minPct = (currentMinPrice - MIN_PRICE) / (MAX_PRICE - MIN_PRICE) * 100;
+        const maxPct = (currentMaxPrice - MIN_PRICE) / (MAX_PRICE - MIN_PRICE) * 100;
+        
+        minHandle.style.left = `${minPct}%`;
+        maxHandle.style.left = `${maxPct}%`;
+        sliderFill.style.left = `${minPct}%`;
+        sliderFill.style.width = `${maxPct - minPct}%`;
+    }
+    
+    function initProductGrid() {
+        // Create sample products with different prices
+        productGrid.innerHTML = '';
+        for (let i = 0; i < 20; i++) {
+            const price = Math.floor(Math.random() * 50) + 1; // Random price 1-50
+            const product = document.createElement('div');
+            product.className = 'product';
+            product.dataset.price = price;
+            product.textContent = `$${price}`;
+            productGrid.appendChild(product);
+        }
+        updateProductVisibility();
+    }
+    
+    function updateProductVisibility() {
+        let visibleCount = 0;
+        document.querySelectorAll('.product').forEach(product => {
+            const price = parseInt(product.dataset.price);
+            const isVisible = price >= currentMinPrice && price <= currentMaxPrice;
+            
+            if (isVisible) {
+                product.classList.remove('hidden');
+                visibleCount++;
+            } else {
+                product.classList.add('hidden');
+            }
+        });
+        
+        productCount.textContent = visibleCount;
+    }
+    
+    function checkTaskCompletion() {
+        if (isTaskComplete) return;
+        
+        if (currentMinPrice === TARGET_MIN && currentMaxPrice === TARGET_MAX) {
+            isTaskComplete = true;
+            
+            // Use standardized task completion
+            window.completeTask(true);
+        } else if (
+            (currentMinPrice >= TARGET_MIN - 1 && currentMinPrice <= TARGET_MIN + 1) && 
+            (currentMaxPrice >= TARGET_MAX - 1 && currentMaxPrice <= TARGET_MAX + 1) &&
+            currentMinPrice !== TARGET_MIN && currentMaxPrice !== TARGET_MAX
+        ) {
+            // Getting close - provide feedback through mistake recording but don't count as actual mistake
+            window.recordMistake(
+                'close_range',
+                `User set range to $${currentMinPrice}-$${currentMaxPrice}, almost at the target range of $${TARGET_MIN}-$${TARGET_MAX}`,
+                'Getting close! Set min to exactly $10 and max to exactly $30.'
+            );
+        }
+    }
+
+    // Touch events for mobile support
+    minHandle.addEventListener('touchstart', function(e) {
+        isDraggingMin = true;
+        document.addEventListener('touchmove', onTouchMove);
+        document.addEventListener('touchend', onTouchEnd);
+        e.preventDefault();
+    });
+    
+    maxHandle.addEventListener('touchstart', function(e) {
+        isDraggingMax = true;
+        document.addEventListener('touchmove', onTouchMove);
+        document.addEventListener('touchend', onTouchEnd);
+        e.preventDefault();
+    });
+    
+    function onTouchMove(e) {
+        if (!isDraggingMin && !isDraggingMax) return;
+        
+        const touch = e.touches[0];
+        const rect = sliderTrack.getBoundingClientRect();
+        const trackStart = rect.left;
+        const trackEnd = rect.right;
+        const trackWidth = trackEnd - trackStart;
+        
+        // Calculate position as percentage
+        let position = (touch.clientX - trackStart) / trackWidth;
+        position = Math.max(0, Math.min(1, position)); // Clamp between 0 and 1
+        
+        // Convert to price
+        const price = Math.round((MIN_PRICE + position * (MAX_PRICE - MIN_PRICE)) / STEP) * STEP;
+        
+        if (isDraggingMin) {
+            currentMinPrice = Math.min(price, currentMaxPrice - STEP);
+            minPriceDisplay.textContent = currentMinPrice;
+            minHandle.setAttribute('aria-valuenow', currentMinPrice);
+            minHandleMoved = true;
+        } else if (isDraggingMax) {
+            currentMaxPrice = Math.max(price, currentMinPrice + STEP);
+            maxPriceDisplay.textContent = currentMaxPrice;
+            maxHandle.setAttribute('aria-valuenow', currentMaxPrice);
+            maxHandleMoved = true;
+        }
+        
+        updateSliderPosition();
+        updateProductVisibility();
+        checkTaskCompletion();
+        e.preventDefault();
+    }
+    
+    function onTouchEnd() {
+        isDraggingMin = false;
+        isDraggingMax = false;
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+        
+        // Check if both handles have been moved and range is incorrect
+        if (minHandleMoved && maxHandleMoved) {
+            checkRangeAccuracy();
+        }
+    }
+    
+    function checkRangeAccuracy() {
+        if (isTaskComplete) return;
+        
+        // If range is not exactly correct but user has adjusted both sliders
+        if (!(currentMinPrice === TARGET_MIN && currentMaxPrice === TARGET_MAX) && 
+            !(currentMinPrice >= TARGET_MIN - 1 && currentMinPrice <= TARGET_MIN + 1 && 
+              currentMaxPrice >= TARGET_MAX - 1 && currentMaxPrice <= TARGET_MAX + 1)) {
+            
+            // Record mistake for incorrect range
+            window.recordMistake(
+                'incorrect_range',
+                `User set incorrect range: $${currentMinPrice}-$${currentMaxPrice}, target is $${TARGET_MIN}-$${TARGET_MAX}`,
+                `Your current range of $${currentMinPrice}-$${currentMaxPrice} is not correct. Please set it to $${TARGET_MIN}-$${TARGET_MAX}.`
+            );
+        }
+    }
+});
+</script> 

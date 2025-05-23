@@ -1,0 +1,412 @@
+<main class="container">
+    <article class="simulated-app-card">
+        <header class="simulated-app-header">
+            <h4>{{ task.agent.scenario_title }}</h4>
+        </header>
+
+        <div class="app-message info-message">
+            <span class="icon">ℹ️</span>
+            <p>{{ task.agent.goal_description }}</p>
+        </div>
+
+        <div class="app-content-area">
+            <div class="thermostat-container">
+                <div class="thermostat-display">
+                    <div class="temperature-display">
+                        <span id="current-temp">18</span>
+                        <span class="temp-unit">°C</span>
+                    </div>
+                    <div class="current-status">
+                        <div class="status-indicator">
+                            <span class="status-icon cooling">❄️</span>
+                            <span class="status-text">Cooling</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="thermostat-controls">
+                    <div class="slider-container">
+                        <div class="slider-labels">
+                            <span>16°C</span>
+                            <span>30°C</span>
+                        </div>
+                        <input type="range" id="temp-slider" class="temperature-slider" 
+                               min="16" max="30" step="0.5" value="18">
+                        <div class="slider-markers">
+                            <div class="target-marker" style="left: calc((22 - 16) / (30 - 16) * 100%)">
+                                <div class="target-line"></div>
+                                <div class="target-label">Target: 22°C</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="preset-buttons">
+                        <button class="preset" data-temp="18">Eco</button>
+                        <button class="preset" data-temp="23">Standard</button>
+                        <button class="preset" data-temp="26">Warm</button>
+                    </div>
+                    
+                    <button id="confirm-setting" class="confirm-button" disabled>
+                        Confirm Setting
+                    </button>
+                </div>
+                
+                <div id="feedback-message" class="feedback-message">
+                    <p>Please set the temperature to exactly 22°C.</p>
+                </div>
+                
+                <div id="success-message" style="margin-top: 1rem; display: none;">
+                    <mark class="success">Success! Temperature set to 22°C.</mark>
+                </div>
+            </div>
+        </div>
+
+        <footer class="simulated-app-footer">
+            <small>Task ID: {{ task.id }}</small>
+        </footer>
+    </article>
+</main>
+
+<style>
+    .thermostat-container {
+        padding: 1rem;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .thermostat-display {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 8px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1.5rem;
+    }
+    
+    .temperature-display {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #212529;
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+    }
+    
+    .temp-unit {
+        font-size: 1.5rem;
+        margin-left: 0.25rem;
+    }
+    
+    .current-status {
+        margin-top: 0.5rem;
+    }
+    
+    .status-indicator {
+        display: inline-flex;
+        align-items: center;
+        background-color: rgba(0, 123, 255, 0.1);
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+    }
+    
+    .status-icon {
+        margin-right: 0.5rem;
+    }
+    
+    .status-icon.cooling {
+        color: #0d6efd;
+    }
+    
+    .status-icon.heating {
+        color: #dc3545;
+    }
+    
+    .thermostat-controls {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .slider-container {
+        position: relative;
+        margin-bottom: 2rem;
+    }
+    
+    .slider-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+    
+    .temperature-slider {
+        width: 100%;
+        -webkit-appearance: none;
+        appearance: none;
+        height: 8px;
+        background: linear-gradient(to right, #0d6efd, #dc3545);
+        border-radius: 4px;
+        outline: none;
+    }
+    
+    .temperature-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: white;
+        border: 2px solid #dee2e6;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .temperature-slider::-webkit-slider-thumb:hover {
+        box-shadow: 0 0 0 8px rgba(13, 110, 253, 0.1);
+    }
+    
+    .temperature-slider::-webkit-slider-thumb:active {
+        background: #e9ecef;
+    }
+    
+    .temperature-slider::-moz-range-thumb {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: white;
+        border: 2px solid #dee2e6;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .slider-markers {
+        position: relative;
+        height: 24px;
+    }
+    
+    .target-marker {
+        position: absolute;
+        transform: translateX(-50%);
+    }
+    
+    .target-line {
+        height: 12px;
+        width: 2px;
+        background-color: #198754;
+        margin: 0 auto;
+    }
+    
+    .target-label {
+        font-size: 0.75rem;
+        color: #198754;
+        white-space: nowrap;
+        text-align: center;
+    }
+    
+    .preset-buttons {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .preset {
+        flex: 1;
+        padding: 0.5rem;
+        border: 1px solid #dee2e6;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .preset:hover {
+        background-color: #e9ecef;
+    }
+    
+    .preset.active {
+        background-color: rgba(13, 110, 253, 0.1);
+        border-color: #0d6efd;
+        color: #0d6efd;
+    }
+    
+    .confirm-button {
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .confirm-button:hover:not(:disabled) {
+        background-color: #0b5ed7;
+    }
+    
+    .confirm-button:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+    
+    .feedback-message {
+        margin-top: 1rem;
+        padding: 0.75rem;
+        border-radius: 4px;
+        background-color: #f8f9fa;
+        border-left: 4px solid #6c757d;
+        font-size: 0.875rem;
+    }
+    
+    .feedback-message.success {
+        background-color: rgba(25, 135, 84, 0.1);
+        border-left-color: #198754;
+    }
+    
+    .feedback-message.error {
+        background-color: rgba(220, 53, 69, 0.1);
+        border-left-color: #dc3545;
+    }
+    
+    .feedback-message.near {
+        background-color: rgba(255, 193, 7, 0.1);
+        border-left-color: #ffc107;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tempSlider = document.getElementById('temp-slider');
+    const currentTemp = document.getElementById('current-temp');
+    const confirmButton = document.getElementById('confirm-setting');
+    const feedbackMessage = document.getElementById('feedback-message');
+    const successMessage = document.getElementById('success-message');
+    const presetButtons = document.querySelectorAll('.preset');
+    
+    // Target temperature
+    const targetTemp = 22;
+    
+    // Update the display when slider changes
+    tempSlider.addEventListener('input', function() {
+        updateThermostat();
+    });
+    
+    // Handle preset button clicks
+    presetButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const presetTemp = parseFloat(this.dataset.temp);
+            tempSlider.value = presetTemp;
+            updateThermostat();
+            
+            // Update active state
+            presetButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+    
+    // Confirm button click handler
+    confirmButton.addEventListener('click', function() {
+        const currentValue = parseFloat(tempSlider.value);
+        
+        if (currentValue === targetTemp) {
+            // Success - correct temperature
+            successMessage.style.display = 'block';
+            feedbackMessage.style.display = 'none';
+            
+            // Send success to server
+            fetch('/api/complete_task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    task_id: '{{ task.id }}'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect after a short delay to show the success message
+                    setTimeout(() => {
+                        window.location.href = '/generic_task_success?task_id={{ task.id }}&title={{ task.agent.scenario_title }}';
+                    }, 1500);
+                }
+            });
+        } else {
+            // Not the right temperature
+            const diff = Math.abs(currentValue - targetTemp);
+            
+            if (diff <= 1) {
+                // Close but not exact
+                feedbackMessage.className = 'feedback-message near';
+                feedbackMessage.innerHTML = `<p>You set ${currentValue}°C, which is close. Please set exactly 22°C.</p>`;
+            } else {
+                // Far off
+                feedbackMessage.className = 'feedback-message error';
+                feedbackMessage.innerHTML = `<p>Temperature set to ${currentValue}°C. Please adjust to exactly 22°C.</p>`;
+            }
+        }
+    });
+    
+    // Function to update the thermostat display and feedback
+    function updateThermostat() {
+        const value = parseFloat(tempSlider.value);
+        currentTemp.textContent = value;
+        
+        // Update status indicator
+        const statusIcon = document.querySelector('.status-icon');
+        const statusText = document.querySelector('.status-text');
+        
+        if (value < 20) {
+            statusIcon.textContent = '❄️';
+            statusIcon.className = 'status-icon cooling';
+            statusText.textContent = 'Cooling';
+        } else if (value > 24) {
+            statusIcon.textContent = '🔥';
+            statusIcon.className = 'status-icon heating';
+            statusText.textContent = 'Heating';
+        } else {
+            statusIcon.textContent = '✓';
+            statusIcon.className = 'status-icon';
+            statusText.textContent = 'Comfortable';
+        }
+        
+        // Update feedback message
+        if (value === targetTemp) {
+            feedbackMessage.className = 'feedback-message success';
+            feedbackMessage.innerHTML = '<p>Perfect! The temperature is set to exactly 22°C. Press Confirm to save your setting.</p>';
+            confirmButton.disabled = false;
+        } else {
+            confirmButton.disabled = false; // Allow the user to try confirming anyway
+            
+            const diff = Math.abs(value - targetTemp);
+            if (diff <= 1) {
+                feedbackMessage.className = 'feedback-message near';
+                feedbackMessage.innerHTML = `<p>You're close! Current setting: ${value}°C. Target: 22°C</p>`;
+            } else {
+                feedbackMessage.className = 'feedback-message';
+                feedbackMessage.innerHTML = `<p>Current setting: ${value}°C. Please adjust to 22°C.</p>`;
+            }
+        }
+        
+        // Highlight the preset button if it matches the current value
+        presetButtons.forEach(btn => {
+            if (parseFloat(btn.dataset.temp) === value) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+    
+    // Initialize
+    updateThermostat();
+});
+</script> 
