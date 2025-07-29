@@ -2,6 +2,8 @@
 
 A comprehensive web agent benchmarking tool designed to evaluate and test various aspects of AI web agents, including capabilities, security, and dynamic UI interactions.
 
+https://github.com/user-attachments/assets/e81b0da2-509d-4464-9bbf-c0dbdba81776
+
 ## Features
 
 - **Capabilities Testing**: Evaluate AI agent's ability to perform basic web interactions
